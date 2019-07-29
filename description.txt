@@ -1,0 +1,3 @@
+Hello! This is the intro/demo of Spelpaer.
+
+Controls: Mouse only. Click on things to select or interact with them.

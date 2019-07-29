@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+		<title>Spelpaer</title>
+		<style>
+			@font-face {
+				font-family: 'Determination Mono';
+				src: url('src/fonts/DTM-Mono.otf');
+			}
+			@font-face {
+				font-family: 'Futura Medium';
+				src: url('src/fonts/FuturaMedium.otf');
+			}
+			@font-face {
+				font-family: 'OpenDyslexic';
+				src: url('src/fonts/OpenDyslexicAlta-Regular.otf');
+			}
+			body {
+				background-color : #101010;
+			}
+		</style>
+		<!-- <script src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script> -->
+        <script type="text/javascript" src="src/main.js"></script>
+        <script type="text/javascript" src="src/game_engine.js"></script>
+        <script type="text/javascript" src="src/controller.js"></script>
+        <script type="text/javascript" src="src/flags.js"></script>
+        <script type="text/javascript" src="src/Save.js"></script>
+        <script type="text/javascript" src="src/Time.js"></script>
+        <script type="text/javascript" src="src/Elements.js"></script>
+        <script type="text/javascript" src="src/Stats.js"></script>
+		
+		<script type="text/javascript" src="src/CharacterImages/CharacterSprites.js"></script>
+		<script type="text/javascript" src="src/Icons/Icons.js"></script>
+		<!-- UI elements -->
+		<script type="text/javascript" src="src/UIObjects/UIObjectBase.js"></script>
+		<script type="text/javascript" src="src/InfoField.js"></script>
+		<script type="text/javascript" src="src/dialog.js"></script>
+		<script type="text/javascript" src="src/UIObjects/label.js"></script>
+		<script type="text/javascript" src="src/UIObjects/Button.js"></script>
+		<script type="text/javascript" src="src/UIObjects/RadioButtons.js"></script>
+		<script type="text/javascript" src="src/UIObjects/Slider.js"></script>
+		<!-- <script type="text/javascript" src="src/UIObjects/Keyboard.js"></script> -->
+		<script type="text/javascript" src="src/UIObjects/ScrollMenu.js"></script>
+		<script type="text/javascript" src="src/UIObjects/ImageHolder.js"></script>
+		<script type="text/javascript" src="src/UIObjects/MoneyDisplay.js"></script>
+		
+		<script type="text/javascript" src="src/UIObjects/TextInput.js"></script>
+		
+		<script type="text/javascript" src="src/Puzzles/Quiz.js"></script>
+		<script type="text/javascript" src="src/Puzzles/PipePath.js"></script>
+		
+		<script type="text/javascript" src="src/ScreenBase.js"></script>
+		
+		<script type="text/javascript" src="src/settings.js"></script>
+		<!-- Particles -->
+		<script type="text/javascript" src="src/Particles/ParticleBase.js"></script>
+		<script type="text/javascript" src="src/Particles/ParticleText.js"></script>
+		<script type="text/javascript" src="src/Particles/musicInfoBar.js"></script>
+		<script type="text/javascript" src="src/Particles/Transitions.js"></script>
+		
+		<!-- Weather -->
+		<script type="text/javascript" src="src/UIObjects/Rain.js"></script>
+		
+		<!-- Menus -->
+		<script type="text/javascript" src="src/mainMenu.js"></script>
+		<script type="text/javascript" src="src/Music/Jukebox.js"></script>
+		<script type="text/javascript" src="src/newGame.js"></script>
+		<script type="text/javascript" src="src/Paths/pathScreen.js"></script>
+		
+		<!-- Spells & Techniques -->
+		<script type="text/javascript" src="src/BattleAction.js"></script>
+		<script type="text/javascript" src="src/Effect.js"></script>
+		
+		<script type="text/javascript" src="src/Techniques/technique.js"></script>
+		<script type="text/javascript" src="src/Techniques/monk.js"></script>
+		<script type="text/javascript" src="src/Techniques/paladin.js"></script>
+		<script type="text/javascript" src="src/Techniques/defensive.js"></script>
+		<script type="text/javascript" src="src/Techniques/techniqueRef.js"></script>
+		<script type="text/javascript" src="src/Techniques/TechniquePalette.js"></script>
+		
+		<script type="text/javascript" src="src/Spells/spell.js"></script>
+		<script type="text/javascript" src="src/Spells/Arcane.js"></script>
+		<script type="text/javascript" src="src/Spells/MagicMissile.js"></script>
+		<script type="text/javascript" src="src/Spells/Cure.js"></script>
+		<script type="text/javascript" src="src/Spells/Channel.js"></script>
+		<script type="text/javascript" src="src/Spells/Inflict.js"></script>
+        <script type="text/javascript" src="src/Spells/MindThrust.js"></script>
+        <script type="text/javascript" src="src/Spells/WeaponSpells.js"></script>
+		
+        <script type="text/javascript" src="src/Spells/spellRef.js"></script>
+        <script type="text/javascript" src="src/Spells/spellPrep.js"></script>
+		
+		<!-- Units -->
+        <script type="text/javascript" src="src/unit.js"></script>
+        <script type="text/javascript" src="src/player.js"></script>
+        <script type="text/javascript" src="src/companion.js"></script>
+        <script type="text/javascript" src="src/LevelUp.js"></script>
+		<!-- Enemies -->
+        <script type="text/javascript" src="src/Enemies/wild_animals.js"></script>
+		
+		<!-- Locations -->
+		<script type="text/javascript" src="src/basicPOI.js"></script>
+		<script type="text/javascript" src="src/Shop.js"></script>
+		<!-- Dungeon -->
+		<script type="text/javascript" src="src/Dungeon.js"></script>
+		<script type="text/javascript" src="src/dungeonScreen.js"></script>
+		
+		<script type="text/javascript" src="src/Explainer.js"></script>
+		
+		<!-- Locales -->
+		<script type="text/javascript" src="src/Locales/locale.js"></script>
+		<script type="text/javascript" src="src/Locales/Pocutop.js"></script>
+		<script type="text/javascript" src="src/Locales/DepartureShrine.js"></script>
+		<script type="text/javascript" src="src/Locales/DepartureGate.js"></script>
+		<!-- Northwest Forest 
+		<script type="text/javascript" src="src/Locales/Bordebulle.js"></script>
+		<script type="text/javascript" src="src/Locales/Coimer.js"></script>
+		<script type="text/javascript" src="src/Locales/Innsport.js"></script>
+		<script type="text/javascript" src="src/Locales/HoblinsDen.js"></script>
+		<script type="text/javascript" src="src/Locales/Sterand.js"></script>
+		<script type="text/javascript" src="src/Locales/Walld.js"></script>
+		<script type="text/javascript" src="src/Locales/Lethodge.js"></script>
+		<script type="text/javascript" src="src/Locales/Bordasca.js"></script>
+		<script type="text/javascript" src="src/Locales/RaziShrine.js"></script>
+		Northwestern Ocean 
+		<script type="text/javascript" src="src/Locales/DeepTown.js"></script>
+		<script type="text/javascript" src="src/Locales/DeepGrotto.js"></script>
+		Eastern Area 
+		<script type="text/javascript" src="src/Locales/HilHin.js"></script>
+		Paths -->
+		<script type="text/javascript" src="src/Paths/path.js"></script>
+		<script type="text/javascript" src="src/Paths/InceptiveTrail.js"></script>
+		<!-- <script type="text/javascript" src="src/Paths/WestField.js"></script>
+		<script type="text/javascript" src="src/Paths/NorthwestForest.js"></script>
+		<script type="text/javascript" src="src/Paths/NorthwestOcean.js"></script>
+		<script type="text/javascript" src="src/Paths/CenterStorm.js"></script> -->
+		
+		
+		<script type="text/javascript" src="src/locationRef.js"></script>
+		
+		<script type="text/javascript" src="src/WorldMap.js"></script>
+		
+		<!-- Adventures -->
+        <script type="text/javascript" src="src/departure.js"></script>
+		
+		<script type="text/javascript" src="src/Locales/LocaleScreen.js"></script>
+		
+		<script type="text/javascript" src="src/battle.js"></script>
+		<script type="text/javascript" src="src/battleScreenPatient.js"></script>
+		<script type="text/javascript" src="src/battleScreenRealTime.js"></script>
+		
+		
+    </head>
+    <body>
+		<div id="BackgroundBox" style="overflow:hidden; position: absolute; left: 0px; top: 0px; width: 800px; height: 600px; background-color: #000000; border-color: #BBBBBB; border-style: solid; border-width: 0px;">
+			<canvas id="GraphicsBox" width="800px" height="600px" style="overflow:hidden; position: absolute; width: 800px; height: 600px; left: 0px; top: 0px;">Your browser requires Canvas support to play this game.</canvas>
+			<input id="TextInput" type="text" hidden maxlength="16" style="position:absolute;left:100px;top:300px;width:600px;" />
+			<!-- <div id="EventCatcher" style="overflow:hidden; position: absolute; left: 0px; top: 0px; width: 1200px; height: 900px;"></div> -->
+		</div>
+		
+		<script>
+			const ONLINE = window.location.href.indexOf("C:") < 0;
+			var kongregate = {stats:{submit:function(){}}};
+			/*
+			kongregateAPI.loadAPI(function(){
+				window.kongregate = kongregateAPI.getAPI();
+				updateFields();
+				
+				kongregate.services.addEventListener('login', function(){
+					updateFields();
+				});
+			});
+			*/
+			startLoading()
+		</script>
+	</body>
+</html>
