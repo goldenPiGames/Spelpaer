@@ -1,0 +1,5 @@
+make stats and elements work by indices
+
+scrollbar: scroll directly
+
+make sure everything works on any screen size

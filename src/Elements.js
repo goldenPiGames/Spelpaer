@@ -35,10 +35,11 @@ function elementsToArray(stuff, normal = 1.0) {
 		ray[i] = normal;
 	}
 	for (nom in stuff) {
-		var dex = ELEMENTS_INDICES[nom];
+		var dex = ELEMENT_INDICES[nom];
 		if (dex != undefined)
 			ray[dex] = stuff[nom];
 		else
 			throw nom + " is not a valid element.";
 	}
+	return ray;
 }

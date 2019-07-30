@@ -1,4 +1,4 @@
-function StunningFist(level, user) {
+function StunningKick(level, user) {
 	this.level = level;
 	this.power = this.powerMult * this.level;
 	this.maxCooldown = this.cooldownMult * this.level;
@@ -10,24 +10,24 @@ function StunningFist(level, user) {
 	effectAmount : -1.0,
 	effectDuration : 80,*/
 	
-}; TECHNIQUES.push(StunningFist);
-StunningFist.prototype = Object.create(Technique);
-StunningFist.prototype.name = "Stunning Fist";
-StunningFist.prototype.flavor = "Strike a foe's pressure point with a well-placed punch to temporarily stun them.";
-StunningFist.prototype.attack = true;
-StunningFist.prototype.powerMult = 0.8;
-StunningFist.prototype.attribute = "bludgeoning";
-StunningFist.prototype.hitrate = 0.75;
-StunningFist.prototype.attackStat = "Strength";
-StunningFist.prototype.usesWeapon = false;
-StunningFist.prototype.defenseStat = "Constitution";
-StunningFist.prototype.usesArmor = true;
-StunningFist.prototype.accuracyStat = "Dexterity";
-StunningFist.prototype.evasionStat = "Agility";
-StunningFist.prototype.delay = 90;
-StunningFist.prototype.cooldownMult = 400;
-StunningFist.prototype.cooldownStat = "Wisdom";
-StunningFist.prototype.prerequisites = [BasicAttack];
+}; TECHNIQUES.push(StunningKick);
+StunningKick.prototype = Object.create(Technique);
+StunningKick.prototype.name = "Stunning Fist";
+StunningKick.prototype.flavor = "Strike a foe's pressure point with a well-placed punch to temporarily stun them.";
+StunningKick.prototype.attack = true;
+StunningKick.prototype.powerMult = 0.8;
+StunningKick.prototype.attribute = "bludgeoning";
+StunningKick.prototype.hitrate = 0.75;
+StunningKick.prototype.attackStat = "Strength";
+StunningKick.prototype.usesWeapon = false;
+StunningKick.prototype.defenseStat = "Constitution";
+StunningKick.prototype.usesArmor = true;
+StunningKick.prototype.accuracyStat = "Dexterity";
+StunningKick.prototype.evasionStat = "Agility";
+StunningKick.prototype.delay = 90;
+StunningKick.prototype.cooldownMult = 400;
+StunningKick.prototype.cooldownStat = "Wisdom";
+StunningKick.prototype.prerequisites = [BasicAttack];
 
 function ShadowSnap(level, user) {
 	this.level = level;
@@ -51,7 +51,7 @@ ShadowSnap.prototype.evasionStat = "Agility";
 ShadowSnap.prototype.delay = 10;
 ShadowSnap.prototype.cooldownMult = 1000;
 ShadowSnap.prototype.cooldownStat = "Wisdom";
-ShadowSnap.prototype.prerequisites = [QuickStab, StunningFist];
+ShadowSnap.prototype.prerequisites = [QuickStab, StunningKick];
 
 /*function ScorpionStrike(level, user) {
 	this.name : "Scorpion Strike",

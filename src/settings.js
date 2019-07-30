@@ -34,19 +34,21 @@ function mainHeight() {
 }
 
 function loadSettings() {
-	for (sett in settings) {
-		var ex = localStorage.getItem(sett, settings[sett]);
-		if (ex != undefined)
-			settings[sett] = parse(ex);
+	var loaded = localStorage.getItem("SpelpaerSettings");
+	if (loaded) {
+		loaded = JSON.parse(loaded);
+		for (sett in settings) {
+			var ex = loaded[sett];
+			if (ex != undefined)
+				settings[sett] = ex;
+		}
 	}
 	setCanvasSize();
 	setMusicVolume(settings.music);
 }
 
 function saveSettings() {
-	for (set in settings) {
-		localStorage.setItem(set, settings[set]);
-	}
+	localStorage.setItem("SpelpaerSettings", JSON.stringify(settings));
 }
 
 function profane() {

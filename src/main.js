@@ -1,7 +1,6 @@
 //const PLAYER_COLOR = "#3434FF";
 //const COMPANION_COLOR = "#FFFF00";
-const MAIN_AREA_HEIGHT = 450;
-const EXTRA_EMBER = true;
+//const MAIN_AREA_HEIGHT = 450;
 var difficulty;
 var saveSlot = 0;
 var money;

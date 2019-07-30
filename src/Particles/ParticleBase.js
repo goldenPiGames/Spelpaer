@@ -1,3 +1,5 @@
+const EXTRA_EMBER = true;
+
 var ParticleBase = {
 	dead : false,
 	overInfo : false,
@@ -9,6 +11,7 @@ var ParticleBase = {
 		ctx.globalAlpha = this.alpha;
 		this.draw(ctx);
 		this.updateAlpha();
+		return !this.dead;
     },
     updatePosition: function() {
         this.x += this.dx;
@@ -47,21 +50,21 @@ Ember.prototype.draw = function() {
 	ctx.fill();
 }
 
-function randomEmber() {
+function addRandomEmbers() {
+	particles.push(randomCursorEmber(mouse.x, mouse.y));
+	if (EXTRA_EMBER) {
+		//console.log(mouse.x, mouse.lastX)
+		particles.push(randomCursorEmber((mouse.x + mouse.lastX) / 2, (mouse.y + mouse.lastY) / 2));
+	}
+}
+
+function randomCursorEmber(x, y) {
 	var direction = randomDirection();
 	var speed = .5 + .5 * Math.random();
 	var color = mouse.down ? settings.click_color : (infoField.used ? settings.hover_color : settings.normal_color);
 	var dx = Math.cos(direction) * speed;
 	var dy = Math.sin(direction) * speed;
-	return new Ember(mouse.x - dx, mouse.y - dy, dx, dy, 2, color, .03);
-	if (EXTRA_EMBER) {
-		var direction = randomDirection();
-		var speed = .5 + .5 * Math.random();
-		var color = mouse.down ? settings.click_color : (infoField.used ? settings.hover_color : settings.normal_color);
-		var dx = Math.cos(direction) * speed;
-		var dy = Math.sin(direction) * speed;
-		return new Ember((mouse.x + mouse.lastx) / 2, (mouse.y + mouse.lasty) / 2, dx, dy, 2, color, .03);
-	}
+	return new Ember(x - dx, y - dy, dx, dy, 2, color, .03);
 }
 
 //------------------------------------ Ring --------------------------

@@ -4,7 +4,7 @@ const SPEAKER_BOX_WIDTH = 200;
 const SPEAKER_BOX_HEIGHT = 50;
 
 var dialog = {
-	height : 200,
+	//height : 200,
 	begin : function() {
 		var arrayguments = Array.prototype.slice.call(arguments);
 		this.list = Array.isArray(arguments[0]) ? (Array.isArray(arguments[0][0]) ?  arguments[0][0]: arguments[0]) : arguments;
@@ -13,10 +13,12 @@ var dialog = {
 		this.advanceBuffer = true;
 		this.justBegun = true;
 		dialogActive = true;
+		this.skipButton = new Button(settings.width - 65, 5, 60, 40, "Skip");
 	},
 	update : function() {
+		this.skipButton.update();
 		//console.log(this.index, mouse.clicked, this.advanceBuffer);
-		if (mouse.clicked && !this.advanceBuffer)
+		if (this.skipButton.held || mouse.clicked && !this.advanceBuffer)
 			this.index ++;
 		//console.log(this.index);
 		this.advanceBuffer = false;
@@ -94,6 +96,8 @@ var dialog = {
 		}
 		
 		ctx.fillText(displaySpeaker, SIDE_MARGINS, canvas.height-settings.infoHeight - SPEAKER_BOX_HEIGHT/2 - fontSize/2);
+		
+		this.skipButton.draw();
 	},
 	add : function(what) {
 		this.dialogList.splice(-1, what);

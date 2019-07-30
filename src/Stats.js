@@ -8,6 +8,8 @@ const STATS_ARRAY = [
 	"Wisdom",
 	"Charisma",
 	"Potential",
+	"Weapon",
+	"Armor",
 	"HReduce",
 ]
 
@@ -21,9 +23,10 @@ STATS_ARRAY.forEach(function(nom, dex) {
 function statMultsToArray(mults, level) {
 	ray = [];
 	for (var i = 0; i < STATS_ARRAY.length-1; i++) {
-		var mult = mults[STATS_ARRAY[i]]
-		if (dex != undefined)
-			ray[i] = Math.ceil(mult * level);
+		var nom = STATS_ARRAY[i];
+		var mult = mults[nom];
+		if (mult != undefined)
+			ray[i] = Math.max(Math.ceil(mult * level), i >= 9 ? 0 : 1);
 		else
 			throw STATS_ARRAY[i] + " could not be found.";
 	}
