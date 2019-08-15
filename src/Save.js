@@ -1,6 +1,6 @@
 const SAVEABLE_CHARACTER_THINGS = ["name", "gender", "color", "level", "experience", "techniquePoints", "baseStats"];
 
-function saveGame(slot, restfulness) {
+function saveGame(slot, restfulness = 1.0) {
 	console.log("Saving game to slot "+slot+".");
 	localStorage.setItem("SpelpaerSlot"+slot+"exists", "yeh");
 	var toSave = {
@@ -23,6 +23,7 @@ function saveGame(slot, restfulness) {
 		if (item.prototype.known)
 			known++;
 	});
+	toSave.numSpells = known;
 	//kongregate.stats.submit("SpellsKnown", known);
 	TECHNIQUES.forEach(function(item) {
 		toSave.techniques[item.name] = item.prototype.known;
@@ -40,6 +41,9 @@ function saveGame(slot, restfulness) {
 		toSave.player[thing] = player[thing];
 		toSave.companion[thing] = companion[thing];
 	});
+	toSave.player.equipped = player.equipped.map((quip)=>saveItem(quip));
+	toSave.companion.equipped = companion.equipped.map((quip)=>saveItem(quip));
+	toSave.inventory = inventory.map((quip)=>saveItem(quip));
 	//kongregate.stats.submit("PlayerLevel", player.level);
 	localStorage.setItem("SpelpaerSlot"+slot, JSON.stringify(toSave));
 	console.log("Game saved to slot "+slot+".");
@@ -53,7 +57,7 @@ function loadGame(slot) {
 		return;
 	}*/
 	var loaded = JSON.parse(localStorage.getItem("SpelpaerSlot"+slot));
-	currentLoc = getLocaleByName(loaded.currentLoc);
+	currentLoc = getLocationByName(loaded.currentLoc);
 	currentTime = loaded.currentTime;
 	money = loaded.money;
 	difficulty = loaded.difficulty;
@@ -71,18 +75,20 @@ function loadGame(slot) {
 		item.visited = loaded.locales[item.name];
 	});
 	PATHS.forEach(function(item) {
-		if (loaded.paths[item.name] != undefined)
-			item.available = loaded.paths[item.name] == "true";
+		item.available = loaded.paths[item.name];
 	});
 	Flags = loaded.flags;
 	player = new Player();
 	companion = new Companion();
 	SAVEABLE_CHARACTER_THINGS.forEach(function(stat) {
-		player[stat] = loaded.companion[stat];
+		player[stat] = loaded.player[stat];
 		companion[stat] = loaded.companion[stat];
 	});
+	player.equipped = loaded.player.equipped.map((quip)=>loadItem(quip));
+	companion.equipped = loaded.companion.equipped.map((quip)=>loadItem(quip));
 	player.recalculateStats();
 	companion.recalculateStats();
+	inventory = loaded.inventory.map((quip)=>loadItem(quip));
 	refreshKnownTechniques();
 	//kongregate.stats.submit("PlayerLevel", player.level);
 	new PrepScreen().begin(loaded.restfulness, function(){currentLoc.returnFromRest();});
@@ -106,7 +112,7 @@ function fileDescription(slot) {
 		var loaded = JSON.parse(localStorage.getItem("SpelpaerSlot"+slot));
 		return [
 			DIFFICULTY_NAMES[loaded.difficulty] + "; "+getDisplayTime(loaded.currentTime),
-			loaded.player.name + " " + (["","♂","♀",""])[loaded.player.gender] + " level " + loaded.player.level,
+			loaded.player.name + " " + (["","♂","♀",""])[loaded.player.gender] + " level " + loaded.player.level + "; " + loaded.numSpells + " spells found",
 			loaded.companion.name + " " + (["","♂","♀",""])[loaded.companion.gender] + " level " + loaded.companion.level,
 			"Currently in "+loaded.currentLoc];    
 	} catch (e) {

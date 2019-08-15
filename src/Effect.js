@@ -8,12 +8,18 @@ var Effect = {
 	},
 	apply : function(user, target, dmg) {
 		if (this.target)
-			target.applyEffect(this);
+			target.addEffect(this);
 		else
-			user.applyEffect(this);
+			user.addEffect(this);
 	},
-	effectOn : function(statName) {
+	effectOnStat : function(statName) {
 		return 0;
+	},
+	getDescription : function() {
+		
+	},
+	getDescriptionApplied : function() {
+		
 	},
 }
 
@@ -48,22 +54,77 @@ BattleAction.getEffectRate = function(attacker, defender) {
 	return truerate;
 }*/
 
-SingleBuff = {
+var BasicEffect = {
+	statChangeMults : statsToArray({}, 0),
+	resistances : attributesToArray({}, 0),
+	effectOnStat(stat) {
+		return this.statChanges[stat] || (this.statChangeMults[stat] * this.source.level);
+	},
+	getDescription : function() {
+		var toret = this.target ? "Target's " : "User's ";
+		var comma = false;
+		for (var i = 0; i < STAT_NAMES.length; i++) {
+			let fec = this.effectOnStat(i);
+			if (fec) {
+				if (comma)
+					toret += ", ";
+				else
+					comma = true;
+				if (fec > 0)
+					toret += STAT_ABBS[i] + " +" + fec;
+				else
+					toret += STAT_ABBS[i] + " " + fec;
+			}
+		}
+		return toret + " for " + this.duration;
+	},
+	getDescriptionApplied : function() {
+		var lines = [];
+		for (var i = 0; i < STAT_NAMES.length; i++) {
+			let fec = this.effectOnStat(i);
+			if (fec > 0)
+				lines.push(STAT_NAMES[i] + " buffed  by " + fec);
+			else if (fec < 0)
+				lines.push(STAT_NAMES[i] + " nerfed  by " + (-fec));
+		}
+		return lines;
+	}
+}
+Object.setPrototypeOf(BasicEffect, Effect);
+
+
+var BasicEffectPhysic = {
+	magic : false,
+	//statChangeMults : statsToArray({}, 0),
+	//resistances : attributesToArray({}, 0),
+	effectOnStat(stat) {
+		return this.statChangeMults[stat] * this.source.level;
+	},
+}
+Object.setPrototypeOf(BasicEffectPhysic, BasicEffect);
+
+
+var BasicEffectMagic = {
+	magic : true,
+	effectOnStat(stat) {
+		return this.statChanges[stat];
+	},
+}
+Object.setPrototypeOf(BasicEffectMagic, BasicEffect);
+
+/*SingleBuff = {
 	__proto__ : Object.create(Effect),
 	target : true,
-	effectOn(stat) {
+	effectOnStat(stat) {
 		if (stat == this.stat)
 			return this.amount;
 		else return 0;
 	},
-	getDescription : function() {
-		return "Buffs "+(this.target?"target":"user")+"'s "+this.stat+" by "+this.amount+" for "+this.duration;
-	}
 }
 SingleNerf = {
 	__proto__ : Object.create(Effect),
 	target : true,
-	effectOn(stat) {
+	effectOnStat(stat) {
 		if (stat == this.stat)
 			return -this.amount;
 		else return 0;
@@ -71,4 +132,4 @@ SingleNerf = {
 	getDescription : function() {
 		return "Nerfs "+(this.target?"target":"user")+"'s "+this.stat+" by "+this.amount+" for "+this.duration;
 	}
-}
+}*/

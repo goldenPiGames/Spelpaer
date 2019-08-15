@@ -9,10 +9,10 @@ InflictMinor.prototype.power = 5;
 InflictMinor.prototype.damageInflection = 0.7;
 InflictMinor.prototype.attribute = "negative";
 InflictMinor.prototype.hitrate = 0.65
-InflictMinor.prototype.attackStat = "Wisdom";
+InflictMinor.prototype.attackStat = STAT_INDICES.Wisdom;
 InflictMinor.prototype.defenseStat = "Vitality";
-InflictMinor.prototype.accuracyStat = "Wisdom";
-InflictMinor.prototype.evasionStat = "Charisma";
+InflictMinor.prototype.accuracyStat = STAT_INDICES.Wisdom;
+InflictMinor.prototype.evasionStat = STAT_INDICES.Charisma;
 InflictMinor.prototype.delay = 100;
 InflictMinor.prototype.cost = 2;
 

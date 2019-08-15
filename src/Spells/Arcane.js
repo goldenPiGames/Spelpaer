@@ -7,14 +7,16 @@ RayOfFrost.prototype.flavor = "A small beam of frigid air.";
 RayOfFrost.prototype.attack = true;
 RayOfFrost.prototype.level = 5;
 RayOfFrost.prototype.power = 7;
-RayOfFrost.prototype.attribute = "cold";
-RayOfFrost.prototype.hitrate = 0.75;
-RayOfFrost.prototype.attackStat = "Intelligence";
-RayOfFrost.prototype.defenseStat = "Constitution";
-RayOfFrost.prototype.accuracyStat = "Dexterity";
-RayOfFrost.prototype.evasionStat = "Agility";
-RayOfFrost.prototype.delay = 80;
-RayOfFrost.prototype.cost = 2
+RayOfFrost.prototype.attribute = ATTRIBUTE_INDICES.cold;
+RayOfFrost.prototype.hitrate = 0.7;
+RayOfFrost.prototype.attackStat = STAT_INDICES.Intelligence;
+RayOfFrost.prototype.defenseStat = STAT_INDICES.Constitution;
+RayOfFrost.prototype.accuracyStat = STAT_INDICES.Dexterity;
+RayOfFrost.prototype.evasionStat = STAT_INDICES.Agility;
+RayOfFrost.prototype.delay = 90;
+RayOfFrost.prototype.maxCooldown = 1500;
+RayOfFrost.prototype.cooldownStat = STAT_INDICES.Intelligence;
+RayOfFrost.prototype.cost = 1;
 
 function AcidSplash(user) {
 	this.user = user;
@@ -25,14 +27,16 @@ AcidSplash.prototype.flavor = "A small orb of corrosive liquid.";
 AcidSplash.prototype.attack = true;
 AcidSplash.prototype.level = 5;
 AcidSplash.prototype.power = 7;
-AcidSplash.prototype.attribute = "acid";
-AcidSplash.prototype.hitrate = 0.75;
-AcidSplash.prototype.attackStat = "Intelligence";
-AcidSplash.prototype.defenseStat = "Wisdom";
-AcidSplash.prototype.accuracyStat = "Dexterity";
-AcidSplash.prototype.evasionStat = "Agility";
-AcidSplash.prototype.delay = 80;
-AcidSplash.prototype.cost = 2
+AcidSplash.prototype.attribute = ATTRIBUTE_INDICES.acid;
+AcidSplash.prototype.hitrate = 0.7;
+AcidSplash.prototype.attackStat = STAT_INDICES.Intelligence;
+AcidSplash.prototype.defenseStat = STAT_INDICES.Wisdom;
+AcidSplash.prototype.accuracyStat = STAT_INDICES.Dexterity;
+AcidSplash.prototype.evasionStat = STAT_INDICES.Agility;
+AcidSplash.prototype.delay = 90;
+AcidSplash.prototype.maxCooldown = 1500;
+AcidSplash.prototype.cooldownStat = STAT_INDICES.Intelligence;
+AcidSplash.prototype.cost = 1;
 
 function BurningHands(user) {
 	this.user = user;
@@ -42,16 +46,18 @@ BurningHands.prototype.name = "Burning Hands";
 BurningHands.prototype.flavor = "Create a cone of fire from your hands.";
 BurningHands.prototype.attack = true;
 BurningHands.prototype.level = 10;
-BurningHands.prototype.power = 10;
+BurningHands.prototype.power = 12;
 BurningHands.prototype.splash = 0.5;
-BurningHands.prototype.attribute = "fire";
+BurningHands.prototype.attribute = ATTRIBUTE_INDICES.fire;
 BurningHands.prototype.hitrate = 0.8;
-BurningHands.prototype.attackStat = "Intelligence";
-BurningHands.prototype.defenseStat = "Wisdom";
-BurningHands.prototype.accuracyStat = "Dexterity";
-BurningHands.prototype.evasionStat = "Agility";
-BurningHands.prototype.delay = 100;
-BurningHands.prototype.cost = 6;
+BurningHands.prototype.attackStat = STAT_INDICES.Intelligence;
+BurningHands.prototype.defenseStat = STAT_INDICES.Wisdom;
+BurningHands.prototype.accuracyStat = STAT_INDICES.Dexterity;
+BurningHands.prototype.evasionStat = STAT_INDICES.Agility;
+BurningHands.prototype.delay = 120;
+BurningHands.prototype.maxCooldown = 540000;
+BurningHands.prototype.cooldownStat = STAT_INDICES.Intelligence;
+BurningHands.prototype.cost = 2;
 
 function ShockingGrasp(user) {
 	this.user = user;
@@ -64,10 +70,10 @@ ShockingGrasp.prototype.level = 12;
 ShockingGrasp.prototype.power = 16;
 ShockingGrasp.prototype.attribute = "electricity";
 ShockingGrasp.prototype.hitrate = 0.75;
-ShockingGrasp.prototype.attackStat = "Intelligence";
-ShockingGrasp.prototype.defenseStat = "Wisdom";
-ShockingGrasp.prototype.accuracyStat = "Dexterity";
-ShockingGrasp.prototype.evasionStat = "Agility";
+ShockingGrasp.prototype.attackStat = STAT_INDICES.Intelligence;
+ShockingGrasp.prototype.defenseStat = STAT_INDICES.Wisdom;
+ShockingGrasp.prototype.accuracyStat = STAT_INDICES.Dexterity;
+ShockingGrasp.prototype.evasionStat = STAT_INDICES.Agility;
 ShockingGrasp.prototype.delay = 120;
 ShockingGrasp.prototype.cost = 6;
 /*class ShockingGrasp extends SpellC {
@@ -81,10 +87,10 @@ ShockingGrasp.prototype.cost = 6;
 	power = 16;
 	attribute = "electricity";
 	hitrate = 0.75;
-	attackStat = "Intelligence";
-	defenseStat = "Wisdom";
-	accuracyStat = "Dexterity";
-	evasionStat = "Agility";
+	attackStat = STAT_INDICES.Intelligence;
+	defenseStat = STAT_INDICES.Wisdom;
+	accuracyStat = STAT_INDICES.Dexterity;
+	evasionStat = STAT_INDICES.Agility;
 	delay = 110;
 	cost = 6;
 }
@@ -100,12 +106,12 @@ AcidArrow.prototype.flavor = "Launch a projectile made of acid.";
 AcidArrow.prototype.attack = true;
 AcidArrow.prototype.level = 17;
 AcidArrow.prototype.power = 22;
-AcidArrow.prototype.attribute = "acid";
+AcidArrow.prototype.attribute = ATTRIBUTE_INDICES.acid;
 AcidArrow.prototype.hitrate = 0.75;
-AcidArrow.prototype.attackStat = "Intelligence";
-AcidArrow.prototype.defenseStat = "Wisdom";
-AcidArrow.prototype.accuracyStat = "Dexterity";
-AcidArrow.prototype.evasionStat = "Agility";
+AcidArrow.prototype.attackStat = STAT_INDICES.Intelligence;
+AcidArrow.prototype.defenseStat = STAT_INDICES.Wisdom;
+AcidArrow.prototype.accuracyStat = STAT_INDICES.Dexterity;
+AcidArrow.prototype.evasionStat = STAT_INDICES.Agility;
 AcidArrow.prototype.delay = 100;
 AcidArrow.prototype.cost = 10;
 
@@ -119,10 +125,10 @@ AcidArrow.prototype.cost = 10;
 	power : 27,
 	attribute : "fire",
 	hitrate : 0.75,
-	attackStat : "Intelligence",
-	defenseStat : "Wisdom",
-	accuracyStat : "Dexterity",
-	evasionStat : "Agility",
+	attackStat : STAT_INDICES.Intelligence,
+	defenseStat : STAT_INDICES.Wisdom,
+	accuracyStat : STAT_INDICES.Dexterity,
+	evasionStat : STAT_INDICES.Agility,
 	delay : 100,
 	cost : 13
 }; SPELLS.push(ScorchingRay);
@@ -137,10 +143,10 @@ var ScorchingRay2 = {
 	power : 54,
 	attribute : "fire",
 	hitrate : 0.75,
-	attackStat : "Intelligence",
-	defenseStat : "Wisdom",
-	accuracyStat : "Dexterity",
-	evasionStat : "Agility",
+	attackStat : STAT_INDICES.Intelligence,
+	defenseStat : STAT_INDICES.Wisdom,
+	accuracyStat : STAT_INDICES.Dexterity,
+	evasionStat : STAT_INDICES.Agility,
 	delay : 100,
 	cost : 32
 }; SPELLS.push(ScorchingRay2);*/

@@ -4,20 +4,24 @@ function WorldMap() {
 	zoom = 1,
 	this.mainWidth = settings.width-200;
 	this.mainHeight = mainHeight();
-	this.centerX = currentLoc.x;
-	this.centerY = currentLoc.y;
 	this.hideButton = new Button(this.mainWidth+10, mainHeight()-100, 180, 45, "Hide", "Mouse over to hide all locales and paths, showing only the physical landscape.");
 	this.backButton = new Button(this.mainWidth+10, mainHeight()-50, 180, 45, "Back", "Return to the Locale", ()=>currentLoc.buildScreen());
+	this.centerButton = new Button(this.mainWidth+10, mainHeight()-150, 180, 45, "Center", "Center the camera on your current location.", ()=>this.centerCamera());
 	this.zoomSlider = new Slider(this.mainWidth+10, 20, 180, 30, "Zoom", "Use this slider to adjust the zoom.", .5, 3, val=>this.zoom = val, ()=>this.zoom);
-	this.objects = [this.backButton, this.hideButton, this.zoomSlider];
+	this.objects = [this.backButton, this.hideButton, this.centerButton, this.zoomSlider];
 }
 WorldMap.prototype = Object.create(ScreenBase);
 WorldMap.prototype.fullMapImg = makeImage("src/WorldMap.png"),
+WorldMap.prototype.centerCamera = function() {
+	this.centerX = currentLoc.x;
+	this.centerY = currentLoc.y;
+}
 WorldMap.prototype.beginFromCurrentLocale = function() {
 	switchScreen(this);
 	var thisser = this;
 	runnee = this;
 	this.zoom = 1;
+	this.centerCamera();
 	//this.info.show(null);
 	/*PATHS.forEach(function(dab){
 		dab.updateLine(null, thisser);

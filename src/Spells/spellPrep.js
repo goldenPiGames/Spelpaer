@@ -7,21 +7,23 @@ function PrepScreen() {
 	var hafw = settings.width/2;
 	var hit = mainHeight();
 	this.sortButton = new Button(hafw, hit-45, 145, 40, "Sort", "Sort your spells.", function(){sortSpells();thisser.preparedMenu.putItems()});
-	this.finishedButton = new Button(wid-150, hit-45, 145, 40, "Finished", "Finish studying and go about your day.");
-	this.autoButton = new Button(50, hit-45, 140, 40, "Auto", "Automatically prepare spells.", function(){thisser.autoPrepare()});
+	this.finishedButton = new Button(wid-150, hit-45, 145, 40, "Finished", "Finish studying and go about your day.", function(){thisser.finish()});
+	this.autoButton = new Button(10, hit-45, 140, 40, "Auto", "Automatically prepare spells.", function(){thisser.autoPrepare()});
+	this.lastButton = new Button(160, hit-45, 140, 40, "Last", "Prepare the same set of spells that you did last time.", function(){thisser.prepareLast()}, localStorage.getItem("SpelpaerLastSpells"));
 	this.knownMenu = new ScrollMenu(0, 30, hafw, hit-80, function(value){thisser.knownClicked(value)}, [], function(val){return val.prototype.cost}, function(val){return val.prototype.description});
 	this.preparedMenu = new ScrollMenu(hafw, 30, hafw, hit-80, function(value){thisser.preparedClicked(value)}, [], "cost", "description");
-	this.objects = [this.pointsLabel, this.knownLabel, this.preparedLabel, this.knownMenu, this.preparedMenu, this.autoButton, this.sortButton, this.finishedButton];
+	this.objects = [this.pointsLabel, this.knownLabel, this.preparedLabel, this.knownMenu, this.preparedMenu, this.autoButton, this.lastButton, this.sortButton, this.finishedButton];
 }
 PrepScreen.prototype = Object.create(ScreenBase);
-PrepScreen.prototype.begin = function(amount, finishedFunction) {
+PrepScreen.prototype.begin = function(amount, after) {
 	player.spells = [];
+	refreshSpellDescriptions(player);
 	refreshKnownSpells();
 	playMusic("Decisions");
 	this.maxPoints = Math.ceil(amount * getSpellPoints());
 	this.points = this.maxPoints;
 	this.pointsLabel.text = outof(this.points, this.maxPoints);
-	this.finishedButton.handler = finishedFunction;
+	this.after = after;
 	this.knownMenu.setItems(knownSpells);
 	this.knownMenu.currentScroll = 0;
 	this.preparedMenu.setItems(player.spells);
@@ -31,7 +33,7 @@ PrepScreen.prototype.begin = function(amount, finishedFunction) {
 PrepScreen.prototype.knownClicked = function(val) {
 	if (!val)
 		return;
-	if (this.points >= val.prototype.cost) {
+	if (this.points >= val.prototype.cost && val.prototype.isPreparable()) {
 		this.points -= val.prototype.cost;
 		this.pointsLabel.text = outof(this.points, this.maxPoints);
 		player.spells.push(new val(player));
@@ -52,10 +54,11 @@ PrepScreen.prototype.autoPrepare = function() {
 	});
 	var loops = 0;
 	//let general = filterKnown(SPELLS_GENERAL);
-	while (this.points >= 2 && loops <= 1000) {
+	while (this.points >= 1 && loops <= 100) {
 		//this.knownClicked(randomTerm(choices));
-		var stat = raffle(player.Intelligence, "Intelligence", player.Wisdom, "Wisdom", player.Charisma, "Charisma", player.level, "All");
+		var stat = raffle(player.stats[STAT_INDICES.Intelligence]*2, STAT_INDICES.Intelligence, player.stats[STAT_INDICES.Wisdom], STAT_INDICES.Wisdom, player.stats[STAT_INDICES.Charisma], STAT_INDICES.Charisma, player.level, "All");
 		//console.log(loops, stat);
+		//console.log(filterKnown(spellsByStat(stat)));
 		this.knownClicked(randomTerm(filterKnown(spellsByStat(stat))));
 		loops++;
 	}
@@ -67,6 +70,16 @@ PrepScreen.prototype.autoPrepare = function() {
 	}*/
 	sortSpells();
 	this.preparedMenu.putItems();
+}
+PrepScreen.prototype.prepareLast = function() {
+	var loaded = localStorage.getItem("SpelpaerLastSpells");
+	if (loaded) {
+		JSON.parse(loaded).forEach((sp)=>this.knownClicked(SPELLS_BY_NAME[sp]));
+	}
+}
+PrepScreen.prototype.finish = function() {
+	localStorage.setItem("SpelpaerLastSpells", JSON.stringify(player.spells.map((sp)=>sp.iname)));
+	this.after();
 }
 
 function sortSpells() {

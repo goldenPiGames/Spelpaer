@@ -1,4 +1,4 @@
-var RadioButtons = function(x, y, width, height, texts, hoverTexts = null, handler = doNothing) {
+function RadioButtons(x, y, width, height, texts, hoverTexts = null, handler = doNothing) {
 	this.index = -1;
     this.texts = texts;
 	this.children = [];
@@ -38,7 +38,7 @@ RadioButtons.prototype.draw = function(ctx) {
 
 //--------------------------------------------------------------- Element ---------------------------------------------------------
 
-var RadioButtonElement = function(x, y, width, height, parent, text, hoverText, index) {
+function RadioButtonElement(x, y, width, height, parent, text, hoverText, index) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -58,7 +58,7 @@ var RadioButtonElement = function(x, y, width, height, parent, text, hoverText, 
 RadioButtonElement.prototype = Object.create(UIObjectBase);
 
 RadioButtonElement.prototype.update = function() {
-    this.updateStats();
+    this.updateMouse();
 	if (this.hovered) {
 		infoField.setText(this.hoverText);
 	}
@@ -83,12 +83,7 @@ RadioButtonElement.prototype.draw = function() {
 	var fontSize = this.height * 4/5;
 	ctx.fillStyle = this.selected ? settings.click_color : (this.hovered ? settings.hover_color : settings.normal_color);
 	ctx.font = fontSize + "px "+settings.font;
-	ctx.textAlign = "start";
+	ctx.textAlign = "left";
 	
-	var textSize = ctx.measureText(this.text);
-	var textX = this.x + this.height;
-	var textY = this.y + (this.height/2) - (fontSize/2);
-
-	//draw the text
-	ctx.fillText(this.text, textX, textY);
+	ctx.fillText(this.text, this.x + this.height, this.y + (this.height/2) - (fontSize/2));
 }

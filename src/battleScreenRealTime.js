@@ -29,7 +29,7 @@ var battleScreenRealTime = {
 			this.currentPlayerMenu.update();
 			this.companionTechniquePalette.update();
 		}
-		//this.updateStats();
+		//this.updateMouse();
 		//var tickSeed = Math.random();
 		this.allUnits().forEach(function(oj) {
 			oj.update();

@@ -13,7 +13,7 @@ var ImageHolder = function(x, y, image) {
 ImageHolder.prototype = Object.create(UIObjectBase);
 
 ImageHolder.prototype.update = function() {
-	this.updateStats(ctx);
+	this.updateMouse(ctx);
 }
 
 ImageHolder.prototype.draw = function() {

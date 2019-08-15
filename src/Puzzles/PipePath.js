@@ -24,7 +24,7 @@ var PipePath = function(level, x, y, width, solveFunction = doNothing) {
 PipePath.prototype = Object.create(UIObjectBase);
 
 PipePath.prototype.update = function() {
-	this.updateStats();
+	this.updateMouse();
 	if (!this.solved) {
 		this.pieces.forEach(function(item1, index1, array1) {
 			item1.forEach(function(item2, index2, array2) {
@@ -125,7 +125,7 @@ var PipePiece = function(x, y, size, type) {
 PipePiece.prototype = Object.create(UIObjectBase);
 
 PipePiece.prototype.update = function() {
-	this.updateStats(ctx);
+	this.updateMouse(ctx);
 	if (this.hovered && this.hoverText != undefined) {
 		infoField.setText(this.hoverText);
 	}

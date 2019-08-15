@@ -1,25 +1,5 @@
 var Boar = function(level) {
-	this.name = "Boar";
-	this.description = "A forest animal, dangerous and aggressive when rutting."
 	this.level = level;
-	this.Vitality =     Math.floor(level*1.0);
-	this.Strength =     Math.floor(level*1.7);
-	this.Constitution = Math.floor(level*1.6);
-	this.Intelligence = 2;
-	this.Wisdom =       Math.floor(level*0.5);
-	this.Dexterity =    Math.floor(level*1.0);
-	this.Agility =      Math.floor(level*1.0);
-	this.Charisma =     Math.floor(level*0.4);
-	this.Potential =    Math.floor(level*0.5);
-	this.Weapon =       0;
-	this.Armor =        0;
-	this.maxhp = Math.ceil(this.Vitality*2.5);
-	this.hp = this.maxhp;
-	this.effectiveness = {
-		piercing : 1.5,
-		positive : -1.0,
-	};
-	this.weaponAttribute = "piercing";
 	this.techniques = [
 		new BasicAttack(level, this),
 		new WildGore(level, this),
@@ -28,31 +8,37 @@ var Boar = function(level) {
 	this.init();
 }
 Boar.prototype = Object.create(Unit);
+Boar.prototype.name = "Boar";
+Boar.prototype.description = "A forest animal, dangerous and aggressive when rutting.";
 Boar.prototype.image = makeImage("src/Enemies/Boar.png"); //Pigboar, Master of the Monster Lair
+Boar.prototype.hpMult = 2.5;
+Boar.prototype.statMults = statsToArray({
+	Vitality : 1.0,
+	Strength : 1.7,
+	Constitution : 1.6,
+	Dexterity : 0.8,
+	Agility : 1.1,
+	Intelligence : 0.2,
+	Wisdom : 0.7,
+	Charisma : 0.6,
+	Potential : 0.5,
+	Weapon : 0,
+	Armor : 0,
+});
+Boar.prototype.effectiveness = attributesToArray({
+	piercing : 1.3,
+	positive : -1.0,
+	thought : 0.4,
+});
+Boar.prototype.weaponAttribute = ATTRIBUTE_INDICES.piercing;
+Boar.prototype.dropTable = [
+	{item:HideShirt, chance:.15, min:5, max:20, condition:DROP_CONDITIONS.deadOnly},
+	{item:TuskNecklace, chance:.20, min:10, max:20, condition:DROP_CONDITIONS.deadOnly},
+]
+
 
 var Moose = function(level) {
-	this.name = "Moose";
-	this.description = "A majestic moose. Mind you, moose bites can be pretty nasty."
 	this.level = level;
-	this.Vitality =     Math.floor(level*1.0);
-	this.Strength =     Math.floor(level*1.5);
-	this.Constitution = Math.floor(level*1.8);
-	this.Intelligence = 2;
-	this.Wisdom =       Math.floor(level*0.7);
-	this.Dexterity =    Math.floor(level*0.9);
-	this.Agility =      Math.floor(level*0.7);
-	this.Charisma =     Math.floor(level*0.4);
-	this.Potential =    Math.floor(level*0.5);
-	this.Weapon =       0;
-	this.Armor =        0;
-	this.maxhp = Math.ceil(this.Vitality*2.5);
-	this.hp = this.maxhp;
-	this.effectiveness = {
-		fire : 1.5,
-		cold : .5,
-		positive : -1.0,
-	};
-	this.weaponAttribute = "bludgeoning";
 	this.techniques = [
 		new BasicAttack(level, this),
 		new WildGore(level, this),
@@ -61,11 +47,35 @@ var Moose = function(level) {
 	this.init();
 }
 Moose.prototype = Object.create(Unit);
+Moose.prototype.name = "Moose";
+Moose.prototype.description = "A majestic moose. Mind you, moose bites can be pretty nasty."
 Moose.prototype.image = makeImage("src/Enemies/Moose.png"); //http://wikiclipart.com/moose-clipart_10850/
+Moose.prototype.hpMult = 2.5;
+Moose.prototype.statMults = statsToArray({
+	Vitality : 1.3,
+	Strength : 1.5,
+	Constitution : 1.7,
+	Dexterity : 0.8,
+	Agility : 0.9,
+	Intelligence : 0.2,
+	Wisdom : 0.9,
+	Charisma : 0.5,
+	Potential : 0.5,
+	Weapon : 0,
+	Armor : 0,
+});
+Moose.prototype.effectiveness = attributesToArray({
+	fire : 1.4,
+	ice : .6,
+	positive : -1.0,
+	thought : 0.4,
+});
+Moose.prototype.weaponAttribute = ATTRIBUTE_INDICES.bludgeoning;
+Moose.prototype.dropTable = [
+	//TODO put something here
+]
 
 var Wolf = function(level) {
-	this.name = "Wolf";
-	this.description = "A wild canine. They hunt in packs."
 	this.level = level;
 	this.Vitality =     Math.floor(level*1.0);
 	this.Strength =     Math.floor(level*1.1);
@@ -87,12 +97,37 @@ var Wolf = function(level) {
 	this.weaponAttribute = "piercing";
 	this.techniques = [
 		new BasicAttack(level, this),
+		//TODO add "Ankle Bite" or something
 	];
 	this.spells = [];
 	this.init();
 }
 Wolf.prototype = Object.create(Unit);
+Wolf.prototype.name = "Wolf";
+Wolf.prototype.description = "A wild canine. They hunt in packs.";
 Wolf.prototype.image = makeImage("src/Enemies/Wolf.png");
+Wolf.prototype.hpMult = 2.5;
+Wolf.prototype.statMults = statsToArray({
+	Vitality : 0.8,
+	Strength : 1.1,
+	Constitution : 1.0,
+	Dexterity : 1.5,
+	Agility : 1.6,
+	Intelligence : 0.3,
+	Wisdom : 0.7,
+	Charisma : 0.9,
+	Potential : 0.5,
+	Weapon : 0,
+	Armor : 0,
+});
+Wolf.prototype.effectiveness = attributesToArray({
+	fire : 1.3,
+	thought : 0.4,
+});
+Wolf.prototype.weaponAttribute = ATTRIBUTE_INDICES.piercing;
+Wolf.prototype.dropTable = [
+	//TODO put something here
+]
 
 /*var Squid = function(level) {
 	this.name = "Squid";
@@ -158,40 +193,3 @@ var Shark = function(level) {
 	this.effects = [];
 }
 Shark.prototype = Object.create(Unit);*/
-
-function WildGore(level, user) {
-	this.level = level;
-	this.power = this.powerMult * this.level;
-	this.maxCooldown = this.cooldownMult * this.level;
-	this.user = user;
-	/*animate : function(user, target, battle) {
-		var x = target.animationX();
-		var y = target.animationY();
-		for(var i = 0; i < 22; i++) {
-			let direction = randomDirection();
-			let speed = i/4 + 2 * Math.random();
-			let shade = 64 + 128 * Math.random();
-			let color = rgb(shade, shade, shade);
-			let dx = Math.cos(direction) * speed;
-			let dy = Math.sin(direction) * speed;
-			engine.particles.push(new Ember(x, y, dx, dy, 3, color, .025));
-		}
-	},*/
-}//; TECHNIQUES.push(WildGore);
-WildGore.prototype = Object.create(Technique);
-WildGore.prototype.name = "Wild Gore";
-WildGore.prototype.flavor = "A reckless and powerful attack with tusks, horns, antlers, or the like.";
-WildGore.prototype.attack = true;
-WildGore.prototype.powerMult = 2.0;
-WildGore.prototype.attribute = "piercing";
-WildGore.prototype.hitrate = 0.45;
-WildGore.prototype.attackStat = "Strength";
-WildGore.prototype.usesWeapon = false;
-WildGore.prototype.defenseStat = "Constitution";
-WildGore.prototype.usesArmor = true;
-WildGore.prototype.accuracyStat = "Dexterity";
-WildGore.prototype.evasionStat = "Agility";
-WildGore.prototype.delay = 140;
-WildGore.prototype.cooldownMult = 250;
-WildGore.prototype.cooldownStat = "Constitution";
-WildGore.prototype.prerequisites = [BasicAttack];

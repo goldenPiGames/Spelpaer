@@ -41,7 +41,9 @@ const MUSIC_LIST = [
 	{name:"Secret Power",         by:"Ucchii 0",      yt:"ivspAGvhA8E", site:"https://creofuga.net/audios/106993", loopStart:16.093, loopEnd:330.35, ogg:true},
 	{name:"Strategy 3",           by:"PeriTune",      yt:"tqS-DwicQCo", site:"https://peritune.com/strategy3/"},
 	{name:"Dramatic 2",           by:"PeriTune",      yt:"okBKjTPrzA4", site:"https://peritune.com/dramatic2/"},
+	{name:"Dramatic 4",           by:"PeriTune",      yt:"dpBh5abRTh8", site:"https://peritune.com/dramatic4/"},
 	{name:"Samurai Sake Showdown",by:"Darren Curtis", yt:"NOGZX7Z4wSI", site:"https://www.darrencurtismusic.com/world-ethnic", loopStart:0.7, loopEnd:69.664},
+	{name:"Unknown World 2",      by:"PeriTune",      yt:"OpsZR7O5H-A", site:"https://peritune.com/unknownworld2/", alt:true},
 	{name:"Demise",               by:"PeriTune",      yt:"Ouj_cwWJdmo", site:"https://peritune.com/demise/", loopStart:13.111, loopEnd:99.403},
 	{name:"Seiiki Kessen",        by:"Ucchii 0",      yt:"6Yx2__wLYek", loopStart:11.380, loopEnd:169.484},
 ];

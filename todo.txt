@@ -1,5 +1,4 @@
-make stats and elements work by indices
 
 scrollbar: scroll directly
-
+credits
 make sure everything works on any screen size

@@ -1,21 +1,20 @@
 const MESSAGE_TIME = 30;
 
 var BattleAction = {
+	damageInflection : 1.0,
+	cooldown : 0,
+	defeat : DEFEAT_INDICES.Dead,
 	execute : function(user, target) {
 		this.addHit(user, target);
 		if (this.splash) {
 			var periphTarget;
 			periphTarget = battle.leftOf(target);
-			if (periphTarget != null) {
-				if (periphTarget.alive) {
-					this.addHit(user, periphTarget, this.splash);
-				}
+			if (periphTarget != null && periphTarget.isActive()) {
+				this.addHit(user, periphTarget, this.splash);
 			}
 			periphTarget = battle.rightOf(target);
-			if (periphTarget != null) {
-				if (periphTarget.alive) {
-					this.addHit(user, periphTarget, this.splash);
-				}
+			if (periphTarget != null && periphTarget.isActive()) {
+				this.addHit(user, periphTarget, this.splash);
 			}
 		}
 	},
@@ -58,10 +57,11 @@ var BattleAction = {
 	getDamage : function(attacker, defender) {
 		var pow = this.power;
 		var eff = defender.getEffectiveness(this.attribute);
-		var atk = attacker.getStat(this.attackStat) + this.usesWeapon*attacker.getStat("Weapon");
-		var def = (eff >= 1 ? defender.getStat(this.defenseStat) : defender.level) + this.usesArmor*attacker.getStat("Armor");
+		var atk = attacker.getStat(this.attackStat) + this.usesWeapon*attacker.getStat(STAT_INDICES.Weapon);
+		var def = (eff >= 0 ? defender.getStat(this.defenseStat) + this.usesArmor*attacker.getStat(STAT_INDICES.Armor) : defender.getStat(STAT_INDICES.HReduce));
 		var inf = this.damageInflection;
 		var bon = this.damageBonus(attacker, defender);
+		//console.log(pow, eff, atk, def, inf, bon);
 		var dmg = pow * eff * Math.pow(atk / def, inf) * bon;
 		return dmg;
 	},
@@ -78,6 +78,20 @@ var BattleAction = {
 	getProperty : function(nom) {
 		if (this[nom])
 			return this[nom]
+	},
+	isAvailable : function() {
+		return !(this.cooldown > 0);
+	},
+	cooldownPortion : function() {
+		return 1-(this.cooldown/this.maxCooldown);
+	},
+	expend : function() {
+		this.cooldown = this.maxCooldown;
+	},
+	tick : function(user) {
+		if (this.cooldown > 0) {
+			this.cooldown = Math.max(0, this.cooldown - user.getStat(this.cooldownStat));
+		}
 	},
 }
 
@@ -185,7 +199,8 @@ function addHit(messageList, attacker, defender, skill, dmgMult = 1.0) {
 	}
 }
 */
-function executeSplashAttack(user, target) {
+
+/*function executeSplashAttack(user, target) {
 	//messageList = [new DialogLine("Battle", null, user.name+(this.isSpell?" casts ":" uses ")+this.name+".", MESSAGE_TIME+5)];
 	if (this.isSpell)
 		user.expendSpell(this);
@@ -203,7 +218,7 @@ function executeSplashAttack(user, target) {
 			this.addHit(user, periphTarget, this.splash);
 		}
 	}
-}
+}*/
 
 function executeLineAttack(user, target) {
 	var thisser = this;

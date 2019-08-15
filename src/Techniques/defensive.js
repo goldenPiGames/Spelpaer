@@ -7,9 +7,11 @@ Guard.prototype.name = "Guard";
 Guard.prototype.flavor = "The most basic defensive technique.";
 Guard.prototype.attack = false;
 Guard.prototype.hitrate = 1.00;
-Guard.prototype.accuracyStat = "Dexterity";
-Guard.prototype.evasionStat = "Agility";
-Guard.prototype.delay = 100;
+Guard.prototype.accuracyStat = STAT_INDICES.Dexterity;
+Guard.prototype.evasionStat = STAT_INDICES.Agility;
+Guard.prototype.delay = 120;
+//Guard.prototype.cooldownMult = 0;
+//Guard.prototype.cooldownStat = STAT_INDICES.Dexterity;
 Guard.prototype.isAvailable = function() {
 	return true;
 },
@@ -20,9 +22,11 @@ Guard.prototype.prerequisites = [];
 
 Guard.prototype.effect = function(source) {
 	this.source = source;
-	this.amount = source.level;
 }
-Guard.prototype.effect.prototype = Object.create(SingleBuff);
+Guard.prototype.effect.prototype = Object.create(BasicEffectPhysic);
 Guard.prototype.effect.prototype.target = true;
-Guard.prototype.effect.prototype.stat = "Armor";
-Guard.prototype.effect.prototype.duration = 100;
+Guard.prototype.effect.prototype.statChangeMults = statsToArray({
+	Armor : +2.0,
+}, 0);
+Guard.prototype.effect.prototype.duration = Guard.prototype.delay;
+Guard.prototype.effect.prototype.rate = 1.0;

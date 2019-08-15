@@ -1,11 +1,20 @@
+const SPELLS_BY_NAME = {};
+
 //const SPELLS = [RayOfFrost, AcidSplash, MagicMissile, MagicMissile2, MagicMissile3, MagicMissile4, MagicMissile5, BurningHands, ShockingGrasp, AcidArrow, ScorchingRay, ScorchingRay2, CureMinor, CureLight, CureModerate, CureSerious, CureCritical, CureExtreme, Channel1, Channel2, Channel3, Channel4, Channel5, InflictLight, InflictModerate, InflictSerious, InflictCritical, InflictExtreme, Favor, Frighten, Distract, MindThrust1, MindThrust2, MindThrust3, MindThrust4, MindThrust5, MindThrust6, ReadStats, ReadEffectiveness, WaterBreathing];
-const SPELLS_CHEAP = [RayOfFrost, AcidSplash, ReadStats];
+//const SPELLS_CHEAP = [RayOfFrost, AcidSplash, ReadStats];
 var knownSpells;
 
 SPELLS.forEach(function(sp, index) {
+	SPELLS_BY_NAME[sp.name] = sp;
+	sp.prototype.iname = sp.name;
 	sp.prototype.index = index;
-	sp.prototype.description = sp.prototype.getDescription();
 });
+
+function refreshSpellDescriptions(user) {
+	SPELLS.forEach(function(sp, index) {
+		sp.prototype.description = sp.prototype.getDescription(user);
+	});
+}
 
 function refreshKnownSpells() {
 	knownSpells = [];
@@ -44,11 +53,11 @@ function learnSpell(spel) {
 }
 
 function getSpellPoints() {
-	var sp = player.Intelligence * 2;
 	refreshKnownSpells();
-	knownSpells.forEach(function(item, index, array) {
+	var sp = player.level + knownSpells.length;
+	/*knownSpells.forEach(function(item, index, array) {
 		sp += item.prototype.cost;
-	});
+	});*/
 	return sp;
 }
 

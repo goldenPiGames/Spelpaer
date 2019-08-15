@@ -7,7 +7,7 @@ var infoField = {
 	hovered : false,
 	text : "S U C C",
 	update : function() {
-		this.updateStats();
+		this.updateMouse();
 		this.text = INFO_DEFAULT_MESSAGE;
 		this.used = false;
 	},

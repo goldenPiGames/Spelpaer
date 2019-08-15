@@ -14,7 +14,7 @@ function Slider(x, y, width, height, text, hoverText, min, max, handler, getter)
 Slider.prototype = Object.create(UIObjectBase);
 
 Slider.prototype.update = function() {
-	this.updateStats();
+	this.updateMouse();
 	if (this.hovered && this.hoverText) {
 		infoField.setText(this.hoverText);
 	}
@@ -44,7 +44,7 @@ Slider.prototype.draw = function() {
 	ctx.fillStyle = color;
 	ctx.fillRect(this.x, this.y, this.width*portion, this.height);
 	ctx.strokeStyle = color;
-	ctx.fillStyle = settings.background_color;
+	ctx.fillStyle = this.forceBG || settings.background_color;
 	ctx.font = (this.height - 6) + "px " + settings.font;
 	ctx.textBaseline = "top";
 	ctx.textAlign = "left";

@@ -47,7 +47,7 @@ function TechniquePaletteElement(x, y, width, height, parent, tech) {
 }
 TechniquePaletteElement.prototype = Object.create(UIObjectBase);
 TechniquePaletteElement.prototype.update = function() {
-	this.updateStats();
+	this.updateMouse();
 	if (this.tech) {
 		if (this.hovered) {
 			infoField.setText(this.tech.getDescription());

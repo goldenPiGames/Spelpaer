@@ -1,10 +1,10 @@
 var UIObjectBase = {
-    intersects: function(obj, mouse) {
+    intersects : function(obj, mouse) {
 		var xIntersect = mouse.x > obj.x && mouse.x < obj.x + obj.width;
         var yIntersect = mouse.y > obj.y && mouse.y < obj.y + obj.height;
         return xIntersect && yIntersect;
     },
-    updateStats: function(canvas){
+    updateMouse : function(canvas) {
         this.hovered = this.intersects(this, mouse);
 		this.wasPressed = this.pressed;
 		this.pressed = mouse.down && this.hovered;
@@ -21,6 +21,6 @@ var BlankUIObject = function(x = 0, y = 0, width = 0, height = 0) {
 }
 BlankUIObject.prototype = Object.create(UIObjectBase);
 
-BlankUIObject.prototype.update = UIObjectBase.updateStats;
+BlankUIObject.prototype.update = UIObjectBase.updateMouse;
 
 BlankUIObject.prototype.draw = doNothing;

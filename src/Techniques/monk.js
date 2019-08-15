@@ -4,29 +4,30 @@ function StunningKick(level, user) {
 	this.maxCooldown = this.cooldownMult * this.level;
 	this.user = user;
 	/*effectRate : .55,
-	effectAccuracyStat : "Wisdom",
-	effectEvasionStat : "Constitution",
+	effectAccuracyStat : STAT_INDICES.Wisdom,
+	effectEvasionStat : STAT_INDICES.Constitution,
 	effectStat : "speed",
 	effectAmount : -1.0,
 	effectDuration : 80,*/
 	
 }; TECHNIQUES.push(StunningKick);
 StunningKick.prototype = Object.create(Technique);
-StunningKick.prototype.name = "Stunning Fist";
-StunningKick.prototype.flavor = "Strike a foe's pressure point with a well-placed punch to temporarily stun them.";
+StunningKick.prototype.name = "Stunning Kick";
+StunningKick.prototype.flavor = "Strike a foe's pressure point with a well-placed kick to temporarily stun them.";
 StunningKick.prototype.attack = true;
-StunningKick.prototype.powerMult = 0.8;
-StunningKick.prototype.attribute = "bludgeoning";
+StunningKick.prototype.powerMult = 1.2;
+StunningKick.prototype.attribute = ATTRIBUTE_INDICES.bludgeoning;
 StunningKick.prototype.hitrate = 0.75;
-StunningKick.prototype.attackStat = "Strength";
+StunningKick.prototype.attackStat = STAT_INDICES.Strength;
 StunningKick.prototype.usesWeapon = false;
-StunningKick.prototype.defenseStat = "Constitution";
+StunningKick.prototype.defenseStat = STAT_INDICES.Constitution;
 StunningKick.prototype.usesArmor = true;
-StunningKick.prototype.accuracyStat = "Dexterity";
-StunningKick.prototype.evasionStat = "Agility";
+StunningKick.prototype.accuracyStat = STAT_INDICES.Dexterity;
+StunningKick.prototype.evasionStat = STAT_INDICES.Agility;
 StunningKick.prototype.delay = 90;
 StunningKick.prototype.cooldownMult = 400;
-StunningKick.prototype.cooldownStat = "Wisdom";
+StunningKick.prototype.cooldownStat = STAT_INDICES.Wisdom;
+//TODO add stunning effect
 StunningKick.prototype.prerequisites = [BasicAttack];
 
 function ShadowSnap(level, user) {
@@ -39,18 +40,18 @@ ShadowSnap.prototype = Object.create(Technique);
 ShadowSnap.prototype.name = "Shadow Snap";
 ShadowSnap.prototype.flavor = "A kick so fast, it takes almost no time at all.";
 ShadowSnap.prototype.attack = true;
-ShadowSnap.prototype.powerMult = 0.9;
-ShadowSnap.prototype.attribute = "bludgeoning";
+ShadowSnap.prototype.powerMult = 1.2;
+ShadowSnap.prototype.attribute = ATTRIBUTE_INDICES.bludgeoning;
 ShadowSnap.prototype.hitrate = 0.85;
-ShadowSnap.prototype.attackStat = "Strength";
+ShadowSnap.prototype.attackStat = STAT_INDICES.Strength;
 ShadowSnap.prototype.usesWeapon = false;
-ShadowSnap.prototype.defenseStat = "Constitution";
+ShadowSnap.prototype.defenseStat = STAT_INDICES.Constitution;
 ShadowSnap.prototype.usesArmor = true;
 ShadowSnap.prototype.accuracyStat = "Dexterity";
-ShadowSnap.prototype.evasionStat = "Agility";
+ShadowSnap.prototype.evasionStat = STAT_INDICES.Agility;
 ShadowSnap.prototype.delay = 10;
 ShadowSnap.prototype.cooldownMult = 1000;
-ShadowSnap.prototype.cooldownStat = "Wisdom";
+ShadowSnap.prototype.cooldownStat = STAT_INDICES.Wisdom;
 ShadowSnap.prototype.prerequisites = [QuickStab, StunningKick];
 
 /*function ScorpionStrike(level, user) {
@@ -60,16 +61,16 @@ ShadowSnap.prototype.prerequisites = [QuickStab, StunningKick];
 	this.power : 0.8*level,
 	this.attribute : "bludgeoning",
 	this.hitrate : 0.7,
-	this.attackStat : "Strength",
+	this.attackStat : STAT_INDICES.Strength,
 	this.usesWeapon : false,
-	this.defenseStat : "Constitution",
+	this.defenseStat : STAT_INDICES.Constitution,
 	this.usesArmor : true,
 	this.accuracyStat : "Dexterity",
-	this.evasionStat : "Agility",
+	this.evasionStat : STAT_INDICES.Agility,
 	
 	this.effectRate : .65,
-	this.effectAccuracyStat : "Wisdom",
-	this.effectEvasionStat : "Constitution",
+	this.effectAccuracyStat : STAT_INDICES.Wisdom,
+	this.effectEvasionStat : STAT_INDICES.Constitution,
 	this.effectStat : "speed",
 	this.effectAmount : -0.25,
 	this.effectDuration : 500,
@@ -84,12 +85,12 @@ ScorpionStrike.prototype = Object.create(Technique);
 .prototype.attack = true;
 .prototype.powerMult = ;
 .prototype.hitrate = ;
-.prototype.attackStat = "Strength";
+.prototype.attackStat = STAT_INDICES.Strength;
 .prototype.usesWeapon = true;
-.prototype.defenseStat = "Constitution";
+.prototype.defenseStat = STAT_INDICES.Constitution;
 .prototype.usesArmor = true;
 .prototype.accuracyStat = "Dexterity";
-.prototype.evasionStat = "Agility";
+.prototype.evasionStat = STAT_INDICES.Agility;
 .prototype.delay = ;
 .prototype.cooldownMult = ;
 .prototype.prerequisites = [];
@@ -101,14 +102,14 @@ function GorgonsFist(level, user) {
 	this.power : 0.8,
 	this.attribute : "bludgeoning",
 	this.hitrate : 0.7,
-	this.attackStat : "Strength",
-	this.defenseStat : "Constitution",
+	this.attackStat : STAT_INDICES.Strength,
+	this.defenseStat : STAT_INDICES.Constitution,
 	this.accuracyStat : "Dexterity",
-	this.evasionStat : "Agility",
+	this.evasionStat : STAT_INDICES.Agility,
 	
 	this.effectRate : .85,
-	this.effectAccuracyStat : "Wisdom",
-	this.effectEvasionStat : "Constitution",
+	this.effectAccuracyStat : STAT_INDICES.Wisdom,
+	this.effectEvasionStat : STAT_INDICES.Constitution,
 	this.effectStat : "speed",
 	this.effectAmount : -0.35,
 	this.effectDuration : 200,
@@ -140,12 +141,12 @@ GorgonsFist.prototype = Object.create(Technique);
 .prototype.attack = true;
 .prototype.powerMult = ;
 .prototype.hitrate = ;
-.prototype.attackStat = "Strength";
+.prototype.attackStat = STAT_INDICES.Strength;
 .prototype.usesWeapon = true;
-.prototype.defenseStat = "Constitution";
+.prototype.defenseStat = STAT_INDICES.Constitution;
 .prototype.usesArmor = true;
 .prototype.accuracyStat = "Dexterity";
-.prototype.evasionStat = "Agility";
+.prototype.evasionStat = STAT_INDICES.Agility;
 .prototype.delay = ;
 .prototype.cooldownMult = ;
 .prototype.prerequisites = [];*/

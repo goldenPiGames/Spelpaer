@@ -110,7 +110,7 @@ ScrollMenuElement.prototype.setItem = function(value) {
 }
 
 ScrollMenuElement.prototype.update = function() {
-    this.updateStats();
+    this.updateMouse();
 	if (this.value != undefined) {
 		if (this.hovered) {
 			//console.log(this.value, this.parent.infoProperty, this.value[this.parent.infoProperty]);
@@ -160,7 +160,7 @@ function ScrollBar(x, y, width, height, hoverText, size, max, handler, getter) {
 ScrollBar.prototype = Object.create(UIObjectBase);
 
 ScrollBar.prototype.update = function() {
-	this.updateStats();
+	this.updateMouse();
 	if (this.hovered && this.hoverText) {
 		infoField.setText(this.hoverText);
 	}

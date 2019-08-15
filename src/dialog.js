@@ -44,7 +44,7 @@ var dialog = {
 		if (typeof currentLine == "string")
 			currentLine = new DialogLine("Narration", null, currentLine);
 		
-		if (currentLine.sprite) {
+		if (currentLine.sprite && settings.dialogPortraits) {
 			//var sprit = currentLine.sprite;
 			//console.log(sprit.image, sprit.x, sprit.y, sprit.width, sprit.height, canvas.width/2 - sprit.width/2, canvas.height - sprit.height, sprit.width, sprit.height);
 			//ctx.drawImage(sprit.image, sprit.x, sprit.y, sprit.width, sprit.height, Math.ceil(canvas.width/2-sprit.width/2), canvas.height - sprit.height, sprit.width, sprit.height);

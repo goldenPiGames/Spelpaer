@@ -15,7 +15,7 @@ var Button = function(x, y, width, height, text, hoverText, handler = doNothing,
 Button.prototype = Object.create(UIObjectBase);
 
 Button.prototype.update = function() {
-	this.updateStats();
+	this.updateMouse();
 	if (this.hovered && this.hoverText != undefined) {
 		infoField.setText(this.hoverText);
 	}

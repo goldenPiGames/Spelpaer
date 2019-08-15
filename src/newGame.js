@@ -152,21 +152,28 @@ CharacterCreationScreen.prototype.generate = function() {
 	if (!this.comp) {
 		character = new Player();
 		character.level = 10;
-		character.baseStats = statMultsToArray({
-				Vitality : 1.0,
-				Strength : .8,
-				Constitution : .8,
-				Dexterity : .9,
-				Agility : .9,
-				Intelligence : 1.2,
-				Wisdom : 1.2,
-				Charisma : 1.2,
-				Potential : 1.0,
+		character.baseStats = statsToArray({
+				Vitality : 10,
+				Strength : 8,
+				Constitution : 8,
+				Dexterity : 9,
+				Agility : 9,
+				Intelligence : 12,
+				Wisdom : 12,
+				Charisma : 12,
+				Potential : 10,
 				Weapon : 0,
 				Armor : 0,
+				HReduce : 10,
 			}, character.level);
+		character.equipped = [
+			new NoWeapon(),
+			new PocutopWand(),
+			new PocutopRobe(),
+			new PocutopNecklace(),
+		]
 		player = character;
-		MagicMissile.prototype.known = true;
+		MagicMissile1.prototype.known = true;
 		CureLight.prototype.known = true;
 		Frighten.prototype.known = true;
 		ReadStats.prototype.known = true;
@@ -179,19 +186,26 @@ CharacterCreationScreen.prototype.generate = function() {
 		relationshipType = this.relationshipRadio.index;
 		character = new Companion();
 		character.level = 10;
-		character.baseStats = statMultsToArray({
-				Vitality : 1.0,
-				Strength : 1.2,
-				Constitution : 1.2,
-				Dexterity : 1.1,
-				Agility : 1.1,
-				Intelligence : 0.8,
-				Wisdom : 0.8,
-				Charisma : 0.8,
-				Potential : 1.0,
+		character.baseStats = statsToArray({
+				Vitality : 10,
+				Strength : 12,
+				Constitution : 12,
+				Dexterity : 11,
+				Agility : 11,
+				Intelligence : 8,
+				Wisdom : 8,
+				Charisma : 8,
+				Potential : 10,
 				Weapon : 0,
 				Armor : 0,
-			}, character.level);
+				HReduce : 10,
+			});
+		character.equipped = [
+			new PocutopSword(),
+			new PocutopShield(),
+			new PocutopArmor(),
+			new PocutopNecklace(),
+		];
 		companion = character;
 		BasicAttack.prototype.known = 10;
 		PowerChop.prototype.known = 10;
@@ -203,6 +217,8 @@ CharacterCreationScreen.prototype.generate = function() {
 		Guard.prototype.known = 10;
 		refreshKnownTechniques();
 	}
+	character.experience = 0;
+	character.recalculateStats();
 	character.name = textInput.value;
 	character.color = this.favColorPicker.color;
 	switch (this.genderRadio.index) {

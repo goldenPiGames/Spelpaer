@@ -10,6 +10,10 @@
 				src: url('src/fonts/DTM-Mono.otf');
 			}
 			@font-face {
+				font-family: 'VL Gothic Regular';
+				src: url('src/fonts/VLGothicRegular.ttf');
+			}
+			@font-face {
 				font-family: 'Futura Medium';
 				src: url('src/fonts/FuturaMedium.otf');
 			}
@@ -23,13 +27,16 @@
 		</style>
 		<!-- <script src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script> -->
 		<script type="text/javascript" src="src/main.js"></script>
+		<script type="text/javascript" src="src/math.js"></script>
+		<script type="text/javascript" src="src/sm64rng.js"></script>
 		<script type="text/javascript" src="src/game_engine.js"></script>
 		<script type="text/javascript" src="src/controller.js"></script>
 		<script type="text/javascript" src="src/flags.js"></script>
 		<script type="text/javascript" src="src/Save.js"></script>
 		<script type="text/javascript" src="src/Time.js"></script>
-		<script type="text/javascript" src="src/Elements.js"></script>
+		<script type="text/javascript" src="src/Attributes.js"></script>
 		<script type="text/javascript" src="src/Stats.js"></script>
+		<script type="text/javascript" src="src/Defeated.js"></script>
 		
 		<script type="text/javascript" src="src/CharacterImages/CharacterSprites.js"></script>
 		<script type="text/javascript" src="src/Icons/Icons.js"></script>
@@ -39,6 +46,7 @@
 		<script type="text/javascript" src="src/dialog.js"></script>
 		<script type="text/javascript" src="src/UIObjects/Label.js"></script>
 		<script type="text/javascript" src="src/UIObjects/Button.js"></script>
+		<script type="text/javascript" src="src/UIObjects/Checkbox.js"></script>
 		<script type="text/javascript" src="src/UIObjects/RadioButtons.js"></script>
 		<script type="text/javascript" src="src/UIObjects/Slider.js"></script>
 		<!-- <script type="text/javascript" src="src/UIObjects/Keyboard.js"></script> -->
@@ -77,6 +85,7 @@
 		<script type="text/javascript" src="src/Techniques/monk.js"></script>
 		<script type="text/javascript" src="src/Techniques/paladin.js"></script>
 		<script type="text/javascript" src="src/Techniques/defensive.js"></script>
+		<script type="text/javascript" src="src/Techniques/enemyonly.js"></script>
 		<script type="text/javascript" src="src/Techniques/techniqueRef.js"></script>
 		<script type="text/javascript" src="src/Techniques/TechniquePalette.js"></script>
 		
@@ -87,10 +96,24 @@
 		<script type="text/javascript" src="src/Spells/Channel.js"></script>
 		<script type="text/javascript" src="src/Spells/Inflict.js"></script>
 		<script type="text/javascript" src="src/Spells/MindThrust.js"></script>
+		<script type="text/javascript" src="src/Spells/Buff.js"></script>
+		<script type="text/javascript" src="src/Spells/Defensive.js"></script>
 		<script type="text/javascript" src="src/Spells/WeaponSpells.js"></script>
 		
 		<script type="text/javascript" src="src/Spells/spellRef.js"></script>
 		<script type="text/javascript" src="src/Spells/spellPrep.js"></script>
+		
+		<!-- Items & Equipment -->
+		<script type="text/javascript" src="src/Items/Item.js"></script>
+		<script type="text/javascript" src="src/Items/Consumable.js"></script>
+		<script type="text/javascript" src="src/Items/healing.js"></script>
+		<script type="text/javascript" src="src/Items/Equipment.js"></script>
+		<script type="text/javascript" src="src/Items/weapons.js"></script>
+		<script type="text/javascript" src="src/Items/shields.js"></script>
+		<script type="text/javascript" src="src/Items/implements.js"></script>
+		<script type="text/javascript" src="src/Items/armor.js"></script>
+		<script type="text/javascript" src="src/Items/bling.js"></script>
+		<script type="text/javascript" src="src/Items/itemRef.js"></script>
 		
 		<!-- Units -->
 		<script type="text/javascript" src="src/unit.js"></script>
@@ -99,18 +122,18 @@
 		<script type="text/javascript" src="src/PCs/player.js"></script>
 		<script type="text/javascript" src="src/PCs/companion.js"></script>
 		<script type="text/javascript" src="src/PCs/LevelUp.js"></script>
+		
+		<script type="text/javascript" src="src/spoilsScreen.js"></script>
 		<!-- Enemies -->
 		<script type="text/javascript" src="src/Enemies/wild_animals.js"></script>
 		
 		<!-- Locations -->
-		<script type="text/javascript" src="src/basicPOI.js"></script>
 		<script type="text/javascript" src="src/Shop.js"></script>
 		<!-- Dungeon -->
 		<script type="text/javascript" src="src/Dungeon.js"></script>
 		<script type="text/javascript" src="src/dungeonScreen.js"></script>
 		
-		<script type="text/javascript" src="src/Explainer.js"></script>
-		
+		<script type="text/javascript" src="src/rest.js"></script>
 		<!-- Locales -->
 		<script type="text/javascript" src="src/Locales/locale.js"></script>
 		<script type="text/javascript" src="src/Locales/Pocutop.js"></script>
@@ -150,9 +173,11 @@
 		<script type="text/javascript" src="src/Locales/LocaleScreen.js"></script>
 		
 		<script type="text/javascript" src="src/battle.js"></script>
+		<script type="text/javascript" src="src/DelayMeter.js"></script>
 		<script type="text/javascript" src="src/battleScreenPatient.js"></script>
 		<script type="text/javascript" src="src/battleScreenRealTime.js"></script>
 		
+		<script type="text/javascript" src="src/Explainer.js"></script>
 		
 	</head>
 	<body>

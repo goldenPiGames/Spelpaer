@@ -7,7 +7,7 @@ var settings = {
 	profanity : false,
 	font : "sans-serif",
 	sfxSystem : "audio",
-	dialogPortraits : "On",
+	dialogPortraits : false,
 	background_color : "#000000",
 	normal_color : "#FFFFFF",
 	hover_color : "#00DDFF",
@@ -52,7 +52,7 @@ function saveSettings() {
 }
 
 function profane() {
-	return settings.profanity == "Profane";
+	return settings.profanity;
 }
 
 function doSettings() {
@@ -67,7 +67,7 @@ function SettingsScreen(initialSub = SettingsScreenGeneral) {
 	var thisser = this;
 	this.tabs = [];
 	SETTINGS_TAB_LIST.forEach(function(oj, dex, liss) {
-		thisser.tabs.push(new HeadbarTab(dex*100+5, 90, oj.title, oj.desc, oj.cons, thisser));
+		thisser.tabs.push(new BarTab(dex*100+5, 5, 90, HEADBAR_HEIGHT-10, oj.title, oj.desc, oj.cons, thisser));
 	});
 	this.subscreen = new initialSub();
 	this.exitButton = new Button(settings.width-150, 5, 140, HEADBAR_HEIGHT - 10, "Exit", "Save your settings and return to the main menu.", function() {
@@ -95,26 +95,26 @@ SettingsScreen.prototype.setSubscreen = function(subconstruct) {
 	this.subscreen = new subconstruct();
 }
 
-function HeadbarTab(x, width, text, hoverText, subconstruct, parent) {
+function BarTab(x, y, width, height, text, hoverText, subconstruct, parent) {
 	this.x = x;
-	this.y = 5;
+	this.y = y;
 	this.width = width;
-	this.height = HEADBAR_HEIGHT - 10;
+	this.height = height;
 	this.text = text;
 	this.hoverText = hoverText;
 	this.subconstruct = subconstruct;
 	this.parent = parent;
 }
 
-HeadbarTab.prototype = Object.create(UIObjectBase) 
-HeadbarTab.prototype.update = function() {
-	this.updateStats();
+BarTab.prototype = Object.create(UIObjectBase); 
+BarTab.prototype.update = function() {
+	this.updateMouse();
 	if (this.hovered)
 		infoField.setText(this.hoverText);
 	if (this.clicked)
 		this.parent.setSubscreen(this.subconstruct);
 }
-HeadbarTab.prototype.draw = function() {
+BarTab.prototype.draw = function() {
 	var color = this.parent.subscreen instanceof this.subconstruct ? settings.click_color : (this.hovered ? settings.hover_color : settings.normal_color);
 	ctx.lineWidth = BUTTON_BORDER_WIDTH;
 	ctx.strokeStyle = color;
@@ -133,15 +133,19 @@ HeadbarTab.prototype.draw = function() {
     ctx.fillText(this.text, this.x + this.width/2, this.y + this.height/2 - fontSize/2);
 }
 
-// ----------------------------------------------------- General ---------------------------------------------
+// ----------------------------------------------------------------- General --------------------------------------------------
 
 function SettingsScreenGeneral() {
 	var thisser = this;
 	this.musicSlider = new Slider(10, HEADBAR_HEIGHT+10, 200, 30, "Music", "Change the volume of the music.", 0, 1, function(val){settings.music = val; setMusicVolume(val)}, function(){return settings.music});
 	this.sfxSlider = new Slider(10, HEADBAR_HEIGHT+50, 200, 30, "SFX", "Change the volume of sound effects.", 0, 1, function(val){settings.sfx = val}, function(){return settings.sfx});
+	this.profanityCheckbox = new Checkbox(settings.width/2, HEADBAR_HEIGHT+10, 200, 30, "Profanity", "Whether dialog will include some bad words and innuendo.", function(val){settings.profanity = val}, settings.profanity);
+	this.portraitsCheckbox = new Checkbox(settings.width/2, HEADBAR_HEIGHT+50, 200, 30, "Dialog Portraits", "Do you want to see the embarassingly bad dialog portraits I drew in MS Paint? Your funeral.", function(val){settings.dialogPortraits = val}, settings.dialogPortraits);
 	this.objects = [
 		this.musicSlider,
 		this.sfxSlider,
+		this.profanityCheckbox,
+		this.portraitsCheckbox,
 	]
 }
 
@@ -156,7 +160,7 @@ SettingsScreenGeneral.prototype.draw = function() {
 	});
 }
 
-// ----------------------------------------------------- Color ---------------------------------------------
+// ----------------------------------------------------------------- Color ----------------------------------------------------
 
 function SettingsScreenColor() {
 	var thisser = this;
@@ -184,12 +188,13 @@ const FONT_LIST = [
 	{name : "sans-serif", description : "The default sans-serif fault of your browser."},
 	{name : "serif", description : "The default serif font of your browser."},
 	//{name : "Arial", description : "heh"},
-	{name : "Courier", description : "heh"},
-	{name : "Determination Mono", description : "This option uses a .otf file in the game's source folder. Source by Haley Wakamatsu: https://www.behance.net/gallery/31268855/Determination-Better-Undertale-Font)"},
-	{name : "Futura Medium", description : "This option uses a .otf file in the game's source folder."},
-	{name : "Helvetica", description : "heh"},
-	{name : "OpenDyslexic", description : "An open font intended to be easily read by people with dyslexia."},
-	{name : "Times New Roman", description : "heh"},
+	{name : "Courier", description : "A common monospace font."},
+	{name : "Determination Mono", description : "(Uses .otf file in game's source folder) <br> A font that fills you with something, I dunno. Source by Haley Wakamatsu: https://www.behance.net/gallery/31268855/Determination-Better-Undertale-Font)"},
+	{name : "Futura Medium", description : "(Uses .otf file in game's source folder)"},
+	{name : "Helvetica", description : "A common sans-serif font."},
+	{name : "OpenDyslexic", description : "(Uses .otf file in game's source folder) <br> An open font intended to be easily read by people with dyslexia."},
+	{name : "Times New Roman", description : "A common serif font."},
+	{name : "VL Gothic Regular", description : "(Uses .ttf file in game's source folder) <br> I've probably spent thousands of hours working on this game. Use this font to make it look like I've spent less than ten."},
 ]
 
 function SettingsScreenFont() {
@@ -216,7 +221,7 @@ function FontChanger(x, y, width, height, font, description) {
 }
 FontChanger.prototype = Object.create(UIObjectBase);
 FontChanger.prototype.update = function() {
-	this.updateStats();
+	this.updateMouse();
 	if (this.hovered)
 		infoField.setText(this.description);
 	if (this.clicked)

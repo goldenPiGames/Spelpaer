@@ -48,36 +48,6 @@ function startGame() {
 	initMusic();
 	coreEngine.run();
 }
-function randomTerm(ray) {
-	return ray[Math.floor(Math.random() * ray.length)];
-}
-
-function randomN(max = 1) {
-	return -max + 2 * max * Math.random();
-}
-
-function round(num, precision) {
-	var mult = Math.pow(10, precision);
-	return Math.round(num*mult)/mult;
-}
-
-function PRound(num, seed) {
-	var whole = Math.floor(num);
-	var partial = num-whole;
-	if (seed == undefined)
-		return whole + ((Math.random() < partial) ? 1 : 0);
-	return whole + ((seed < partial) ? 1 : 0);
-}
-
-/*function PExtend(obj) {
-	Array.prototype.slice.call(arguments, 1).forEach(function(sauce) {
-		for (var prop in sauce) {
-			if (obj[prop] === undefined)
-				obj[prop] = sauce[prop];
-        }
-	});
-	return obj;
-};*/
 
 function getValue(obj, value) {
 	if (typeof value == 'function')
@@ -85,36 +55,7 @@ function getValue(obj, value) {
 	return object.value;
 }
 
-function parse(str) {
-	if (str == "true") return true;
-	if (str == "false") return false;
-	var num = parseFloat(str);
-	if (num == num) return num;
-	return str;
-}
 
-function raffle(weight, item) {
-	var args = Array.prototype.slice.call(arguments);
-	var weights = [];
-	var totalWeight = 0;
-	var items = [];
-	while (args.length > 0) {
-		let newWeight = args.shift();
-		totalWeight += newWeight;
-		weights.push(newWeight);
-		items.push(args.shift());
-	}
-	var chosen = totalWeight * Math.random();
-	var i = 0;
-	var soFar = 0;
-	while (i < weights.length) {
-		soFar += weights[i];
-		if (chosen < soFar)
-			return items[i];
-		i++;
-	}
-	return null;
-}
 
 function doNothing() {
 	
@@ -123,18 +64,6 @@ function doNothing() {
 var emptyGameObject = {
 	update : doNothing,
 	draw : doNothing,
-}
-
-function asPercent(num, precision) {
-	return round(num*100, precision)+"%";
-}
-
-function fillLeft(str, length, filler="0") {
-	str = "" + str;
-	while(str.length < length) {
-		str = filler+str;
-	}
-	return str;
 }
 
 function clearBack() {

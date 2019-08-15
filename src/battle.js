@@ -31,14 +31,6 @@ var battle = {
 			this.screen = new BattleScreenRealTime();
 		}
 		switchScreen(this.screen);
-		/*if (!Flags.seenBattle) {
-			Flags.seenBattle = true;
-			dialog.begin("You've just gotten into a battle. Now listen up, because I'll only explain this once.",
-				"To the right is the Delay Sequence. It keeps track of what order everybody's going to act. Each arrow represents a single unit: "+settings.player_color+" for <Player>, "+settings.companion_color+" for <Companion>, and "+settings.normal_color+" for enemies. Your starting position is determined by both Agility and random chance.",
-				"During battle, all of the arrows will move upwards in real currentTime. When an arrow reaches the top, its corresponding unit will take an action.",
-				"You can choose a Technique or a Spell. Once you have it selected, you can choose a target by clicking on its header at the top of the screen.",
-				"Note that you can attack your allies or heal your enemies if you want. You probably shouldn't, but just be aware that you have that option.")
-		}*/
 	},
 	beginTutorial : function() {
 		if (this.patient) {
@@ -51,70 +43,18 @@ var battle = {
 		var units = this.allUnits();
 		var highestAgility = 0;
 		for (var i = 0; i < units.length; i++) {
-			let agility = units[i].getStat("Agility");
+			let agility = units[i].getStat(STAT_INDICES.Agility);
 			highestAgility = Math.max(highestAgility, agility);
 		}
-		for (var i = 0; i < units.length; i++) {
-			this.setCooldown(units[i], 90 + highestAgility * 2 + Math.floor(20 * Math.random()) - units[i].getStat("Agility") * 2);
+		units.forEach(oj => oj.delay = Math.floor(this.getBaseStartDelay() + 150 * (1 - oj.getStat(STAT_INDICES.Agility) / highestAgility) + 20 * Math.random()));
+	},
+	getBaseStartDelay : function() {
+		switch (difficulty) {
+			case 0: return 60; break;
+			case 1: return 120; break;
+			case 2: return 60; break;
 		}
 	},
-	/*update : function() {
-		var thisser = this;
-		if (this.patient) {
-			if (player.isReady()) {
-				this.currentPlayerMenu.update();
-			} else if (companion.isReady()) {
-				this.companionTechniquePalette.update();
-			}
-		} else {
-			this.currentPlayerMenu.update();
-			this.companionTechniquePalette.update();
-		}
-		//this.updateStats();
-		//var tickSeed = Math.random();
-		this.allUnits().forEach(function(oj) {
-			oj.update();
-			if (oj.clicked) {
-				if (oj.patient) {
-					
-				} else {
-					if (thisser.playerAction)
-						thisser.playerTarget = oj;
-					else {
-						if (oj.team)
-							thisser.companionAllyTarget = oj;
-						else
-							thisser.companionEnemyTarget = oj;
-					}
-				}
-			}
-		});
-		if (this.ticking) {
-			this.allUnits().forEach(function(peep) {
-				peep.battleTick();
-			});
-			if (player.isReady() && this.playerAction && this.playerAction.isAvailable() && this.playerTarget) {
-				this.executeAction(player, this.playerAction, this.playerTarget);
-				this.playerAction = null;
-				this.playerTarget = null;
-			}
-			if (companion.isReady() && this.companionAction && this.companionAction.isAvailable()) {
-				this.executeAction(companion, this.companionAction, this.companionEnemyTarget);
-				this.companionAction = null;
-			}
-			for (var i = 0; i < this.enemies.length; i++) {
-				if (this.enemies[i].isReady()) {
-					var taker = this.enemies[i];
-					taker.avail();
-					var act = taker.chooseAction();
-					this.executeAction(taker, act.skill, act.target);
-					return;
-				}
-			}
-			//this.taker = null;
-		}
-		advanceTime(1);
-	},*/
 	tick : function() {
 		this.allUnits().forEach(function(peep) {
 			peep.battleTick();
@@ -128,91 +68,22 @@ var battle = {
 				return;
 			}
 		}
+		if (this.numberOfActiveEnemies() <= 0) {
+			this.win();
+			return;
+		}
+		if (player.defeated == DEFEAT_INDICES.Dead || companion.defeated == DEFEAT_INDICES.Dead || (!player.isActive() && !companion.isActive())) {
+			//console.log(player, companion)
+			this.lose();
+			return;
+		}
 		advanceTime(1);
 	},
-	/*draw : function() {
-		clearBack();
-		ctx.lineWidth = 3;
-		ctx.strokeStyle = settings.normal_color;
-		ctx.beginPath();
-		ctx.moveTo(5, 9);
-		ctx.lineTo(25+this.enemies.length*10, 9);
-		ctx.stroke();
-		this.allUnits().forEach(function(peep, index) {
-			if (peep.alive)
-				drawCooldownArrow(peep.delay, index, peep.color);
-			peep.draw();
-		});
-		this.currentPlayerMenu.draw();
-		this.companionTechniquePalette.draw();
-	},*/
-	takeTurn : function(taker) {
-		//this.ticking = false;
-		this.currentSkill = false;
-		taker.avail();
-	},
-	/*setMenu : function(type) {
-		this.selectedSkill = null;
-		var options = null;
-		switch(type) {
-			case "technique":
-				options = this.taker.availableTechniques;
-				break;
-			case "spell":
-				options = this.taker.spells;
-				break;
-		}
-		engine.gameObjects = [currentLoc.getBattleWeatherObject(), this.pauseButton, this.techniqueButton, this.spellButton, this.itemButton, this.parleyButton, this.otherButton, this.waitButton].concat(this.allUnits(), this.skillLabel, this.skillMenu, this);
-		this.skillMenu.setItems(options);
-		
-	},*/
-	unitSelected : function(unit) {
-		if (this.selectedSkill != null && !engine.gameObjects.includes(this.skillMenu)) {
-			this.executeAction(new Action(this.selectedSkill, unit));
-		}
-	},
-	menuReturn : function(dab) {
-		this.selectedSkill = dab;
-		this.menuActive = false;
-		engine.gameObjects = [this.pauseButton, this.techniqueButton, this.spellButton, this.itemButton, this.parleyButton, this.otherButton, this.waitButton].concat(this.allUnits(), this.skillLabel, this, currentLoc.getBattleWeatherObject());
-		this.skillLabel.text = this.selectedSkill.name;
-		this.skillLabel.hoverText = this.selectedSkill.description;
-	},
 	executeAction : function(user, skill, target) {
-		//this.ticking = false;
-		/*var messageList = ass.skill.execute(this.taker, ass.target, this);
-		ass.skill.animate(this.user, ass.target, this);
-		var thisser = this;
-		this.taker.selectionButton.hovered = true;
-		ass.target.unClickHover();
-		ass.target.selectionButton.clicked = true;
-		this.setCooldown(this.taker, ass.skill.delay);
-		messageList.push(function(){thisser.resume();});
-		this.selectedSkill = null;
-		this.skillLabel.text = "";
-		this.skillLabel.hoverText = null;
-		dialog.begin(messageList);*/
-		
-		//console.log(user, skill, target);
 		skill.execute(user, target);
 		skill.expend();
 		user.delay = skill.delay;
 		user.animSkill(skill, target);
-	},
-	resume : function() {
-		//Win
-		if (this.numberOfLivingEnemies() <= 0) {
-			this.win();
-			return;
-		}
-		//Lose
-		if (!player.alive || !companion.alive) {
-			this.lose();
-			return;
-		}
-		battleActive = true;
-		this.ticking = true;
-		this.deactivateButtons();
 	},
 	win : function() {
 		var exp = 0;
@@ -232,13 +103,16 @@ var battle = {
 				}
 			}
 		});
-		spoilsScreen.begin(exp, tech, cash, stuff, this.winFunction);
+		getSpoils(exp, tech, cash, stuff, this.winFunction);
 	},
 	lose : function() {
 		this.loseFunction();
 	},
 	leftOf : function(center) {
-		if (center == null)
+		var nits = this.membersOfSide(center.team);
+		var dex = nits.indexOf(center);
+		return nits[dex-1] || null;
+		/*if (center == null)
 			return null;
 		if (center === player)
 			return null;
@@ -247,10 +121,13 @@ var battle = {
 		centerIndex = this.indexOfEnemy(center);
 		if (centerIndex <= 0)
 			return null;
-		return this.enemies[centerIndex - 1];
+		return this.enemies[centerIndex - 1];*/
 	},
 	rightOf : function(center) {
-		if (center == null)
+		var nits = this.membersOfSide(center.team);
+		var dex = nits.indexOf(center);
+		return nits[dex+1] || null;
+		/*if (center == null)
 			return null;
 		if (center === player)
 			return companion;
@@ -259,45 +136,35 @@ var battle = {
 		centerIndex = this.indexOfEnemy(center);
 		if (centerIndex >= this.enemies.length-1)
 			return null;
-		return this.enemies[centerIndex + 1];
+		return this.enemies[centerIndex + 1];*/
 	},
-	membersOfSide : function(team) {
+	membersOfSide : function(team, activeOnly = false) {
 		if (team)
 			return [player, companion];
-		var livingEnemies = [];
-		for (var i = 0; i < this.enemies.length; i++) {
-			if (this.enemies[i].alive)
-				livingEnemies.push(this.enemies[i]);
+		else {
+			if (activeOnly)
+				return this.enemies.filter(oj => oj.isActive());
+			else
+				return this.enemies;
 		}
-		return livingEnemies;
 	},
-	indexOfEnemy : function(enemy) {
+	/*indexOfEnemy : function(enemy) {
 		for (var i = 0; i < this.enemies.length; i++) {
 			if (this.enemies[i] === enemy)
 				return i;
 		}
 		return null;
+	},*/
+	allUnits : function(first = false) {
+		return this.membersOfSide(first, false).concat(this.membersOfSide(!first, false));
 	},
-	setCooldown : function(peep, amount) {
-		peep.delay = amount;
-		this.checkTie(peep);
+	allActiveUnits : function(first = false) {
+		return this.membersOfSide(first, true).concat(this.membersOfSide(!first, true));
 	},
-	checkTie : function(peep) {
-		var others = this.allUnits();
-		for (var i = 0; i < others.length; i++) {
-			if (others[i].delay == peep.delay && others[i] !== peep) {
-				peep.delay++;
-				return this.checkTie(peep);
-			}
-		}
-	},
-	allUnits : function() {
-		return [player, companion].concat(this.enemies);
-	},
-	numberOfLivingEnemies : function() {
+	numberOfActiveEnemies : function() {
 		var soFar = 0;
 		for (var i = 0; i < this.enemies.length; i++) {
-			if (this.enemies[i].alive)
+			if (this.enemies[i].isActive())
 				soFar++;
 		}
 		return soFar;
@@ -339,6 +206,7 @@ var battle = {
 }*/
 
 function gameOver() {
+	//throw "succ";
 	runnee = GeneralEngine;
 	GeneralEngine.objects = [new Label(50, 150, 700, 50, "Game Over", "you are succ. You'll have to refresh the page if you want to replay; too many stray variables.")];
 }

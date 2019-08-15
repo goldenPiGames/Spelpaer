@@ -43,7 +43,7 @@ var DungeonPOI = function(x, y, image, hoverText = null, handler = doNothing) {
 DungeonPOI.prototype = Object.create(UIObjectBase);
 
 DungeonPOI.prototype.update = function() {
-	this.updateStats(ctx);
+	this.updateMouse(ctx);
 	if (this.hovered) {
 		infoField.setText(this.hoverText);
 	}
@@ -69,7 +69,7 @@ var BasicDoor = function(image) {
 BasicDoor.prototype = Object.create(UIObjectBase);
 
 BasicDoor.prototype.update = function() {
-	this.updateStats();
+	this.updateMouse();
 	if (this.hovered) {
 		infoField.setText(DOOR_HOVER);
 	}
@@ -96,7 +96,7 @@ var DungeonExit = function(destination, image) {
 DungeonExit.prototype = Object.create(UIObjectBase);
 
 DungeonExit.prototype.update = function(ctx) {
-	this.updateStats(ctx);
+	this.updateMouse(ctx);
 	if (this.hovered) {
 		infoField.setText(EXIT_HOVER);
 	}

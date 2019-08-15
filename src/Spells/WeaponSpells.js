@@ -13,10 +13,10 @@ var ForceKnife = {
 	power : 1.4,
 	attribute : "cold",
 	hitrate : 0.75,
-	attackStat : "Strength",
-	defenseStat : "Constitution",
+	attackStat : STAT_INDICES.Strength,
+	defenseStat : STAT_INDICES.Constitution,
 	accuracyStat : "Dexterity",
-	evasionStat : "Agility",
+	evasionStat : STAT_INDICES.Agility,
 	duration : 1*MINUTES,
 	delay : 60,
 	cost : 12

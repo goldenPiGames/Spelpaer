@@ -1,6 +1,6 @@
-const LOCALES = []//Pocutop, DepartureShrine, DepartureGate]//, Bordebulle, Coimer, Innsport, HoblinsDen, Sterand, Walld, DeepTown, DeepGrotto, Lethodge, Bordasca, RaziShrine, HilHin];
+const LOCALES = []
 const SUBLOCALES = [];
-const PATHS = []//InceptiveTrailWest, InceptiveTrailEast, AroundTheBubbleEast, AroundTheBubbleNorth, MernBeach, RaidersPath, StarBeach, OceanDescent, DeepFlee, WayOfApathy, GreyHorizonWay, StormApproachWest];
+const PATHS = [];
 
 var Locale = {
 	isLocale : true,
@@ -119,22 +119,14 @@ var SubLocale = {
 	}
 }
 
-function longRest(amount = 1.0) {
-	player.hp = player.maxhp;
-	player.effects = [];
-	companion.hp = companion.maxhp;
-	companion.effects = [];
-	advanceTime(8*HOURS);
-	saveGame(saveSlot, amount);
-	dialog.begin(
-		"Game saved to slot "+saveSlot+".", 
-		function(){
-			new PrepScreen().begin(amount, function(){
-				currentLoc.returnFromRest();
-			});
-		});
+function BasicPOI(name, description, stuff) {
+	this.name = name;
+	this.description = description;
+	if (!Array.isArray(this.stuff));
+		stuff = Array.prototype.slice.call(arguments, 2);
+	this.stuff = stuff;
 }
-
-function longRestPoor() {
-	longRest(0.8);
+BasicPOI.prototype.type = "";
+BasicPOI.prototype.activate = function() {
+	dialog.begin(this.stuff);
 }
