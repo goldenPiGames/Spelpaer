@@ -6,8 +6,10 @@ TECHNIQUES.forEach(function(tech) {
 
 function refreshKnownTechniques() {
 	companion.techniques = [];
-	TECHNIQUES.forEach(function(item) {
-		if (item.prototype.known)
-			companion.techniques.push(new item(item.prototype.known, companion));
+	TECHNIQUES.forEach(function(tech) {
+		if (tech.prototype.known)
+			companion.techniques.push(new tech(tech.prototype.known, companion));
+		if (typeof tech.prototype.attribute != "number")
+			throw tech.name+"'s attribute is not valid.";
 	});
 }

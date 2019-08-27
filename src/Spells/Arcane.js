@@ -1,5 +1,7 @@
-function RayOfFrost(user) {
-	this.user = user;
+class RayOfFrost extends Spell {
+	constructor() {
+		super();
+	}
 }; SPELLS.push(RayOfFrost);
 RayOfFrost.prototype = Object.create(Spell);
 RayOfFrost.prototype.name = "Ray of Frost";
@@ -18,8 +20,10 @@ RayOfFrost.prototype.maxCooldown = 1500;
 RayOfFrost.prototype.cooldownStat = STAT_INDICES.Intelligence;
 RayOfFrost.prototype.cost = 1;
 
-function AcidSplash(user) {
-	this.user = user;
+class AcidSplash extends Spell {
+	constructor() {
+		super();
+	}
 }; SPELLS.push(AcidSplash);
 AcidSplash.prototype = Object.create(Spell);
 AcidSplash.prototype.name = "Acid Splash";
@@ -38,14 +42,15 @@ AcidSplash.prototype.maxCooldown = 1500;
 AcidSplash.prototype.cooldownStat = STAT_INDICES.Intelligence;
 AcidSplash.prototype.cost = 1;
 
-function BurningHands(user) {
-	this.user = user;
-}; SPELLS.push(BurningHands);
+class BurningHands extends Spell {
+	constructor() {
+		super();
+	}}; SPELLS.push(BurningHands);
 BurningHands.prototype = Object.create(Spell);
 BurningHands.prototype.name = "Burning Hands";
 BurningHands.prototype.flavor = "Create a cone of fire from your hands.";
 BurningHands.prototype.attack = true;
-BurningHands.prototype.level = 10;
+BurningHands.prototype.level = 11;
 BurningHands.prototype.power = 12;
 BurningHands.prototype.splash = 0.5;
 BurningHands.prototype.attribute = ATTRIBUTE_INDICES.fire;
@@ -59,8 +64,10 @@ BurningHands.prototype.maxCooldown = 540000;
 BurningHands.prototype.cooldownStat = STAT_INDICES.Intelligence;
 BurningHands.prototype.cost = 2;
 
-function ShockingGrasp(user) {
-	this.user = user;
+class ShockingGrasp extends Spell {
+	constructor() {
+		super();
+	}
 }; SPELLS.push(ShockingGrasp);
 ShockingGrasp.prototype = Object.create(Spell);
 ShockingGrasp.prototype.name = "Shocking Grasp";
@@ -68,7 +75,7 @@ ShockingGrasp.prototype.flavor = "Touch an enemy to discharge an electrical shoc
 ShockingGrasp.prototype.attack = true;
 ShockingGrasp.prototype.level = 12;
 ShockingGrasp.prototype.power = 16;
-ShockingGrasp.prototype.attribute = "electricity";
+ShockingGrasp.prototype.attribute = ATTRIBUTE_INDICES.electricity;
 ShockingGrasp.prototype.hitrate = 0.75;
 ShockingGrasp.prototype.attackStat = STAT_INDICES.Intelligence;
 ShockingGrasp.prototype.defenseStat = STAT_INDICES.Wisdom;
@@ -96,9 +103,10 @@ ShockingGrasp.prototype.cost = 6;
 }
 SPELLS.push(ShockingGrasp);*/
 
-
-function AcidArrow(user) {
-	this.user = user;
+class AcidArrow extends Spell {
+	constructor() {
+		super();
+	}
 }; SPELLS.push(AcidArrow);
 AcidArrow.prototype = Object.create(Spell);
 AcidArrow.prototype.name = "Acid Arrow";

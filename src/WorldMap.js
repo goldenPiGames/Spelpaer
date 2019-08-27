@@ -1,138 +1,91 @@
 const MAP_WATER_COLOR = "#00A2E8";
 
-function WorldMap() {
-	zoom = 1,
-	this.mainWidth = settings.width-200;
-	this.mainHeight = mainHeight();
-	this.hideButton = new Button(this.mainWidth+10, mainHeight()-100, 180, 45, "Hide", "Mouse over to hide all locales and paths, showing only the physical landscape.");
-	this.backButton = new Button(this.mainWidth+10, mainHeight()-50, 180, 45, "Back", "Return to the Locale", ()=>currentLoc.buildScreen());
-	this.centerButton = new Button(this.mainWidth+10, mainHeight()-150, 180, 45, "Center", "Center the camera on your current location.", ()=>this.centerCamera());
-	this.zoomSlider = new Slider(this.mainWidth+10, 20, 180, 30, "Zoom", "Use this slider to adjust the zoom.", .5, 3, val=>this.zoom = val, ()=>this.zoom);
-	this.objects = [this.backButton, this.hideButton, this.centerButton, this.zoomSlider];
-}
-WorldMap.prototype = Object.create(ScreenBase);
-WorldMap.prototype.fullMapImg = makeImage("src/WorldMap.png"),
-WorldMap.prototype.centerCamera = function() {
-	this.centerX = currentLoc.x;
-	this.centerY = currentLoc.y;
-}
-WorldMap.prototype.beginFromCurrentLocale = function() {
-	switchScreen(this);
-	var thisser = this;
-	runnee = this;
-	this.zoom = 1;
-	this.centerCamera();
-	//this.info.show(null);
-	/*PATHS.forEach(function(dab){
-		dab.updateLine(null, thisser);
-	});
-	LOCALES.forEach(function(dab){
-		dab.updatePoint(null, thisser);
-	});*/
-	LOCALES.forEach(dab => dab.updatePoint(thisser));
-	PATHS.forEach(dab => dab.updateLine(thisser));
-	if (!Flags.beginningTalkToClaire) {
-		dialog.begin(
-			new DialogLine("Player", null, "This is no time to be leaving."),
-			function(){Pocutop.buildScreen();});
-		return;
-	}
-	if (!Flags.seenWorldMap) {
-		setFlag("seenWorldMap");
-		this.hideButton.hovered = false;
-		/*dialog.begin(
-			"This is the World Map. As you can see, it's quite expansive, but until you complete the Departure Trial, you'll be seeing only a very small part of it.",
-			"Your current location is shown by the green-filled circle. In this case, see all the way to the west, inside the grey circle.",
-			"The circles are Locales, which are towns, villages, dungeons, waypoints, and other landmarks. White means you've been there, and transparent grey means you haven't.",
-			"Lines represent paths, which are roads, trails, or simply the most direct route over an open field. Each path connects two locales.",
-			"Many paths can be traveled along from either of its two connections. Some, however, are hidden or locked somehow, and must be made available somehow. "+InceptiveTrailWest.available?"For example, you unlocked Inceptive Trail (West) when you spoke to Doctor Clair.":"Inceptive Trail (West), the only path leading out of Pocutop, is unavailable. You'll need to talk to Doctor lair.",
-			"You can mouse over a path to learn its length and encounter level. The typical path will have a random encounter about every "+TYPICAL_ENCOUNTER_DELAY+" distance.",
-			"To begin traveling, just click on any Locale connected to yours by an available path.");
-			*/
-	}
-}
-WorldMap.prototype.update = function() {
-	advanceTime(1);
-	var thisser = this;
-	//this.info.show(null);
-	//this.litPathYet = false;
-	this.objects.forEach(oj => oj.update());
-	this.clicked = mouse.clicked && mouse.x <= this.mainWidth && mouse.y <= this.mainHeight;
-	this.held = this.clicked || (mouse.down && this.held);
-	if (this.held) {
-		this.centerX += (mouse.lastX - mouse.x) / this.zoom;
-		this.centerY += (mouse.lastY - mouse.y) / this.zoom;
-	}
-	LOCALES.forEach(dab => dab.updatePoint(thisser));
-	PATHS.forEach(dab => dab.updateLine(thisser));
-}
-WorldMap.prototype.draw = function() {
-	clearBack();
-	ctx.globalAlpha = 1;
-	ctx.fillStyle = MAP_WATER_COLOR;
-	ctx.fillRect(0, 0, this.mainWidth, mainHeight());
-	ctx.drawImage(this.fullMapImg, this.drawX(0), this.drawY(0), this.fullMapImg.width*this.zoom, this.fullMapImg.height*this.zoom); 
-	var thisser = this;
-	if (!this.hideButton.hovered) {
-		PATHS.forEach(dab => dab.drawLine(thisser));
-		LOCALES.forEach(dab => dab.drawPoint(thisser));
-	}
-	ctx.fillStyle = settings.background_color;
-	ctx.fillRect(this.mainWidth, 0, settings.width-this.mainWidth, this.mainHeight);
-	this.objects.forEach(oj => oj.draw());
-}
-WorldMap.prototype.localeClicked = function(loc) {
-	var interPath = currentLoc.pathTo(loc);
-	if (interPath) {
-		if (interPath.underwater) {
-			if (player.getStat("waterbreathing") > .5) {
-				pathScreen.begin(interPath);
-			} else if (player.spells.includes(WaterBreathing)) {
-				dialog.begin(WaterBreathing.execute(player, player, battleOutOfBattle));
-			} else {
-				dialog.begin("The path to this locale is underwater. You must be able to breath water in order to travel there.");
-			}
+class WorldMapScreen extends Screen {
+	constructor() {
+		super();
+		var mapWidth = settings.width-200;
+		var mapHeight = mainHeight();
+		this.map = new WorldMapMap(mapWidth, mapHeight);
+		this.hideButton = new Button(mapWidth+10, mapHeight-100, 180, 45, "Hide", "Mouse over to hide all locales and paths, showing only the physical landscape.");
+		this.backButton = new Button(mapWidth+10, mapHeight-50, 180, 45, "Back", "Return to the Locale", ()=>currentLoc.buildScreen());
+		this.centerButton = new Button(mapWidth+10, mapHeight-150, 180, 45, "Center", "Center the camera on your current location.", ()=>this.map.centerOnCurrent());
+		this.zoomSlider = new Slider(mapWidth+10, 20, 180, 30, "Zoom", "Use this slider to adjust the zoom. You can also scroll.", this.map.minZoom, this.map.maxZoom, val=>this.map.setZoom(Math.round(val*4)/4), ()=>this.map.zoom); //TODO scroll events
+		this.objects = [this.backButton, this.hideButton, this.centerButton, this.zoomSlider];
+		this.map.centerOnCurrent();
+		if (!getFlag("beginningTalkToClaire")) {
+			dialog.begin(
+				new DialogLine("Player", null, "This is no time to be leaving."),
+				function(){Pocutop.buildScreen();});
 			return;
 		}
-		beginPath(interPath);
+		if (!getFlag("seenWorldMap")) {
+			setFlag("seenWorldMap");
+			this.hideButton.hovered = false;
+			/*dialog.begin(
+				"This is the World Map. As you can see, it's quite expansive, but until you complete the Departure Trial, you'll be seeing only a very small part of it.",
+				"Your current location is shown by the green-filled circle. In this case, see all the way to the west, inside the grey circle.",
+				"The circles are Locales, which are towns, villages, dungeons, waypoints, and other landmarks. White means you've been there, and transparent grey means you haven't.",
+				"Lines represent paths, which are roads, trails, or simply the most direct route over an open field. Each path connects two locales.",
+				"Many paths can be traveled along from either of its two connections. Some, however, are hidden or locked somehow, and must be made available somehow. "+InceptiveTrailWest.available?"For example, you unlocked Inceptive Trail (West) when you spoke to Doctor Clair.":"Inceptive Trail (West), the only path leading out of Pocutop, is unavailable. You'll need to talk to Doctor lair.",
+				"You can mouse over a path to learn its length and encounter level. The typical path will have a random encounter about every "+TYPICAL_ENCOUNTER_DELAY+" distance.",
+				"To begin traveling, just click on any Locale connected to yours by an available path.");
+				*/
+		}
 	}
-}
-WorldMap.prototype.drawX = function(realX) {
-	return (realX - this.centerX) * this.zoom + this.mainWidth/2;
-}
-WorldMap.prototype.drawY = function(realY) {
-	return (realY - this.centerY) * this.zoom + mainHeight()/2;
-}
-/*WorldMap.prototype.info = {
-	__proto__ : UIObjectBase,
-	x : 5,
-	y : 5,
-	width : 290,
-	height : 440,
-	update : function() {
-		this.x = mouse.x <= canvas.width/2 ? 700 - this.width - this.y*2 : this.y;
-	},
-	draw : function() {
-		if (this.thing == null)
-			return;
+	update() {
+		advanceTime(1, true);
+		this.map.update();
+		this.objects.forEach(oj => oj.update());
+	}
+	draw() {
+		clearBack();
+		this.map.draw(!this.hideButton.hovered)
 		ctx.fillStyle = settings.background_color;
-		ctx.strokeStyle = settings.normal_color;
-		ctx.strokeRect(this.x, this.y, this.width, this.height);
-		ctx.fillRect(this.x, this.y, this.width, this.height);
-		
-		ctx.fillStyle = settings.normal_color;
-		ctx.font = "20px "+settings.font;
-		ctx.fillText(this.thing.name, this.x + 5, this.y + 5);
-		
-		if (this.thing.isLocale) {
-			
-		} else {
-			ctx.fillText("Distance: "+this.thing.distance, this.x + 5, this.y + 30);
-			ctx.fillText("Encounter Level: "+this.thing.encounterLevel, this.x + 5, this.y + 55);
-		}
-	},
-	show : function(thing) {
-		this.thing = thing;
-	},
-}*/
+		ctx.fillRect(this.map.x + this.map.width, 0, settings.width - this.map.x + this.map.width + 1, mainHeight());
+		this.objects.forEach(oj => oj.draw());
+	}
+}
 
+class WorldMapMap extends DynamicCamera {
+	constructor(width, height) {
+		super(0, 0, width, height);
+	}
+	update() {
+		super.update();
+		LOCALES.forEach(dab => dab.updatePoint(this));
+		PATHS.forEach(dab => dab.updateLine(this));
+	}
+	draw(polit) {
+		ctx.globalAlpha = 1;
+		ctx.fillStyle = MAP_WATER_COLOR;
+		ctx.fillRect(0, 0, this.width, this.height);
+		ctx.drawImage(this.fullMapImg, this.drawX(0), this.drawY(0), this.fullMapImg.width*this.zoom, this.fullMapImg.height*this.zoom); 
+		if (polit) {
+			PATHS.forEach(dab => dab.drawLine(this));
+			LOCALES.forEach(dab => dab.drawPoint(this));
+		}
+	}
+	centerOnCurrent() {
+		this.center(currentLoc.x, currentLoc.y);
+	}
+	localeClicked(loc) {
+		var interPath = currentLoc.pathTo(loc);
+		if (interPath) {
+			/*if (interPath.underwater) {
+				if (bluh) {
+					pathScreen.begin(interPath);
+				} else if (player.spells.includes(WaterBreathing)) {
+					dialog.begin(WaterBreathing.execute(player, player));
+				} else {
+					dialog.begin("The path to this locale is underwater. You must be able to breath water in order to travel there.");
+				}
+				return;
+			}*/
+			beginPath(interPath);
+		}
+	}
+}
+WorldMapMap.prototype.fullMapImg = makeImage("src/WorldMap.png"),
+WorldMapMap.prototype.draggable = true;
+WorldMapMap.prototype.minZoom = .5;
+WorldMapMap.prototype.maxZoom = 3;

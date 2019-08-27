@@ -8,6 +8,8 @@ SPELLS.forEach(function(sp, index) {
 	SPELLS_BY_NAME[sp.name] = sp;
 	sp.prototype.iname = sp.name;
 	sp.prototype.index = index;
+	if (typeof sp.prototype.attribute != "number")
+		throw sp.name+"'s attribute is not valid.";
 });
 
 function refreshSpellDescriptions(user) {
@@ -46,10 +48,13 @@ function spellsByStat(stat) {
 }
 
 function learnSpell(spel) {
-	spel.prototype.known = true;
-	if (!spel.prototype.known && spel.prototype.level <= player.level) {
-		player.spells.push(new spel(player));
+	if (!spel.prototype.known) {
+		//TODO
 	}
+	if (spel.level > player.level) {
+		//TODO
+	}
+	spel.prototype.known = true;
 }
 
 function getSpellPoints() {

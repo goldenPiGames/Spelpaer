@@ -118,3 +118,13 @@ function makeSprites(sauce, sec) {
 	}
 	return sheetData;
 }
+
+function drawTextInRect(text, x, y, width, height) {
+	ctx.textAlign = "center";
+	ctx.textBaseline = "middle";
+	ctx.font = height+"px "+settings.font;
+	var wid = ctx.measureText(text).width;
+	if (wid > width)
+		ctx.font = (height*width/wid)+"px "+settings.font;
+	ctx.fillText(text, x+width/2, y+height/2);
+}

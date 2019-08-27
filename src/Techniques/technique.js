@@ -1,13 +1,13 @@
 const TECHNIQUES = [];
 
-var Technique = {
-	__proto__ : BattleAction,
-	known : false,
-	isTechnique : true,
-	isSpell : false,
-	usesWeapon : true,
-	usesArmor : true,
-	getDescription : function() {
+class Technique extends BattleAction {
+	constructor(level) {
+		super();
+		this.level = level;
+		this.power = this.powerMult * this.level;
+		this.maxCooldown = this.cooldownMult * this.level;
+	}
+	getDescription() {
 		var desc = this.name + " lv. " + this.level;
 		desc += " <br> Delay: " + this.delay;
 		if (this.maxCooldown)
@@ -27,20 +27,24 @@ var Technique = {
 		}
 		desc += " <br> " + this.flavor;
 		return desc;
-	},
+	}
 }
+Technique.prototype.known = false;
+Technique.prototype.isTechnique = true;
+Technique.prototype.isSpell = false;
+Technique.prototype.usesWeapon = true;
+Technique.prototype.usesArmor = true;
 
-function BasicAttack(level, user) {
-	this.level = level;
-	this.power = this.powerMult * this.level;
-	this.user = user;
-	this.attribute = this.user.weaponAttribute;
+class BasicAttack extends Technique {
+	constructor(level) {
+		super(level);
+	}
 }; TECHNIQUES.push(BasicAttack);
-BasicAttack.prototype = Object.create(Technique);
 BasicAttack.prototype.name = "Attack";
 BasicAttack.prototype.flavor = "The most basic combat technique.";
 BasicAttack.prototype.attack = true;
 BasicAttack.prototype.powerMult = 1.0;
+BasicAttack.prototype.attribute = WEAPON_ATTRIBUTE;
 BasicAttack.prototype.hitrate = 0.75;
 BasicAttack.prototype.attackStat = STAT_INDICES.Strength;
 BasicAttack.prototype.usesWeapon = true;
@@ -58,11 +62,10 @@ BasicAttack.prototype.cooldownPortion = function() {
 },
 BasicAttack.prototype.prerequisites = [];
 
-function PowerChop(level, user) {
-	this.level = level;
-	this.power = this.powerMult * this.level;
-	this.maxCooldown = this.cooldownMult * this.level;
-	this.user = user;
+class PowerChop extends Technique {
+	constructor(level) {
+		super(level);
+	}
 	/*animate : function(user, target, battle) {
 		var x = target.animationX();
 		var y = target.animationY();
@@ -77,7 +80,6 @@ function PowerChop(level, user) {
 		}
 	},*/
 }; TECHNIQUES.push(PowerChop);
-PowerChop.prototype = Object.create(Technique);
 PowerChop.prototype.name = "Power Chop";
 PowerChop.prototype.flavor = "A more powerful two-handed attack.";
 PowerChop.prototype.attack = true;
@@ -95,11 +97,10 @@ PowerChop.prototype.cooldownMult = 200;
 PowerChop.prototype.cooldownStat = STAT_INDICES.Constitution;
 PowerChop.prototype.prerequisites = [BasicAttack];
 
-function Cleave(level, user) {
-	this.level = level;
-	this.power = this.powerMult * this.level;
-	this.maxCooldown = this.cooldownMult * this.level;
-	this.user = user;
+class Cleave extends Technique {
+	constructor(level) {
+		super(level);
+	}
 	/*animate : function(user, target, battle) {
 		var x = target.animationX();
 		var y = target.animationY();
@@ -111,7 +112,6 @@ function Cleave(level, user) {
 			engine.particles.push(new Ember(x, y - 10 + 20*Math.random(), dx, 0, 3, color, .02));
 		}
 	},*/
-	prerequisites : [BasicAttack]
 }; TECHNIQUES.push(Cleave);
 Cleave.prototype = Object.create(Technique);
 Cleave.prototype.name = "Cleave";
@@ -131,7 +131,7 @@ Cleave.prototype.delay = 120;
 Cleave.prototype.cooldownMult = 250;
 Cleave.prototype.cooldownStat = STAT_INDICES.Constitution;
 //Cleave.prototype.execute = executeSplashAttack;
-Cleave.prototype.prerequisites = [];
+Cleave.prototype.prerequisites = [BasicAttack];
 
 /*function InfinitySlash(level, user) {
 	__proto__ : Technique,
@@ -179,11 +179,10 @@ InfinitySlash.prototype = Object.create(Technique);
 .prototype.cooldownMult = ;
 .prototype.prerequisites = [];*/
 
-function QuickStab(level, user) {
-	this.level = level;
-	this.power = this.powerMult * this.level;
-	this.user = user;
-	this.maxCooldown = this.cooldownMult * this.level;
+class QuickStab extends Technique {
+	constructor(level) {
+		super(level);
+	}
 }; TECHNIQUES.push(QuickStab);
 QuickStab.prototype = Object.create(Technique);
 QuickStab.prototype.name = "Quick Stab";
@@ -202,37 +201,3 @@ QuickStab.prototype.delay = 65;
 QuickStab.prototype.cooldownMult = 200;
 QuickStab.prototype.cooldownStat = STAT_INDICES.Agility;
 QuickStab.prototype.prerequisites = [BasicAttack];
-
-function ArmorPierce(level, user) {
-	this.level = level;
-	this.power = this.powerMult * this.level;
-	this.user = user;
-	this.maxCooldown = this.cooldownMult * this.level;
-}; TECHNIQUES.push(ArmorPierce);
-ArmorPierce.prototype = Object.create(Technique);
-ArmorPierce.prototype.name = "Armor Pierce";
-ArmorPierce.prototype.flavor = "Stabby stabby.";
-ArmorPierce.prototype.attack = true;
-ArmorPierce.prototype.powerMult = 0.8;
-ArmorPierce.prototype.attribute = ATTRIBUTE_INDICES.piercing;
-ArmorPierce.prototype.hitrate = 0.75;
-ArmorPierce.prototype.attackStat = STAT_INDICES.Strength;
-ArmorPierce.prototype.usesWeapon = true;
-ArmorPierce.prototype.defenseStat = STAT_INDICES.Constitution;
-ArmorPierce.prototype.usesArmor = 0.5;
-ArmorPierce.prototype.accuracyStat = STAT_INDICES.Dexterity;
-ArmorPierce.prototype.evasionStat = STAT_INDICES.Agility;
-ArmorPierce.prototype.delay = 110;
-ArmorPierce.prototype.cooldownMult = 500;
-ArmorPierce.prototype.cooldownStat = STAT_INDICES.Intelligence;
-ArmorPierce.prototype.prerequisites = [BasicAttack];
-ArmorPierce.prototype.effect = function(source) {
-	this.source = source;
-}
-ArmorPierce.prototype.effect.prototype = Object.create(BasicEffectPhysic);
-ArmorPierce.prototype.effect.prototype.target = true;
-ArmorPierce.prototype.effect.prototype.statChangeMults = statsToArray({
-	Armor : -1.0,
-}, 0);
-ArmorPierce.prototype.effect.prototype.duration = 300;
-ArmorPierce.prototype.effect.prototype.rate = 1.0;

@@ -30,7 +30,7 @@ var Locale = {
 		currentLoc = this;
 	},
 	buildScreen : function() {
-		switchScreen(new LocaleScreen(this.getPOIs(), false, this.image));
+		switchScreen(new LocaleScreen(this));
 		/*localeScreen.setLeaveButton(false);
 		//this.hovered = false;
 		//this.clicked = false;
@@ -39,32 +39,25 @@ var Locale = {
 		localeScreen.POImenu.setItems(this.getPOIs());
 		//GeneralEngine.objects = [bgimg, leaveButton, poiMenu, weather];*/
 	},
+	radius : 8,
 	updatePoint : function(map) {
-		var wasNotClicked = !this.clicked;
-		this.drawX = map.drawX(this.x);
-		this.drawY = map.drawY(this.y);
-		this.drawRadius = 8 * map.zoom;
-		if (ctx != null) {
-			this.hovered = mouse.x <= map.mainWidth && mouse.y <= map.mainHeight && Math.pow(this.drawX - mouse.x, 2) + Math.pow(this.drawY - mouse.y, 2) < Math.pow(this.drawRadius, 2);
-			this.clicked = (this.hovered && mouse.clicked);
-			if (this.hovered) {
-				infoField.setText(this.getInfo());
-				//map.info.show(this);
-			}
-			if (this.clicked && wasNotClicked)
-				map.localeClicked(this);
-		} else {
-			this.hovered = false;
-			this.clicked = false;
+		//this.drawX = map.drawX(this.x);
+		//this.drawY = map.drawY(this.y);
+		//var drawRadius = 8 * map.zoom;
+		this.hovered = Math.pow(this.x - map.mouse.x, 2) + Math.pow(this.y - map.mouse.y, 2) < Math.pow(this.radius, 2);
+		this.clicked = this.hovered && mouse.clicked;
+		if (this.hovered) {
+			infoField.setText(this.getInfo());
 		}
+		if (this.clicked)
+			map.localeClicked(this);
 	},
 	drawPoint : function(map) {
 		ctx.strokeWidth = 2;
 		ctx.strokeStyle = (this.hovered) ? settings.hover_color : (this.visited ? settings.normal_color : settings.normal_color+"80");
 		ctx.fillStyle = (this == currentLoc) ? settings.click_color : settings.background_color+"69";
-		
 		ctx.beginPath();
-		ctx.arc(this.drawX, this.drawY, this.drawRadius-1, 0, 2*Math.PI);
+		ctx.arc(map.drawX(this.x), map.drawY(this.y), this.radius*map.zoom-1, 0, 2*Math.PI);
 		ctx.closePath();
 		ctx.fill();
 		ctx.stroke();
@@ -91,6 +84,7 @@ function activatePOI(poi) {
 
 var SubLocale = {
 	isLocale : true,
+	isSub : true,
 	type : "Sublocale",
 	arrive : function() {
 		playMusic(this.music);
@@ -104,7 +98,7 @@ var SubLocale = {
 		this.arrive();
 	},
 	buildScreen : function() {
-		switchScreen(new LocaleScreen(this.getPOIs(), true, this.image));
+		switchScreen(new LocaleScreen(this));
 	},
 	returnFromRest : function() {
 		playMusic(this.music);

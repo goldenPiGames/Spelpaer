@@ -1,13 +1,7 @@
 const SPELLS = [];
 
-var Spell = {
-	__proto__ : BattleAction,
-	known : false,
-	isTechnique : false,
-	isSpell : true,
-	usesWeapon : false,
-	usesArmor : false,
-	getDescription : function(user) {
+class Spell extends BattleAction {
+	getDescription(user) {
 		var desc = this.name + " : level " + this.level + ", costs " + this.cost;
 		desc += " <br> Delay: " + this.delay;
 		if (this.maxCooldown == Infinity)
@@ -29,12 +23,12 @@ var Spell = {
 		}
 		desc += " <br> " + this.flavor;
 		return desc;
-	},
-	isPreparable : function() {
+	}
+	isPreparable() {
 		//console.log(this.known, (this.level <= player.level))
 		return this.known && (this.level <= player.level);
-	},
-	estimateMaxCooldownTime : function(user) {
+	}
+	estimateMaxCooldownTime(user) {
 		var divisor;
 		if (user) {
 			divisor = user.stats[this.cooldownStat];
@@ -47,8 +41,8 @@ var Spell = {
 		}
 		var time = this.maxCooldown / divisor;
 		return getShortDuration(time);
-	},
-	getCDDesc : function(user) {
+	}
+	getCDDesc(user) {
 		var cd = Math.ceil(this.cooldown / user.stats[this.cooldownStat]);
 		if (this.isAvailable())
 			return "";
@@ -56,89 +50,27 @@ var Spell = {
 			return "-";
 		else
 			return getShortDuration(cd);
-		/*else if (cd >= MINUTES)
-			return Math.floor(this.cooldown/MINUTES)+"m";
-		else
-			return Math.floor(this.cooldown/SECONDS)+"s";*/
-	},
-	getKeyStat : function() {
+	}
+	getKeyStat() {
 		return this.attackStat || this.accuracyStat || this.cooldownStat;
-	},
-	purchase : function() {
+	}
+	purchase() {
 		this.known = true;
-	},
-	canBeBought : function() {
+	}
+	canBeBought() {
 		return !this.known;
-	},
-	shouldAutoPrepare : function() {
+	}
+	shouldAutoPrepare() {
 		return true;
-	},
-	maxCooldown : Infinity,
+	}
 }
+Spell.prototype.known = false;
+Spell.prototype.isTechnique = false;
+Spell.prototype.isSpell = true;
+Spell.prototype.usesWeapon = false;
+Spell.prototype.usesArmor = false;
+Spell.prototype.maxCooldown = Infinity;
 
-/*class SpellC extends BattleActionC {
-	constructor(level) {
-		this.level = level;
-	}
-	known = false;
-	isSpell = true;
-	usesWeapon = false;
-	usesArmor = false;
-	damageInflection = 1.0;
-	getDescription () {
-		var desc = this.name + " : level " + this.level + ", costs " + this.cost;
-		if (this.power)
-			desc += " <br> Power: " + this.power + " " + this.attribute + " (" + this.attackStat + " vs. " + this.defenseStat + (this.damageInflection != 1.0 ? ", damage inflection "+this.damageInflection+")" : ")");
-		if (this.hitrate) {
-			desc += " <br> Hitrate: " + asPercent(this.hitrate, 0)
-			if (this.hitrate < 1.0)
-				desc += " (" + this.accuracyStat + " vs " + this.evasionStat + ")";
-		}
-		desc += " <br> " + this.flavor;
-		return desc;
-	}
-	isPreparable () {
-		//console.log(this.known, (this.level <= player.level))
-		return this.known && (this.level <= player.level);
-	}
-	isAvailable () {
-		return !this.used;
-	}
-	expend () {
-		this.used = true;
-	}
-	getKeyStat () {
-		if (this.attackStat == STAT_INDICES.Intelligence) return STAT_INDICES.Intelligence;
-		if (this.attackStat == STAT_INDICES.Wisdom) return STAT_INDICES.Wisdom;
-		if (this.attackStat == STAT_INDICES.Charisma) return STAT_INDICES.Charisma;
-		if (this.accuracyStat == STAT_INDICES.Intelligence) return STAT_INDICES.Intelligence;
-		if (this.accuracyStat == STAT_INDICES.Wisdom) return STAT_INDICES.Wisdom;
-		if (this.accuracyStat == STAT_INDICES.Charisma) return STAT_INDICES.Charisma;
-		if (this.effectAccuracyStat == STAT_INDICES.Intelligence) return STAT_INDICES.Intelligence;
-		if (this.effectAccuracyStat == STAT_INDICES.Wisdom) return STAT_INDICES.Wisdom;
-		if (this.effectAccuracyStat == STAT_INDICES.Charisma) return STAT_INDICES.Charisma;
-	}
-	getKeyStat : function() {
-		if (this.attackStat == STAT_INDICES.Intelligence) return STAT_INDICES.Intelligence;
-		if (this.attackStat == STAT_INDICES.Wisdom) return STAT_INDICES.Wisdom;
-		if (this.attackStat == STAT_INDICES.Charisma) return STAT_INDICES.Charisma;
-		if (this.accuracyStat == STAT_INDICES.Intelligence) return STAT_INDICES.Intelligence;
-		if (this.accuracyStat == STAT_INDICES.Wisdom) return STAT_INDICES.Wisdom;
-		if (this.accuracyStat == STAT_INDICES.Charisma) return STAT_INDICES.Charisma;
-		if (this.effectAccuracyStat == STAT_INDICES.Intelligence) return STAT_INDICES.Intelligence;
-		if (this.effectAccuracyStat == STAT_INDICES.Wisdom) return STAT_INDICES.Wisdom;
-		if (this.effectAccuracyStat == STAT_INDICES.Charisma) return STAT_INDICES.Charisma;
-	}
-	purchase () {
-		this.known = true;
-	}
-	canBeBought () {
-		return !this.known;
-	}
-	shouldAutoPrepare () {
-		return true;
-	}
-}*/
 
 /*var Favor = {
 	__proto__ : Spell,
@@ -160,8 +92,10 @@ var Spell = {
 	execute : executeBuff
 }; SPELLS.push(Favor);*/
 
-function Frighten(user) {
-	this.user = user;
+class Frighten extends Spell {
+	constructor() {
+		super();
+	}
 }; SPELLS.push(Frighten);
 Frighten.prototype = Object.create(Spell);
 Frighten.prototype.name = "Frighten";
@@ -207,48 +141,7 @@ Frighten.prototype.execute = function(user, target) {
 	execute : executeBuff
 }; SPELLS.push(Distract);*/
 
-function ReadStats(user) {
-	this.user = user;
-}; SPELLS.push(ReadStats);
-ReadStats.prototype = Object.create(Spell);
-ReadStats.prototype.name = "Read Stats";
-ReadStats.prototype.flavor = "Quickly tells you the stats of one enemy.";
-ReadStats.prototype.level = 1;
-ReadStats.prototype.attack = false;
-ReadStats.prototype.delay = 45;
-ReadStats.prototype.maxCooldown = 100;
-ReadStats.prototype.cooldownStat = STAT_INDICES.Intelligence;
-ReadStats.prototype.cost = 1;
-ReadStats.prototype.execute = function(user, target) {
-	var statsList = [STAT_INDICES.Vitality, STAT_INDICES.Strength, STAT_INDICES.Constitution, STAT_INDICES.Dexterity, STAT_INDICES.Agility, STAT_INDICES.Intelligence, STAT_INDICES.Wisdom, STAT_INDICES.Charisma, STAT_INDICES.Weapon, STAT_INDICES.Armor];
-	messageList = [];
-	for (var i = 0; i < statsList.length; i++) {
-		messageList.push(new DialogLine("Read Stats", null, STAT_NAMES[statsList[i]] + ": Normally " + target.stats[statsList[i]] + ", currently " + target.getStat(statsList[i]) + "."));
-	}
-	dialog.begin(messageList);
-}
 
-/*var ReadEffectiveness = {
-	__proto__ : Spell,
-	name : "Read Effectiveness",
-	flavor : "Quickly tells you the effectiveness of all attributes against one enemy.",
-	source : "Ask the Explainer about how damage is calculated.",
-	attack : false,
-	known : false,
-	level : 1,
-	delay : 20,
-	cost : 1,
-	execute : function(user, target, battle) {
-		user.expendSpell(this);
-		var effectiveness = target.effectiveness;
-		messageList = [];
-		for (var prop in effectiveness) {
-			messageList.push(new DialogLine("Read Effectiveness", null, prop + ": " + asPercentage(effectiveness[prop])));
-        }
-		return messageList;
-	},
-	price : 1000
-}; SPELLS.push(ReadEffectiveness);*/
 
 /*var WaterBreathing = {
 	__proto__ : Spell,

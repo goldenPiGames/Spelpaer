@@ -1,26 +1,23 @@
 var player = {name:"Player"}
 
-function Player() {
-	this.team = true;
-	this.description = "You, the Player. Primary spellcaster.";
-	this.techniques = [
-		new BasicAttack(5, this)
-	];
-	this.spells = [];
-	this.emptyEffects();
-	//this.init();
+class Player extends PC {
+	constructor() {
+		super(10);
+	}
+	getAttack() {
+		return this.equipped[SLOT_INDICES.RightHand].attack || this.techniques[0];
+	}
 }
-Player.prototype = Object.create(PC);
-Player.prototype.weaponAttribute = "bludgeoning";
+Player.prototype.description = "Your avatar. Primary spellcaster.";
+Player.prototype.weaponAttribute = ATTRIBUTE_INDICES.bludgeoning;
 Player.prototype.baseEffectiveness = attributesToArray({
 	positive : -1.0
 });
+Player.prototype.techniqueTable = [
+	{technique:BasicAttack, levelMult:0.5},
+]
 
-Player.prototype.getAttack = function() {
-	return this.equipped[SLOT_INDICES.RightHand].attack || this.techniques[0];
-}
-
-/*Player.prototype.makeComponents = function(x, y, width = 150, height = 100) {
+/*Player.prototype.setDisplay = function(x, y, width = 150, height = 100) {
 	this.selectionButton = new Button(x, y, width, height, "");
 	this.nameLabel = new Label(x, y+2, width, 18, this.name, this.description, this.color);
 	this.levelLabel = new Label(x, y+20, width, 14, "Lv "+this.level, this.toNextLevel() + " experience to the next level. This is the maximum level of spell you can prepare and cast.");

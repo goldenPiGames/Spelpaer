@@ -1,4 +1,4 @@
-var Channel1 = {
+/*var Channel1 = {
 	__proto__ : Spell,
 	name : "Channel I",
 	description : "A surge of positive energy heals the wounds of a living creature, or damages undead. Has no effect on most constructs.",
@@ -91,4 +91,4 @@ var Channel5 = {
 	delay : 150,
 	cost : CureExtreme.cost * 2,
 	execute : executeLineAttack
-}
+}*/

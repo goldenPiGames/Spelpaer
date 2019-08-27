@@ -1,4 +1,5 @@
 var runnee;
+var overlay;
 const FPS = 30;
 var particles = [];
 
@@ -10,14 +11,12 @@ var coreEngine = {
 		musicLoopCheck();
 		var thisser = this;
 		infoField.update();
-		if (dialogActive)
-			dialog.update();
-		else
+		if (!overlay || overlay.update())
 			runnee.update();
 		if (mouse.clicked)
 			particles.push(new ParticleRing(mouse.x, mouse.y, 1.5, settings.click_color, .04));
 		runnee.draw();
-		if (dialogActive)
+		if (overlay)
 			dialog.draw();
 		else {
 			infoField.draw();

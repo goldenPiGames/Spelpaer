@@ -1,8 +1,7 @@
-function StunningKick(level, user) {
-	this.level = level;
-	this.power = this.powerMult * this.level;
-	this.maxCooldown = this.cooldownMult * this.level;
-	this.user = user;
+class StunningKick extends Technique {
+	constructor(level) {
+		super(level);
+	}
 	/*effectRate : .55,
 	effectAccuracyStat : STAT_INDICES.Wisdom,
 	effectEvasionStat : STAT_INDICES.Constitution,
@@ -30,11 +29,10 @@ StunningKick.prototype.cooldownStat = STAT_INDICES.Wisdom;
 //TODO add stunning effect
 StunningKick.prototype.prerequisites = [BasicAttack];
 
-function ShadowSnap(level, user) {
-	this.level = level;
-	this.power = this.powerMult * this.level;
-	this.maxCooldown = this.cooldownMult * this.level;
-	this.user = user;
+class ShadowSnap extends Technique {
+	constructor(level) {
+		super(level);
+	}
 }; TECHNIQUES.push(ShadowSnap);
 ShadowSnap.prototype = Object.create(Technique);
 ShadowSnap.prototype.name = "Shadow Snap";

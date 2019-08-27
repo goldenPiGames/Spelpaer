@@ -2,6 +2,17 @@ function randomTerm(ray) {
 	return ray[Math.floor(Math.random() * ray.length)];
 }
 
+function maxTerm(ray, criteria) {
+	return ray.reduce((accum, cur) => {
+		let newVal = criteria(cur);
+		//console.log(cur, newVal);
+		if (newVal >= accum.val)
+			return {item: cur, val: newVal}
+		else
+			return accum;
+	}, {item: ray[0], val: -Infinity}).item;
+}
+
 function randomN(max = 1) {
 	return -max + 2 * max * Math.random();
 }
@@ -54,6 +65,7 @@ function fillLeft(str, length, filler="0") {
 	}
 	return str;
 }
+
 
 //https://stackoverflow.com/questions/17428587/transposing-a-2d-array-in-javascript
 function transposeArray(array) {

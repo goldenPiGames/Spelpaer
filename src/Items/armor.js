@@ -26,6 +26,9 @@ PocutopArmor.prototype.forCompanion = true;
 PocutopArmor.prototype.statMods = statsToArray({
 	Armor : 10,
 }, 0);
+PocutopArmor.prototype.attributeResists = attributesToArray({
+	fear : 10,
+}, 0);
 
 function HideShirt() {
 	

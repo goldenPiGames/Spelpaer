@@ -22,6 +22,6 @@ function getFlag(name) {
 	return Flags[name];
 }
 
-function numberOfAnchorsPurified() {
+function numberOfAnqorsPurified() {
 	return 0;
 }

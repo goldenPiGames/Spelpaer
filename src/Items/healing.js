@@ -1,7 +1,7 @@
 function HealingPotion(spec) {
 	this.spec = spec;
 	this.power = parseInt(spec);
-	this.description = "Restores "+this.power+" hp to the user."
+	//this.description = "Restores "+this.power+" hp to the user.";
 }
 ITEMS.push(HealingPotion);
 HealingPotion.prototype = Object.create(Consumable);
@@ -11,6 +11,7 @@ HealingPotion.prototype.execute = function(user, target) {
 }
 HealingPotion.prototype.selfOnly = true;
 HealingPotion.prototype.delay = 120;
+HealingPotion.prototype.flavor = "Restores hp to the user.";
 
 function HealingSyringe(spec) {
 	this.spec = spec;

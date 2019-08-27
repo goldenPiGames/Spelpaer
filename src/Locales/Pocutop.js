@@ -159,7 +159,7 @@ PocutopObservatory = {
 				new DialogLine("Player", null, "I ask for clarification, as there are nine people here."),
 				new DialogLine("Claire", CHAR_SPRITES.Claire.Pointing, "You."),
 				new DialogLine("Player", CHAR_SPRITES.Claire.Pointing, "She points directly at me. I move around a little bit. She's still pointing directly at me."),
-				new DialogLine("Claire", CHAR_SPRITES.Claire.Pointing, "Oh, and you too, <Compnion>."),
+				new DialogLine("Claire", CHAR_SPRITES.Claire.Pointing, "Oh, and you too, <Companion>."),
 				new DialogLine("Claire", CHAR_SPRITES.Claire.Pointing, "You can avert this catastrophe."),
 				new DialogLine("Manz", CHAR_SPRITES.Manz.DialogNormal, "This is all rather sudden."),
 				new DialogLine("Poslo", CHAR_SPRITES.Poslo.DialogNormal, "Please, Claire, elaborate, if you will."),
@@ -212,20 +212,21 @@ function afterFightManzMarcel() {
 		new DialogLine("Marcel", CHAR_SPRITES.Marcel.DialogNormal, "It's possible to pass through it, but only if you're in possession of an object called the Departure Token."),
 		new DialogLine("Manz", CHAR_SPRITES.Manz.DialogNormal, "And the Departure Tokens are found inside of the Departure Shrine, located exactly in the center of the bubble."),
 		new DialogLine("Manz", CHAR_SPRITES.Manz.DialogNormal, "Right over there is the Inceptive Trail. It leads to the Departure Shrine and Departure Gate. Just follow along it until you come across a building of red wood and grey stone. You can't miss it."),
+		new DialogLine("Manz", CHAR_SPRITES.Manz.DialogNormal, "And here, take this spell."),
+		()=>learnSpell(BurningHands),
 	);
 }
 
-function Manz(level) {
-	this.level = level;
-	this.techniques = [
-		new BasicAttack(Math.floor(level/2), this),
-	];
-	this.spells = [
-		new AcidSplash(this),
-		new RayOfFrost(this),
-		new MagicMissile1(this),
-	];
-	this.init();
+class Manz extends Unit {
+	constructor(level) {
+		super(level);
+	}
+	chooseAction() {
+		return {
+			target: player,
+			action: this.findSpell(BurningHands) || this.findSpell(MagicMissile1) || this.findSpell(RayOfFrost) || this.findSpell(AcidSplash) || this.findTechnique(BasicAttack)
+		};
+	}
 }
 Manz.prototype = Object.create(Unit);
 Manz.prototype.name = "Manz";
@@ -233,38 +234,51 @@ Manz.prototype.description = "One of <Player>'s instructors. A user of arcane ma
 Manz.prototype.sprites = CHAR_SPRITES.Manz;
 Manz.prototype.hpMult = 10;
 Manz.prototype.statMults = statsToArray({
-	Vitality : 1.0,
+	Vitality : 0.9,
 	Strength : 0.7,
 	Constitution : 0.7,
-	Intelligence : 1.3,
+	Intelligence : 1.4,
 	Wisdom : 1.1,
 	Dexterity : 0.8,
 	Agility : 0.7,
-	Charisma : 1.2,
+	Charisma : 1.1,
 	Potential : 0.8,
 	Weapon : 0.0,
 	Armor : 0.4,
 });
 Manz.prototype.effectiveness = attributesToArray({
-	cutting : 1.2,
+	cutting : 1.1,
+	fire : 0.6,
 	positive : -1.0,
 	negative : 1.5
 });
 Manz.prototype.weaponAttribute = ATTRIBUTE_INDICES.bludgeoning;
+Manz.prototype.techniqueTable = [
+	{technique:BasicAttack, levelMult:0.5},
+];
+Manz.prototype.spellTable = [
+	AcidSplash,
+	RayOfFrost,
+	MagicMissile1,
+	MagicMissile1,
+	//MagicMissile1,
+	BurningHands,
+	//MagicMissile2,
+];
 Manz.prototype.expYield = function() {
-	return Math.ceil(forNextLevel(this.level - 2) / 2);
+	return Math.ceil(forNextLevel(Math.min(player.level, this.level)) * (this.hpPortion <= .5 ? 1 : .5));
 }
 
-function Marcel(level) {
-	this.level = level;
-	this.techniques = [
-		new BasicAttack(level, this),
-		new PowerChop(level, this),
-		new QuickStab(level, this),
-		new Cleave(level, this),
-	];
-	this.spells = [];
-	this.init();
+class Marcel extends Unit {
+	constructor(level) {
+		super(level);
+	}
+	chooseAction() {
+		return {
+			target: companion,
+			action: this.findTechnique(QuickStab) || this.findTechnique(Cleave) || this.findTechnique(PowerChop) || this.findTechnique(BasicAttack)
+		};
+	}
 }
 Marcel.prototype = Object.create(Unit);
 Marcel.prototype.name = "Marcel";
@@ -272,8 +286,8 @@ Marcel.prototype.description = "<Companion>'s father and tutor. Wields a voulge.
 Marcel.prototype.sprites = CHAR_SPRITES.Marcel;
 Marcel.prototype.hpMult = 10;
 Marcel.prototype.statMults = statsToArray({
-	Vitality : 1.0,
-	Strength : 1.1,
+	Vitality : 0.9,
+	Strength : 1.2,
 	Constitution : 1.4,
 	Intelligence : 0.8,
 	Wisdom : 0.7,
@@ -285,9 +299,18 @@ Marcel.prototype.statMults = statsToArray({
 	Armor : 1.1,
 });
 Marcel.prototype.effectiveness = attributesToArray({
-	electricity : 1.5,
+	electricity : 1.3,
 	positive : -1.0,
 	negative : 1.5
 });
+
 Marcel.prototype.weaponAttribute = ATTRIBUTE_INDICES.cutting;
-Marcel.prototype.expYield = Manz.prototype.expYield;
+Marcel.prototype.techniqueTable = [
+	BasicAttack,
+	PowerChop,
+	QuickStab,
+	Cleave,
+];
+Marcel.prototype.expYield = function() {
+	return Math.ceil(forNextLevel(Math.min(companion.level, this.level)) * (this.hpPortion <= .5 ? 1 : .5));
+}

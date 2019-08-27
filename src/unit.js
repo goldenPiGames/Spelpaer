@@ -1,38 +1,49 @@
-var Unit = {
+class Unit extends UIObject {
 //------------------------------------------------------------------ CRUNCH --------------------------------------------
-	defeated : 0,
-	team : false,
-	speed : 1.0,
-	init : function() {
-		if (!this.stats) {
-			this.stats = statsFromMults(this.statMults, this.level);
-		}
-		if (!this.maxhp)
-			this.maxhp = Math.floor(this.hpMult * this.stats[STAT_INDICES.Vitality]);
-		if (!this.hp)
-			this.hp = this.maxhp;
-		this.spells = this.spells.filter((sp)=>sp.level<=this.level);
+	constructor(level) {
+		super(); //I'm still not sure whether or not Unit should extend UIObject
+		this.level = level;
+		this.stats = statsFromMults(this.statMults, this.level);
+		this.maxhp = Math.floor(this.hpMult * this.stats[STAT_INDICES.Vitality]);
+		this.hp = this.maxhp;
+		this.techniques = [];
+		this.techniqueTable.forEach(row => {
+			if (typeof row == "function") {
+				this.techniques.push(new row(this.level));
+			} else {
+				if ((!row.minLevel || this.level >= row.minLevel) && (!row.maxLevel || this.level <= row.maxLevel))
+					this.techniques.push(new (row.technique)(Math.floor(this.level * (row.levelMult || 1.0))));
+			}
+		});
+		this.spells = [];
+		this.spellTable.forEach(row => {
+			if (typeof row == "function") {
+				if (this.level >= row.prototype.level)
+					this.spells.push(new row());
+			} else {
+				if (this.level >= (row.minLevel || row.spell.prototype.level) && (!row.maxLevel || this.level <= row.maxLevel))
+					this.spells.push(new (row.spell)());
+			}
+		});
 		this.emptyEffects();
-		if (!this.color)
-			this.color = settings.normal_color;
-	},
-	battleTick : function(tickSeed) {
-		var thisser = this;
+		this.color = settings.normal_color;
+	}
+	battleTick() {
 		if (!this.defeated) {
 			this.delay = Math.max(this.delay-1, 0)//PRound(battleSpeed * this.getStat("speed"), tickSeed);
 		}
-		this.effects = this.effects.filter(fmega => fmega.tick());
-		this.allActions().forEach(function(quiche) {
-			//console.log(quiche);
-			quiche.tick(thisser);
-		});
-	},
-	getStat : function(statIndex) {
+		this.effects = this.effects.filter(fmega => fmega.tick(this));
+		this.allActions().forEach(quiche => quiche.tick(this));
+	}
+	fieldTick(length) {
+		this.spells.forEach(quiche => quiche.fieldTick(this, length))
+	}
+	getStat(statIndex) {
 		var base = this.stats[statIndex];
 		var buff = 0;
 		var nerf = 0;
-		this.effects.forEach(function(oof) {
-			var ton = oof.effectOnStat(statIndex);
+		this.effects.forEach(oof => {
+			var ton = oof.effectOnStat(statIndex, this);
 			if (ton) {
 				if (ton > buff)
 					buff = ton;
@@ -41,31 +52,30 @@ var Unit = {
 			}
 		});
 		return Math.max(base, 1) * (base+buff) / Math.max((base-nerf), 1);
-	},
-	getEffectiveness : function(index) {
-		if (this.effectiveness[index] == undefined)
-			return 1.0;
+	}
+	getEffectiveness(index) {
+		//if (this.effectiveness[index] == undefined)
+			//return 1.0;
 		return this.effectiveness[index];
-	},
-	isReady : function() {
-		return (this.delay <= 0);
-	},
-	takeDamage : function(amount, source) {
+	}
+	isReady() {
+		return this.delay <= 0;
+	}
+	takeDamage(amount, source, attacker) {
 		if (amount < 0) {
-			this.heal(-amount)
-			return;
+			return this.heal(-amount);
 		}
 		this.hp -= amount;
 		//this.hpLabel.text = this.hp + "/" + this.maxhp;
+		this.lastHitBy = attacker;
 		particles.push(new ParticleText("-"+amount, this.textX(), this.textY(), 0, .3, 40, "#FF4040", settings.normal_color, .05));
 		this.animHurt(amount);
 		if (this.hp <= 0)
 			this.die(source);
-	},
-	heal : function(amount) {
+	}
+	heal(amount, source) {
 		if (amount < 0) {
-			this.takeDamage(-amount);
-			return;
+			return this.takeDamage(-amount);
 		}
 		this.hp += amount;
 		if (this.hp > this.maxhp) {
@@ -73,12 +83,12 @@ var Unit = {
 		}
 		//this.hpLabel.text = this.hp + "/" + this.maxhp;
 		particles.push(new ParticleText("+"+amount, this.textX(), this.textY(), 0, .3, 40, "#00DD00", settings.normal_color, .05))
-	},
-	dodge : function(amount) {
+	}
+	dodge(amount) {
 		particles.push(new ParticleText("MISS", this.textX(), this.textY(), 0, .3, 40, "#4040FF", settings.normal_color, .05))
 		this.animDodge();
-	},
-	die : function(ar) {
+	}
+	die(ar) {
 		if (ar == undefined)
 			this.defeated = DEFEAT_INDICES.Dead;
 		else if (typeof defeated == "object")
@@ -91,85 +101,88 @@ var Unit = {
 		this.unClickHover();
 		//this.components.splice(this.components.indexOf(this.imageHolder));
 		//this.hpLabel.text = DEFEAT_NAMES[this.defeated];
-	},
-	flee : function() {
+	}
+	flee() {
 		this.die(DEFEAT_INDICES.Fled);
-	},
-	isActive : function() {
+	}
+	isActive() {
 		return !this.defeated;
-	},
-	emptyEffects : function() {
+	}
+	emptyEffects() {
 		this.effects = [];
 		this.ailments = {
 			Stun : 0,
 		};
-	},
-	addEffect : function(fect) {
+	}
+	addEffect(fect) {
 		this.effects.push(fect);
-	},
-	hasSpells : function() {
+	}
+	hasSpells() {
 		return (this.spells.length > 0);
-	},
-	avail : function() {
+	}
+	avail() {
 		this.availableTechniques = this.techniques.filter(tech => tech.isAvailable());
 		this.availableSpells = this.spells.filter(spel => spel.isAvailable());
-	},
-	hpPortion : function() {
+	}
+	hpPortion() {
 		return this.hp / this.maxhp;
-	},
+	}
 	allActions() {
 		return this.techniques.concat(this.spells);
-	},
+	}
 	allAvailableActions() {
 		this.avail();
 		return this.availableTechniques.concat(this.availableSpells);
-	},
-	chooseAction : function() {
+	}
+	/*chooseAction() {
 		var act = {};
 		var choices = this.allAvailableActions();
 		act.skill = randomTerm(choices);
 		act.target = randomTerm(battle.membersOfSide(!this.side));
 		return act;
-	},
-	getAttack : function() {
+	}*/
+	pickRandomEnemy() {
+		return randomTerm(battle.membersOfSide(!this.side, true));
+	}
+	pickEnemy(crit) {
+		return maxTerm(battle.membersOfSide(!this.side, true), crit);
+	}
+	getAttack() {
 		return this.techniques[0];
-	},
-	getSpell : function(sp) {
-		this.spells.forEach(oj => {
-			if (oj instanceof sp && oj.isAvailable())
-				return oj;
-		});
-		return false;
-	},
-	expYield : function() {
-		return this.level * this.level * this.expMult * this.expMult;
-	},
-	expMult : 1,
-	techYield : function() {
+	}
+	findTechnique(tech) {
+		this.foundAction = this.techniques.find(oj => oj instanceof tech && oj.isAvailable());
+		return this.foundAction;
+	}
+	findSpell(sp) {
+		this.foundAction = this.spells.find(oj => oj instanceof sp && oj.isAvailable());
+		return this.foundAction;
+	}
+	findEffect(f) {
+		return this.effects.find(oj => oj instanceof f);
+	}
+	expYield() {
+		return this.level * this.level * this.hpMult * this.expMult;
+	}
+	techYield() {
 		return this.maxhp * this.techMult;
-	},
-	techMult : 1,
-	moneyYield : function() {
+	}
+	moneyYield() {
 		return (this.hp <= 0) * this.maxhp * this.cashMult;
-	},
-	cashMult : 1,
-	itemYield : function() {
+	}
+	itemYield() {
 		var stuff = [];
-		var thisser = this;
-		this.dropTable.forEach(function(row) {
-			//console.log(row);
-			if (row.condition(thisser) && !(row.min > thisser.level) && !(row.max < thisser.level) && Math.random() <= row.chance) {
+		this.dropTable.forEach(row => {
+			if (row.condition(this) && !(row.minLevel > this.level) && !(row.maxLevel < this.level) && Math.random() <= row.chance) {
 				stuff.push(new (row.item)());
 			}
 		});
 		return stuff;
-	},
-	dropTable : [],
-	
+	}
 	
 //------------------------------------------------------------------ INTERFACE ----------------------------------------
     
-	makeComponents : function(x, y, width = 150, height = 100) {
+	setDisplay(x, y, width = 150, height = 100, listener = undefined) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -181,8 +194,12 @@ var Unit = {
 		this.components = [this.selectionButton, this.nameLabel, this.levelLabel, this.hpLabel];*/
 		this.animbaseX = x + width/2;
 		this.animbaseY = mainHeight()/2 - 25;
-	},
-	setPosition : function(x, y) {
+		if (listener)
+			this.setListener(listener)
+		else
+			this.handler = doNothing;
+	}
+	setPosition(x, y) {
 		this.x = x;
 		this.y = y;
 		//this.width = width;
@@ -191,39 +208,39 @@ var Unit = {
 		this.nameLabel.x = x; this.nameLabel.y = y+2;
 		this.levelLabel.x = x; this.levelLabel.y = y+20;
 		this.hpLabel.x = x; this.hpLabel.y = y+33;*/
-	},
-	textX : function() {
+	}
+	textX() {
 		return this.x + this.width/2;
-	},
-	textY : function() {
+	}
+	textY() {
 		return this.y + this.height/2;
-	},
-	unClickHover : function() {
+	}
+	unClickHover() {
 		this.clicked = false;
 		this.hovered = false;
 		/*this.selectionButton.clicked = false; this.selectionButton.hovered = false;
 		this.nameLabel.clicked = false; this.nameLabel.hovered = false;
 		this.levelLabel.clicked = false; this.levelLabel.hovered = false;
 		this.hpLabel.clicked = false; this.hpLabel.hovered = false;*/
-	},
-	unHover : function() {
+	}
+	unHover() {
 		this.hovered = false;
 		/*this.components.forEach(function(obj){
 			obj.hovered = false;
 		});*/
-	},
-	update : function() {
-		/*this.components.forEach(function(obj) {
-			obj.update();
-		});*/
+	}
+	update() {
 		this.updateMouse();
 		if (this.hovered)
 			infoField.setText(this.description);
-		//this.selectionButton.update();
-		//this.clicked = this.selectionButton.clicked;
-		
-	},
-	draw : function() {
+		if (this.clicked)
+			this.handler();
+	}
+	setListener(listener) {
+		//console.log(listener);
+		this.handler = ()=>listener.unitClicked(this);
+	}
+	draw() {
 		ctx.fillStyle = settings.background_color;
 		ctx.fillRect(this.x, this.y, this.width, this.height);
 		ctx.textAlign = "center";
@@ -244,8 +261,8 @@ var Unit = {
 		this.drawField();
 		//if (this.image)
 			//ctx.drawImage(this.image, this.selectionButton.x + this.selectionButton.width/2 - this.image.width/2, 320 - this.image.height/2);
-	},
-	drawField : function() {
+	}
+	drawField() {
 		if (this.team)
 			return;
 		var pic;
@@ -270,26 +287,22 @@ var Unit = {
 			this.animoffY ++;
 		}
 		drawSprite(pic, this.animbaseX + this.animoffX, this.animbaseY + this.animoffY, 1/2, 1/2);
-	},
-	animoffX : 0,
-	animoffY : 0,
-	animTime : 0,
-	animState : "Normal",
-	animDodge : function() {
+	}
+	animDodge() {
 		if (this.sprites && this.sprites.Dodge) {
 			this.animState = "Dodge";
 			this.animTime = 10;
 		} else
 			this.animoffX = 10;
-	},
-	animHurt : function(amount) {
+	}
+	animHurt(amount) {
 		if (this.sprites && this.sprites.Hurt) {
 			this.animState = "Hurt";
 			this.animTime = 5;
 		} else
 			this.animoffY = -5;
-	},
-	animSkill : function(skill) {
+	}
+	animSkill(skill) {
 		if (skill.isSpell) {
 			if (this.sprites && this.sprites.Cast) {
 				this.animState = "Cast";
@@ -302,7 +315,20 @@ var Unit = {
 			} else
 				this.animoffY = 25;
 		}
-	},
-	waterbreathing : 0,
+	}
 }
-Object.setPrototypeOf(Unit, UIObjectBase);
+Unit.prototype.defeated = 0;
+Unit.prototype.team = false;
+Unit.prototype.techniqueTable = [
+	{technique:BasicAttack},
+]
+Unit.prototype.spellTable = [];
+Unit.prototype.expMult = 1;
+Unit.prototype.techMult = 1;
+Unit.prototype.cashMult = 1;
+Unit.prototype.dropTable = [];
+Unit.prototype.animoffX = 0;
+Unit.prototype.animoffY = 0;
+Unit.prototype.animTime = 0;
+Unit.prototype.animState = "Normal";
+Unit.prototype.waterbreathing = 0;

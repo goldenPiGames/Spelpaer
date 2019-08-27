@@ -12,8 +12,8 @@ function PocutopWand() {
 }
 ITEMS.push(PocutopWand);
 PocutopWand.prototype = Object.create(Implement);
-PocutopWand.prototype.name = "Pocutop Sword";
-PocutopWand.prototype.description = "Wizards's wand crafted traditionally in Pocutop.";
+PocutopWand.prototype.name = "Pocutop Wand";
+PocutopWand.prototype.flavor = "Wizards's wand crafted traditionally in Pocutop.";
 PocutopWand.prototype.statMods = statsToArray({
 	//Implement : 10,
 }, 0);

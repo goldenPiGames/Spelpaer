@@ -10,8 +10,12 @@ const APOCALYPSE_EXTEND_1 = 30*DAYS;
 const APOCALYPSE_INITIAL_2 = 40*DAYS;
 const APOCALYPSE_EXTEND_2 = 20*DAYS;
 
-function advanceTime(amount) {
+function advanceTime(amount, tick) {
 	currentTime += amount;
+	if (tick) {
+		player.fieldTick(amount);
+		companion.fieldTick(amount);
+	}
 }
 
 function getDisplayTime(hora = "current") {

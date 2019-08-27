@@ -10,7 +10,7 @@ PATHS.forEach(function(dab) {
 	dab.connectionWest.paths.push(dab);
 	dab.connectionEast.paths.push(dab);
 	if (!dab.distance)
-		dab.distance = Math.ceil(dist(dab.connectionWest.x, dab.connectionWest.y, dab.connectionEast.x, dab.connectionEast.y)*MINUTES);
+		dab.distance = Math.ceil(distanceBetween(dab.connectionWest.x, dab.connectionWest.y, dab.connectionEast.x, dab.connectionEast.y)*MINUTES);
 });
 
 SUBLOCALES.forEach(function(dab) {

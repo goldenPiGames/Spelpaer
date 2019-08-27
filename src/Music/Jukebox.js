@@ -14,6 +14,7 @@ const MUSIC_LIST = [
 	{name:"Breeze",               by:"PeriTune",      yt:"RINkM_o-e4I", site:"https://peritune.com/breeze/"},
 	{name:"Breeze 2",             by:"PeriTune",      yt:"fVm5ul0y0kk", site:"https://peritune.com/breeze2/"},
 	{name:"Still of Night",       by:"Eric Matyas",   site:"https://soundimage.org/city-urban/"},
+	{name:"Kuukan o Tsukishi Mono", by:"Ucchii 0",    yt:"vcJNE87j7js", loopStart:5.903, loopEnd:141.480},
 	{name:"Underwater Coolness",  by:"Eric Matyas", site:"https://soundimage.org/nature-science-3/"},
 	{name:"War of the Pianos",    by:"Darren Curtis", yt:"CP8HoV4ArHw", site:"https://www.darrencurtismusic.com/hybrid-other"},
 	{name:"Massacre on Teddy Bear Hill", by:"Darren Curtis", yt:"qG5e8cmoL_s", site:"https://www.darrencurtismusic.com/hybrid-other"},
@@ -39,6 +40,7 @@ const MUSIC_LIST = [
 	{name:"Dark Anthem",          by:"Darren Curtis", yt:"G-VY51L2AQU", site:"https://www.darrencurtismusic.com/horror-mystery"},// loopStart:0, loopEnd:201.175},//loopStart:8.743, loopEnd:200.673},//
 	{name:"Glory Eternal",        by:"Darren Curtis", yt:"Qx1ypzkhTy0", site:"https://www.darrencurtismusic.com/horror-mystery"},
 	{name:"Secret Power",         by:"Ucchii 0",      yt:"ivspAGvhA8E", site:"https://creofuga.net/audios/106993", loopStart:16.093, loopEnd:330.35, ogg:true},
+	{name:"Boat Paint",           by:"Al Gorgeous", site:"https://soundcloud.com/al-goregous/boat-paint"},
 	{name:"Strategy 3",           by:"PeriTune",      yt:"tqS-DwicQCo", site:"https://peritune.com/strategy3/"},
 	{name:"Dramatic 2",           by:"PeriTune",      yt:"okBKjTPrzA4", site:"https://peritune.com/dramatic2/"},
 	{name:"Dramatic 4",           by:"PeriTune",      yt:"dpBh5abRTh8", site:"https://peritune.com/dramatic4/"},

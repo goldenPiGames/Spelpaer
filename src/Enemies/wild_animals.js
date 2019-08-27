@@ -1,11 +1,13 @@
-var Boar = function(level) {
-	this.level = level;
-	this.techniques = [
-		new BasicAttack(level, this),
-		new WildGore(level, this),
-	];
-	this.spells = [];
-	this.init();
+class Boar extends Unit {
+	constructor(level) {
+		super(level);
+	}
+	chooseAction() {
+		if (this.lastHitBy)
+			return {action: this.findTechnique(WildGore) || this.findTechnique(BasicAttack), target: this.lastHitBy}
+		else
+			return {action: this.findTechnique(BasicAttack), target: this.pickRandomEnemy()}
+	}
 }
 Boar.prototype = Object.create(Unit);
 Boar.prototype.name = "Boar";
@@ -31,22 +33,27 @@ Boar.prototype.effectiveness = attributesToArray({
 	thought : 0.4,
 });
 Boar.prototype.weaponAttribute = ATTRIBUTE_INDICES.piercing;
+Boar.prototype.techniqueTable = [
+	BasicAttack,
+	WildGore,
+]
 Boar.prototype.dropTable = [
-	{item:HideShirt, chance:.15, min:5, max:20, condition:DROP_CONDITIONS.deadOnly},
-	{item:TuskNecklace, chance:.20, min:10, max:20, condition:DROP_CONDITIONS.deadOnly},
+	{item:HideShirt, chance:.05, minLevel:5, maxLevel:20, condition:DROP_CONDITIONS.deadOnly},
+	{item:TuskNecklace, chance:.20, minLevel:10, maxLevel:20, condition:DROP_CONDITIONS.deadOnly},
 ]
 
-
-var Moose = function(level) {
-	this.level = level;
-	this.techniques = [
-		new BasicAttack(level, this),
-		new WildGore(level, this),
-	];
-	this.spells = [];
-	this.init();
+class Moose extends Unit {
+	constructor(level) {
+		super(level);
+	}
+	chooseAction() {
+		if (this.hpPortion() <= 1/2) {
+			if (this.findTechnique(Desperation))
+				return {action: this.foundAction, target: this};
+		}
+		return {action: this.findTechnique(BasicAttack), target: this.pickRandomEnemy()};
+	}
 }
-Moose.prototype = Object.create(Unit);
 Moose.prototype.name = "Moose";
 Moose.prototype.description = "A majestic moose. Mind you, moose bites can be pretty nasty."
 Moose.prototype.image = makeImage("src/Enemies/Moose.png"); //http://wikiclipart.com/moose-clipart_10850/
@@ -66,55 +73,48 @@ Moose.prototype.statMults = statsToArray({
 });
 Moose.prototype.effectiveness = attributesToArray({
 	fire : 1.4,
-	ice : .6,
+	cold : .6,
 	positive : -1.0,
 	thought : 0.4,
 });
 Moose.prototype.weaponAttribute = ATTRIBUTE_INDICES.bludgeoning;
+Moose.prototype.techniqueTable = [
+	BasicAttack,
+	//WildGore,
+	Desperation,
+]
 Moose.prototype.dropTable = [
+	{item:HideShirt, chance:.10, minLevel:5, maxLevel:20, condition:DROP_CONDITIONS.deadOnly},
 	//TODO put something here
 ]
 
-var Wolf = function(level) {
-	this.level = level;
-	this.Vitality =     Math.floor(level*1.0);
-	this.Strength =     Math.floor(level*1.1);
-	this.Constitution = Math.floor(level*1.0);
-	this.Intelligence = 4;
-	this.Wisdom =       Math.floor(level*0.8);
-	this.Dexterity =    Math.floor(level*1.5);
-	this.Agility =      Math.floor(level*1.6);
-	this.Charisma =     Math.floor(level*0.6);
-	this.Potential =    Math.floor(level*0.5);
-	this.Weapon =       0;
-	this.Armor =        0;
-	this.maxhp = Math.ceil(this.Vitality*2.5);
-	this.hp = this.maxhp;
-	this.effectiveness = {
-		fire : 1.5,
-		positive : -1.0,
-	};
-	this.weaponAttribute = "piercing";
-	this.techniques = [
-		new BasicAttack(level, this),
-		//TODO add "Ankle Bite" or something
-	];
-	this.spells = [];
-	this.init();
+class Wolf extends Unit {
+	constructor(level) {
+		super(level);
+	}
+	chooseAction() {
+		var target = this.pickEnemy(oj=>1-oj.hpPortion()+Math.random()/5);
+		return {
+			action: !target.findEffect(AnkleBiteEffect) && this.findTechnique(AnkleBite) ||
+					//target.findEffect(AnkleBiteEffect) && this.findTechnique(Artery) ||
+					battle.membersOfSide(this.team, true) >= 2 && this.findTechnique(PackAttack) ||
+					this.findTechnique(BasicAttack),
+			target: target
+		}
+	}
 }
-Wolf.prototype = Object.create(Unit);
 Wolf.prototype.name = "Wolf";
 Wolf.prototype.description = "A wild canine. They hunt in packs.";
 Wolf.prototype.image = makeImage("src/Enemies/Wolf.png");
 Wolf.prototype.hpMult = 2.5;
 Wolf.prototype.statMults = statsToArray({
 	Vitality : 0.8,
-	Strength : 1.1,
+	Strength : 1.0,
 	Constitution : 1.0,
-	Dexterity : 1.5,
+	Dexterity : 1.4,
 	Agility : 1.6,
 	Intelligence : 0.3,
-	Wisdom : 0.7,
+	Wisdom : 0.9,
 	Charisma : 0.9,
 	Potential : 0.5,
 	Weapon : 0,
@@ -125,6 +125,12 @@ Wolf.prototype.effectiveness = attributesToArray({
 	thought : 0.4,
 });
 Wolf.prototype.weaponAttribute = ATTRIBUTE_INDICES.piercing;
+Wolf.prototype.techniqueTable = [
+	BasicAttack,
+	AnkleBite,
+	//ArteryBite,
+	PackAttack,
+]
 Wolf.prototype.dropTable = [
 	//TODO put something here
 ]

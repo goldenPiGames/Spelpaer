@@ -1,8 +1,7 @@
-function Smite(level, user) {
-	this.level = level;
-	this.power = this.powerMult * this.level;
-	this.maxCooldown = this.cooldownMult * this.level;
-	this.user = user;
+class Smite extends Technique {
+	constructor(level) {
+		super(level);
+	}
 	/*animate : function(user, target, battle) {
 		var x = target.animationX();
 		var y = target.animationY();
@@ -35,11 +34,10 @@ Smite.prototype.cooldownMult = 500;
 Smite.prototype.cooldownStat = STAT_INDICES.Charisma;
 Smite.prototype.prerequisites = [];
 
-function BrilliantBlade(level, user) {
-	this.level = level;
-	this.power = this.powerMult * this.level;
-	this.maxCooldown = this.cooldownMult * this.level;
-	this.user = user;
+class BrilliantBlade extends Technique {
+	constructor(level) {
+		super(level);
+	}
 	/*this.animate : function(user, target, battle) {
 		var x = target.animationX();
 		var y = target.animationY();

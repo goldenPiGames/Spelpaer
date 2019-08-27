@@ -145,7 +145,7 @@ function SettingsScreenGeneral() {
 		this.musicSlider,
 		this.sfxSlider,
 		this.profanityCheckbox,
-		this.portraitsCheckbox,
+		//this.portraitsCheckbox,
 	]
 }
 
@@ -179,6 +179,9 @@ SettingsScreenColor.prototype.update = function() {
 	this.pickers.forEach(oj => oj.update());
 }
 SettingsScreenColor.prototype.draw = function() {
+	ctx.fillStyle = settings.normal_color;
+	let head = this.backgroundPicker.header;
+	ctx.fillRect(head.x, head.y, head.width, head.height+10);
 	this.pickers.forEach(oj => oj.draw());
 }
 

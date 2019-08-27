@@ -1,13 +1,13 @@
 var battleScreenRealTime = {
 	begin : function() {
 		runnee = this;
-		player.makeComponents(450, 550, 150, 125);
-		companion.makeComponents(600, 550, 150, 125);
+		player.setDisplay(450, 550, 150, 125);
+		companion.setDisplay(600, 550, 150, 125);
 		this.playerSpellMenu.setItems(player.spells);
 		this.currentPlayerMenu = this.playerSpellMenu;
 		this.companionTechniquePalette.setTechniques(companion.techniques);
 		this.enemies.forEach(function(nem, dex, lisp) {
-			nem.makeComponents(canvas.width/2 + ENEMY_WIDTH*(dex - lisp.length/2), 0, ENEMY_WIDTH, 100);
+			nem.setDisplay(canvas.width/2 + ENEMY_WIDTH*(dex - lisp.length/2), 0, ENEMY_WIDTH, 100);
 		});
 		this.playerAction = null;
 		this.playerTarget = null;

@@ -1,4 +1,4 @@
-function InflictMinor(user) {
+/*function InflictMinor(user) {
 	this.user = user;
 }; SPELLS.push(InflictMinor);
 InflictMinor.prototype = Object.create(Spell);
@@ -8,9 +8,9 @@ InflictMinor.prototype.level = 4;
 InflictMinor.prototype.power = 5;
 InflictMinor.prototype.damageInflection = 0.7;
 InflictMinor.prototype.attribute = "negative";
-InflictMinor.prototype.hitrate = 0.65
+InflictMinor.prototype.hitrate = 0.65;
 InflictMinor.prototype.attackStat = STAT_INDICES.Wisdom;
-InflictMinor.prototype.defenseStat = "Vitality";
+InflictMinor.prototype.defenseStat = STAT_INDICES.Vitality;
 InflictMinor.prototype.accuracyStat = STAT_INDICES.Wisdom;
 InflictMinor.prototype.evasionStat = STAT_INDICES.Charisma;
 InflictMinor.prototype.delay = 100;
@@ -65,3 +65,4 @@ InflictExtreme.prototype.flavor = "A surge of negative energy.";
 InflictExtreme.prototype.level = 50;
 InflictExtreme.prototype.power = 70;
 InflictExtreme.prototype.cost = 41;
+*/

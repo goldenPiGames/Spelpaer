@@ -1,19 +1,25 @@
 const PATH_DETECTION_WIDTH = 15;
 const TYPICAL_ENCOUNTER_DELAY = 15*MINUTES;
 
+const SECTOR_W = "W";
+
 var Path = {
 	available : true,
 	isPath : true,
 	avgEncounterDelay : TYPICAL_ENCOUNTER_DELAY,
-	randomEncounter : function() {
-		var i = Math.floor(Math.random()*this.encounterList.length);
-		var list1 = this.encounterList[i];
-		var level = Math.sqrt(sqr(this.encounterLevel) / list1.length);
-		var list2 = [];
-		for (i = 0; i < list1.length; i++) {
-			list2.push(new list1[i](PRound(level)));
-		}
-		return list2;
+	encounterLevelIncrease : 10,
+	getEncounterLevel : function() {
+		return this.encounterLevelBase + this.encounterLevelIncrease * numberOfAnqorsPurified();
+	},
+	beginRandomEncounter : function(after) {
+		var level = this.getEncounterLevel();
+		var row = randomTerm(this.encounterTable); //TODO weights
+		return battle.begin(
+			row.enemies.map((col) => new (col.enemy)(PRound(level * (col.levelMult || 1.0)))),
+			row.music || this.battleMusic,
+			row.onWin ? ()=>{row.onWin(); after()} : after,
+			row.onLose || gameOver,
+		);
 	},
 	otherConnection : function(firstConnection) {
 		return (firstConnection == this.connectionEast) ? this.connectionWest : this.connectionEast;
@@ -22,34 +28,23 @@ var Path = {
 		return (this.available && (this.connectionWest.visited || this.connectionEast.visited));
 	},
 	updateLine : function(map) {
-		var wx = this.connectionWest.drawX;
-		var wy = this.connectionWest.drawY;
-		var ex = this.connectionEast.drawX;
-		var ey = this.connectionEast.drawY;
-		this.drawWX = wx;
-		this.drawWY = wy;
-		this.drawEX = ex;
-		this.drawEY = ey;
-		if (mouse.x <= map.mainWidth && mouse.y <= map.mainHeight) {
-			var distance = distToSegment(mouse.x, mouse.y, wx, wy, ex, ey);
-			this.hovered = distance <= (PATH_DETECTION_WIDTH/2 * map.zoom);
+		if (map.hovered && this.shown()) {
+			this.hovered = distanceToSegment(map.mouse.x, map.mouse.y, this.connectionWest.x, this.connectionWest.y, this.connectionEast.x, this.connectionEast.y) <= PATH_DETECTION_WIDTH/2;
 			this.clicked = this.hovered && mouse.clicked;
 		} else {
 			this.hovered = false;
 			this.clicked = false;
 		}
 		if (this.hovered && this.shown()) {
-			infoField.text = this.getInfo();
-			//map.info.show(this);
+			infoField.setText(this.getInfo());
 		}
 	},
 	drawLine : function(map) {
-		
 		ctx.strokeWidth = 2;
 		ctx.strokeStyle = this.shown() ? (this.hovered ? settings.hover_color : "#FFFFFF") : "#FFFFFF42";
 		ctx.beginPath();
-		ctx.moveTo(this.drawWX, this.drawWY);
-		ctx.lineTo(this.drawEX, this.drawEY);
+		ctx.moveTo(map.drawX(this.connectionWest.x), map.drawY(this.connectionWest.y));
+		ctx.lineTo(map.drawX(this.connectionEast.x), map.drawY(this.connectionEast.y));
 		ctx.stroke();
 	},
 	encounterDelay : function() {
@@ -64,19 +59,20 @@ var Path = {
 	getInfo : function() {
 		return this.name + " <br> " + 
 		"Distance: " + getLongDuration(this.distance) + " <br> " + 
-		"Encounter level: " + this.encounterLevel + " <br> " + 
+		"Encounter level: " + this.getEncounterLevel() + " <br> " + 
 		this.description;
 	}
 }
 
-function sqr(x) { return x * x }
+function distanceBetween(vx, vy, wx, wy) {
+	return Math.sqrt(Math.pow(vx - wx, 2) + Math.pow(vy - wy, 2));
+}
 
-function dist(vx, vy, wx, wy) { return Math.sqrt(sqr(vx - wx) + sqr(vy - wy)) }
-
-function distToSegment(px, py, vx, vy, wx, wy) {
-	var l2 = sqr(dist(vx, vy, wx, wy));
-	if (l2 == 0) return dist(px, py, vx, vy);
-	var t = ((px - vx) * (wx - vx) + (py - vy) * (wy - vy)) / l2;
-	t = Math.max(0, Math.min(1, t));
-	return dist(px, py, vx + t * (wx - vx), vy + t * (wy - vy));
+function distanceToSegment(px, py, vx, vy, wx, wy) {
+	var l2 = Math.pow(distanceBetween(vx, vy, wx, wy), 2);
+	if (l2 <= 0)
+		return distanceBetween(px, py, vx, vy);
+	var t = Math.max(0, Math.min(1, ((px - vx) * (wx - vx) + (py - vy) * (wy - vy)) / l2));
+	//console.log(l2, t)
+	return distanceBetween(px, py, vx + t * (wx - vx), vy + t * (wy - vy));
 }

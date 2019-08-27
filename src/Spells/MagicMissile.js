@@ -1,18 +1,22 @@
-var MagicMissileBase = {
-	attribute : ATTRIBUTE_INDICES.force,
-	hitrate : 1.0,
-	damageInflection : 0.5,
-	attackStat : STAT_INDICES.Intelligence,
-	defenseStat : STAT_INDICES.Wisdom,
-	accuracyStat : STAT_INDICES.Dexterity,
-	evasionStat : STAT_INDICES.Agility,
-	cooldownStat : STAT_INDICES.Intelligence,
-	delay : 100,
+class MagicMissileBase extends Spell {
+	constructor() {
+		super();
+	}
 }
-Object.setPrototypeOf(MagicMissileBase, Spell);
+MagicMissileBase.prototype.attribute = ATTRIBUTE_INDICES.force;
+MagicMissileBase.prototype.hitrate = 1.0;
+MagicMissileBase.prototype.damageInflection = 0.5;
+MagicMissileBase.prototype.attackStat = STAT_INDICES.Intelligence;
+MagicMissileBase.prototype.defenseStat = STAT_INDICES.Wisdom;
+MagicMissileBase.prototype.accuracyStat = STAT_INDICES.Dexterity;
+MagicMissileBase.prototype.evasionStat = STAT_INDICES.Agility;
+MagicMissileBase.prototype.cooldownStat = STAT_INDICES.Intelligence;
+MagicMissileBase.prototype.delay = 100;
 
-function MagicMissile1(user) {
-	this.user = user;
+class MagicMissile1 extends MagicMissileBase {
+	constructor() {
+		super();
+	}
 }; SPELLS.push(MagicMissile1);
 MagicMissile1.prototype = Object.create(MagicMissileBase);
 MagicMissile1.prototype.name = "Magic Missile";
@@ -22,8 +26,10 @@ MagicMissile1.prototype.power = 8;
 MagicMissile1.prototype.maxCooldown = 900*10;
 MagicMissile1.prototype.cost = 1;
 
-function MagicMissile2(user) {
-	this.user = user;
+class MagicMissile2 extends MagicMissileBase {
+	constructor() {
+		super();
+	}
 }; SPELLS.push(MagicMissile2);
 MagicMissile2.prototype = Object.create(MagicMissileBase);
 MagicMissile2.prototype.name = "Magic Missile x2";
@@ -33,8 +39,10 @@ MagicMissile2.prototype.power = 16;
 MagicMissile2.prototype.maxCooldown = 900*20;
 MagicMissile2.prototype.cost = 2;
 
-function MagicMissile3(user) {
-	this.user = user;
+class MagicMissile3 extends MagicMissileBase {
+	constructor() {
+		super();
+	}
 }; SPELLS.push(MagicMissile3);
 MagicMissile3.prototype = Object.create(MagicMissileBase);
 MagicMissile3.prototype.name = "Magic Missile x3";
@@ -44,8 +52,10 @@ MagicMissile3.prototype.power = 24;
 MagicMissile3.prototype.maxCooldown = 900*30;
 MagicMissile3.prototype.cost = 3;
 
-function MagicMissile4(user) {
-	this.user = user;
+class MagicMissile4 extends MagicMissileBase {
+	constructor() {
+		super();
+	}
 }; SPELLS.push(MagicMissile4);
 MagicMissile4.prototype = Object.create(MagicMissileBase);
 MagicMissile4.prototype.name = "Magic Missile x4";
@@ -55,8 +65,10 @@ MagicMissile4.prototype.power = 32;
 MagicMissile4.prototype.maxCooldown = 900*40;
 MagicMissile4.prototype.cost = 4;
 
-function MagicMissile5(user) {
-	this.user = user;
+class MagicMissile5 extends MagicMissileBase {
+	constructor() {
+		super();
+	}
 }; SPELLS.push(MagicMissile5);
 MagicMissile5.prototype = Object.create(MagicMissileBase);
 MagicMissile5.prototype.name = "Magic Missile x5";

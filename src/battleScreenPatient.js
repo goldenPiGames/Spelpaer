@@ -44,23 +44,25 @@ function BattleScreenPatient() {
 	this.fieldHeight = mainHeight() - this.fieldY - 100;
 	var fieldBottom = this.fieldY + this.fieldHeight;
 	var fieldMiddle = this.fieldX + this.fieldWidth/2;
-	player.makeComponents(fieldMiddle-150, fieldBottom, 150, mainHeight()-fieldBottom);
-	companion.makeComponents(fieldMiddle, fieldBottom, 150, mainHeight()-fieldBottom);
+	player.setDisplay(fieldMiddle-150, fieldBottom, 150, mainHeight()-fieldBottom, this);
+	companion.setDisplay(fieldMiddle, fieldBottom, 150, mainHeight()-fieldBottom, this);
 	this.playerSpellMenu.setItems(player.spells);
 	this.currentMenu = null;
 	this.taker = null;
 	this.companionTechniquePalette.setTechniques(companion.techniques);
 	var wid = Math.min(this.fieldWidth/battle.enemies.length, 150);
-	battle.enemies.forEach(function(nem, dex, lisp) {
-		nem.makeComponents(thisser.fieldX + thisser.fieldWidth*(dex+1)/(lisp.length+1) - wid/2, 0, wid, thisser.fieldY);
-	});
+	var pact = true;
+	if (wid >= this.fieldWidth/4) {
+		wid = this.fieldWidth/4;
+		pact = false;
+	}
+	battle.enemies.forEach((nem, dex, lisp) => nem.setDisplay(/*pact ? this.fieldX + wid * dex : */this.fieldX + this.fieldWidth/2 + wid*(dex-lisp.length/2), 0, wid, this.fieldY, this));
 	this.selectedAction = null;
 	this.selectedTarget = null;
 	//this.ticking = true;
 }
 BattleScreenPatient.prototype = Object.create(ScreenBase);
 BattleScreenPatient.prototype.update = function() {
-	var thisser = this;
 	this.taker = null;
 	if (player.isReady()) {
 		this.taker = player;
@@ -69,21 +71,15 @@ BattleScreenPatient.prototype.update = function() {
 	}
 	//this.updateMouse();
 	//var tickSeed = Math.random();
-	battle.allUnits().forEach(function(oj) {
-		oj.update(thisser);
-		if (oj.clicked && thisser.selectedAction) {
-			thisser.selectedTarget = oj;
+	battle.allUnits().forEach(oj=>oj.update(this));
+	this.delayMeter.update();
+	if (this.taker) {
+		if (this.taker == player) {
+			this.playerSpellButton.update();
+		} else if (this.taker == companion) {
+			this.companionTechniqueButton.update();
 		}
-	});
-	if (this.taker == player) {
 		this.attackButton.update();
-		this.playerSpellButton.update();
-		this.itemButton.update();
-		if (this.currentMenu)
-			this.currentMenu.update();
-	} else if (this.taker == companion) {
-		this.attackButton.update();
-		this.companionTechniqueButton.update();
 		this.itemButton.update();
 		if (this.currentMenu)
 			this.currentMenu.update();
@@ -91,10 +87,20 @@ BattleScreenPatient.prototype.update = function() {
 		battle.tick();
 	}
 	if (this.taker && this.taker.isReady() && this.selectedAction && this.selectedAction.isAvailable() && (this.selectedAction.selfOnly || this.selectedTarget)) {
-		battle.executeAction(this.taker, this.selectedAction, this.selectedTarget);
+		battle.executeAction(this.taker, this.selectedAction, this.selectedTarget || this.taker);
 		this.currentMenu = null;
 		this.selectedAction = null;
 		this.selectedTarget = null;
+	}
+}
+BattleScreenPatient.prototype.unitClicked = function(unit) {
+	if (this.selectedAction && unit.isActive()) {
+		this.selectedTarget = unit;
+	}
+}
+BattleScreenPatient.prototype.delayClicked = function(mount) {
+	if (this.taker) {
+		this.selectedAction = new Wait(mount);
 	}
 }
 BattleScreenPatient.prototype.draw = function() {

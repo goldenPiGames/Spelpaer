@@ -1,4 +1,4 @@
-var ColorFade = function(fade, x=0, y=0, width=1200, height=675, color=settings.background_color) {
+var ColorFade = function(fade, x=0, y=0, width=settings.width, height=settings.height, color=settings.background_color) {
 	this.fade = fade;
 	this.color = color;
 	this.x = x;
@@ -6,7 +6,7 @@ var ColorFade = function(fade, x=0, y=0, width=1200, height=675, color=settings.
     this.width = width;
 	this.height = height;
 	if (ONLINE)
-		this.oldData = gameCanvas.getContext('2d').getImageData(this.x, this.y, this.width, this.height);
+		this.oldData = ctx.getImageData(this.x, this.y, this.width, this.height);
 }
 ColorFade.prototype = Object.create(ParticleBase);
 ColorFade.prototype.draw = function(ctx) {

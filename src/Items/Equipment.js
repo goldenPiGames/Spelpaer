@@ -13,6 +13,7 @@ SLOT_NAMES.forEach(function(nom, dex) {
 });
 
 var Equipment = {
+	selfOnly : true,
 	forPlayer : false,
 	forCompanion : false,
 	statMods : statsToArray({
@@ -22,7 +23,13 @@ var Equipment = {
 		
 	}, 0),
 	execute : function(user) {
-		user.equip(this);
+		if (this.equippableTo(user))
+			user.equip(this);
+		else
+			return false;
+	},
+	equippableTo(character) {
+		return this.forPlayer && character instanceof Player || this.forCompanion && character instanceof Companion;
 	},
 }
 Object.setPrototypeOf(Equipment, Item);

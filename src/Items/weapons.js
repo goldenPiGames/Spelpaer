@@ -13,7 +13,7 @@ function PocutopSword() {
 ITEMS.push(PocutopSword);
 PocutopSword.prototype = Object.create(Weapon);
 PocutopSword.prototype.name = "Pocutop Sword";
-PocutopSword.prototype.description = "Knight's armor crafted traditionally in Pocutop.";
+PocutopSword.prototype.flavor = "Knight's armor crafted traditionally in Pocutop.";
 PocutopSword.prototype.statMods = statsToArray({
 	Weapon : 10,
 }, 0);

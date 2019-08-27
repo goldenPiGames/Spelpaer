@@ -5,6 +5,7 @@ var mouse = {x:0,y:0,clicked:false,down:false,
 		this.wasPressed = this.pressed;
 		this.lastX = this.x;
 		this.lastY = this.y;
+		this.scrolled = 0;
 	}
 }
 
@@ -109,6 +110,16 @@ function addEvents() {
 	eventCatcher.addEventListener("mouseup", function(e) {
 		mouse.down = false;
 		mouse.clicked;
+	});
+	
+	/*eventCatcher.addEventListener("mousewheel", function(e) {
+		mouse.scrolled += e.deltaY / 3;
+		console.log(mouse.scrolled);
+	});*/
+	
+	eventCatcher.addEventListener("wheel", function(e) {
+		mouse.scrolled += e.deltaY > 0 ? 1 : -1;
+		//console.log(mouse.scrolled);
 	});
 	
 	document.addEventListener("keydown", function(e) {

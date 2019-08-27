@@ -5,9 +5,9 @@ function doMainMenu() {
 function MainMenu() {
 	this.objects = [
 		new Label(0, 10, settings.width, 100, "Spelpaer"),
-		new Button(settings.width/2-200, mainHeight()-200, 400, 45, "Play", "Create a new file or load and existing one.", function(){switchScreen(FileSelect)}),
+		new Button(settings.width/2-200, mainHeight()-200, 400, 45, "Play", "Create a new file or load and existing one.", ()=>switchScreen(FileSelect)),
 		new Button(settings.width/2-200, mainHeight()-150, 400, 45, "Jukebox", "Listen to all the music tracks used in the game, plus some I plan to use in the future. You can see the credits for each individual track, or visit them on other sites.", function(){runnee = new Jukebox()}),
-		new Button(settings.width/2-200, mainHeight()-100, 400, 45, "Credits", "View the persons who made this game.", buildCredits),
+		new Button(settings.width/2-200, mainHeight()-100, 400, 45, "Credits", "View the persons who made this game.", ()=>switchScreen(Credits)),
 		new Button(settings.width/2-200, mainHeight()-50, 400, 45, "Settings", "Change some of the game's settings.", doSettings),
 	]
 }
@@ -66,17 +66,3 @@ function FileSelect() {
 	}
 }
 FileSelect.prototype = Object.create(ScreenBase);
-
-
-function buildCredits() {
-	engine.gameObjects = [];
-	//Incidentally, my real name is Prescott Weems.
-	engine.gameObjects.push(new Label(0, 50, 800, 45, "Almost everything: Prexot goldenPi", "That's me, Prexot, the founder (and currently sole member) of goldenPiGames. I did all the concept, story, and programming for this game."));
-	engine.gameObjects.push(new Button(325, 105, 150, 40, "YouTube", "Visit my YouTube. I upload stuff occasionally.", function(){window.open("https://www.youtube.com/channel/UCb4QliR5GWppUqOLXBYKYHw")}));
-	
-	//engine.gameObjects.push(new Label(0, 200, 590, 40, "Music by Eric Matyas", "Someone who hosts an entire website dedicated to free music, sound effects, and textures. All of the following songs are his original compositions."));
-	//engine.gameObjects.push(new Button(600, 200, 190, 40, "SoundImage.org", "Click on this button to go to SoundImage.org. Then give Eric money.", function(){window.open("http://soundimage.org/")}));
-	
-	engine.gameObjects.push(new Button(705, 5, 90, 40, "Return", "Return to the main menu.", buildMainMenu));
-}
-

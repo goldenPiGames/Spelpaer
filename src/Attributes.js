@@ -1,10 +1,12 @@
+const WEAPON_ATTRIBUTE = -1;
+
 const ATTRIBUTE_NAMES = [
 	"untyped",
 	"cutting",
 	"piercing",
 	"bludgeoning",
 	"fire",
-	"ice",
+	"cold",
 	"electricity",
 	"acid",
 	"sonic",
@@ -40,7 +42,7 @@ function attributesToArray(stuff, normal = 1.0) {
 		if (dex != undefined)
 			ray[dex] = stuff[nom];
 		else
-			throw nom + " is not a valid element.";
+			throw nom + " is not a valid attribute.";
 	}
 	return ray;
 }

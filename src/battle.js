@@ -64,7 +64,7 @@ var battle = {
 				var taker = this.enemies[i];
 				taker.avail();
 				var act = taker.chooseAction();
-				this.executeAction(taker, act.skill, act.target);
+				this.executeAction(taker, act.action, act.target);
 				return;
 			}
 		}
@@ -77,13 +77,25 @@ var battle = {
 			this.lose();
 			return;
 		}
-		advanceTime(1);
+		advanceTime(1, false);
 	},
-	executeAction : function(user, skill, target) {
-		skill.execute(user, target);
-		skill.expend();
-		user.delay = skill.delay;
-		user.animSkill(skill, target);
+	executeAction : function(user, action, target) {
+		//console.log(user, action, target);
+		this.log(user.name + " uses " + action.name + " on " + target.name);
+		if (!action) {
+			user.delay++;
+			this.log(user.name + " could not choose an action.");
+		} else if (action.execute(user, target) != false) {
+			action.expend();
+			user.delay = action.delay;
+			user.animSkill(action, target);
+		} else {
+			this.log("But it didn't go through.");
+			//TODO play sound cannot do
+		}
+	},
+	log : function(msg) {
+		console.log(msg);
 	},
 	win : function() {
 		var exp = 0;

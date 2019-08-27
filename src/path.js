@@ -22,21 +22,21 @@ var Path = {
 		return (this.available && (this.connectionWest.visited || this.connectionEast.visited));
 	},
 	updateLine : function() {
-		var wx = (this.connectionWest.latitude - WorldMap.centerX) * WorldMap.zoom + 400;
-		var wy = (this.connectionWest.longitude - WorldMap.centerY) * WorldMap.zoom + 225;
-		var ex = (this.connectionEast.latitude - WorldMap.centerX) * WorldMap.zoom + 400;
-		var ey = (this.connectionEast.longitude - WorldMap.centerY) * WorldMap.zoom + 225;
+		var wx = (this.connectionWest.latitude - WorldMapScreen.centerX) * WorldMapScreen.zoom + 400;
+		var wy = (this.connectionWest.longitude - WorldMapScreen.centerY) * WorldMapScreen.zoom + 225;
+		var ex = (this.connectionEast.latitude - WorldMapScreen.centerX) * WorldMapScreen.zoom + 400;
+		var ey = (this.connectionEast.longitude - WorldMapScreen.centerY) * WorldMapScreen.zoom + 225;
 		this.drawWX = wx;
 		this.drawWY = wy;
 		this.drawEX = ex;
 		this.drawEY = ey;
 		if (ctx != null) {
 			var distance = distToSegment(mouse.x, mouse.y, wx, wy, ex, ey);
-			this.hovered = (distance <= (PATH_DETECTION_WIDTH/2 * WorldMap.zoom));
+			this.hovered = (distance <= (PATH_DETECTION_WIDTH/2 * WorldMapScreen.zoom));
 			this.clicked = (this.hovered && mouse.clicked);
 			if (this.hovered && this.shown()) {
 				infoField.text = this.getInfo();
-				WorldMap.info.show(this);
+				WorldMapScreen.info.show(this);
 			}
 		} else {
 			this.hovered = false;

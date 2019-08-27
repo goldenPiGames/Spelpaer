@@ -2,12 +2,11 @@ const INFO_DEFAULT_MESSAGE = "Mouse over something to learn more.";
 const SIDE_MARGINS = 10;
 
 var infoField = {
-	__proto__ : UIObjectBase,
 	clicked : false,
 	hovered : false,
 	text : "S U C C",
 	update : function() {
-		this.updateMouse();
+		//this.updateMouse();
 		this.text = INFO_DEFAULT_MESSAGE;
 		this.used = false;
 	},

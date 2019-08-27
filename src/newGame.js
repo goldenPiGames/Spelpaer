@@ -179,7 +179,7 @@ CharacterCreationScreen.prototype.generate = function() {
 		ReadStats.prototype.known = true;
 		RayOfFrost.prototype.known = true;
 		AcidSplash.prototype.known = true;
-		BurningHands.prototype.known = true;
+		//BurningHands.prototype.known = true;
 	} else {
 		if (!(this.relationshipRadio.index >= 0))
 			return false;

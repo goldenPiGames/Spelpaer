@@ -1,18 +1,17 @@
 var pathScreen;
 var pathPosition;
 const PATH_LINE_Y = 250;
-const PATH_SPEEDS = [1, 2, 5, 15, 30, 60]
+const PATH_SPEEDS = [1, 2, 5, 15, 30, 60, 120, 300]
 
 function PathScreen(paff) {
-	var thisser = this;
 	this.encounterTimer = 1;
 	this.speed = 1;
 	this.path = paff;
-	this.pathLabel = new Label(250, 20, 300, 30, this.path.name, this.path.description);
+	this.pathLabel = new Label(settings.width/4, 20, settings.width/2, 30, this.path.name, this.path.description);
 	this.westLabel = new Label(0, PATH_LINE_Y - 60, 200, 25, this.path.connectionWest.name, this.path.connectionWest.description); this.westLabel.align = "left";
 	this.eastLabel = new Label(settings.width-200, PATH_LINE_Y - 60, 200, 25, this.path.connectionEast.name, this.path.connectionEast.description); this.eastLabel.align = "right";
-	this.stopButton = new Button(550, 400, 100, 40, "Pause", "Pause the traveling so you can cast spells or whatever.", function(){thisser.toggleMove()});
-	this.speedSlider = new Slider(settings.width/2-150, mainHeight()-50, 300, 35, "Speed", "Change the rate at which you view this journey.", 0, PATH_SPEEDS.length-1, val=>thisser.setSpeedIndex(val), function(){return thisser.speedIndex});
+	this.stopButton = new Button(105, mainHeight()-50, 90, 40, "Stop", "Pause the traveling so you can cast spells or whatever.", ()=>this.toggleMove());
+	this.speedSlider = new Slider(settings.width/2-150, mainHeight()-50, 300, 35, "Speed", "Change the rate at which you view this journey.", 0, PATH_SPEEDS.length-1, val=>this.setSpeedIndex(val), ()=>this.speedIndex, ()=>"x"+this.speed);
 	this.distance = 0;
 	this.distanceLabel = new Label(275, 350, 250, 20, "Distance left: blegh", "The distance between you and your destination.");
 	this.objects = [this.pathLabel, this.westLabel, this.eastLabel, this.distanceLabel, this.stopButton, this.speedSlider, this.path.getWeatherObject()];
@@ -44,14 +43,13 @@ PathScreen.prototype.update = function() {
 	if (this.moving) {
 		this.encounterTimer -= this.speed;
 		if (this.encounterTimer <= 0) {
-			var thisser = this;
-			battle.begin(this.path.randomEncounter(), this.path.battleMusic, function(){thisser.resume();});
+			this.path.beginRandomEncounter(()=>this.resume());
 			return;
 		}
 		pathPosition += (this.direction?1:-1) * this.speed;
-		advanceTime(this.speed);
+		advanceTime(this.speed, true);
 	} else {
-		advanceTime(1);
+		advanceTime(1, true);
 	}
 	this.distanceLabel.text = "Distance left: "+Math.ceil(this.direction ? this.path.distance-pathPosition : pathPosition);
 	if (pathPosition <= 0) {

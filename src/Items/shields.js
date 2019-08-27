@@ -13,7 +13,7 @@ function PocutopShield() {
 ITEMS.push(PocutopShield);
 PocutopShield.prototype = Object.create(Shield);
 PocutopShield.prototype.name = "Pocutop Shield";
-PocutopShield.prototype.description = "Knight's shield crafted traditionally in Pocutop.";
+PocutopShield.prototype.flavor = "Knight's shield crafted traditionally in Pocutop.";
 PocutopShield.prototype.statMods = statsToArray({
 	Armor : 5,
 }, 0);

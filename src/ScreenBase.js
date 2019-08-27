@@ -1,3 +1,17 @@
+class Screen {
+	constructor() {
+		
+	}
+	update() {
+		this.objects.forEach(oj => oj.update());
+	}
+	draw() {
+		clearBack();
+		this.objects.forEach(oj => oj.draw());
+	}
+}
+Screen.prototype.isScreen = true;
+
 var ScreenBase = {
 	isScreen : true,
 	resize : function() {

@@ -29,16 +29,6 @@ function defArray(oj, fault) {
 	return ray;
 }
 
-function statsFromMults(mults, level) {
-	var stats = [];
-	for (var i = 0; i < STAT_NAMES.length - 1; i++) {
-		var mult = mults[i];
-		stats[i] = Math.max(Math.round(mult * level), i >= 9 ? 0 : 1);
-	}
-	stats[STAT_INDICES.HRE] = level;
-	return stats;
-}
-
 const DROP_CONDITIONS = {
 	deadOnly : function(nem) {
 		return nem.defeated == DEFEAT_INDICES.Dead;
