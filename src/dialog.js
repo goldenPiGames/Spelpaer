@@ -1,33 +1,37 @@
-var dialogActive = false;
-//const settings.infoHeight = 225;
 const SPEAKER_BOX_WIDTH = 200;
 const SPEAKER_BOX_HEIGHT = 50;
 
 var dialog = {
 	//height : 200,
 	begin : function() {
+		//console.log("bah");
 		var arrayguments = Array.prototype.slice.call(arguments);
-		this.list = Array.isArray(arguments[0]) ? (Array.isArray(arguments[0][0]) ?  arguments[0][0]: arguments[0]) : arguments;
+		this.list = Array.isArray(arrayguments[0]) ? (Array.isArray(arrayguments[0][0]) ?  arrayguments[0][0]: arrayguments[0]) : arrayguments;
 		this.index = 0;
 		//console.log("new list");
 		this.advanceBuffer = true;
 		this.justBegun = true;
-		dialogActive = true;
+		//console.log(overlay);
+		overlay = this;
 		this.skipButton = new Button(settings.width - 65, 5, 60, 40, "Skip");
 	},
 	update : function() {
 		this.skipButton.update();
 		//console.log(this.index, mouse.clicked, this.advanceBuffer);
-		if (this.skipButton.held || mouse.clicked && !this.advanceBuffer)
+		if (this.skipButton.held || mouse.clicked && !this.advanceBuffer) {
 			this.index ++;
+			this.checkCurrent();
+		}
 		//console.log(this.index);
 		this.advanceBuffer = false;
-		this.checkCurrent();
 		this.justBegun = false;
+		return false;
 	},
 	checkCurrent : function() {
 		if (this.index >= this.list.length) {
-			dialogActive = false;
+			//console.log(overlay);
+			if (overlay != tutorialOverlay)
+				overlay = null;
 			return;
 		}
 		if ((typeof this.list[this.index] == "function")) {
@@ -68,13 +72,13 @@ var dialog = {
 		//main text
 		var fontSize = 20;
 		ctx.fillStyle = settings.normal_color;
-		ctx.font = fontSize + "px "+settings.font;
+		drawParagraphInRect(currentLine.text, 0, settings.height - settings.infoHeight + 5, settings.width, settings.infoHeight - 5, 20);
+		/*ctx.font = fontSize + "px "+settings.font;
 		ctx.textAlign = "start";
-		
 		var lines = getLines(currentLine.text, canvas.width - (SIDE_MARGINS * 2));
 		for (i = 0; i < lines.length; i++) { 
 			ctx.fillText(lines[i], SIDE_MARGINS, canvas.height-settings.infoHeight + SIDE_MARGINS + 1.2 * fontSize * i);
-		}
+		}*/
 		
 		//speaker
 		var displaySpeaker = currentLine.speaker;
@@ -98,6 +102,8 @@ var dialog = {
 		ctx.fillText(displaySpeaker, SIDE_MARGINS, canvas.height-settings.infoHeight - SPEAKER_BOX_HEIGHT/2 - fontSize/2);
 		
 		this.skipButton.draw();
+		
+		return false;
 	},
 	add : function(what) {
 		this.dialogList.splice(-1, what);
@@ -106,14 +112,13 @@ var dialog = {
 
 //---------------------------------------- Dialog Line -----------------------------
 
-var DialogLine = function(speaker, sprite, text, currentTime) {
+var DialogLine = function(speaker, sprite, text, time) {
     this.speaker = speaker;
     this.sprite = sprite;
 	this.text = text;
-	this.currentTime = currentTime;
+	this.time = time;
 }
 DialogLine.prototype.isDialogLine = true;
-DialogLine.prototype.isDialogPausing = true;
 
 function isDialogLine(obj) {
 	if (typeof obj == "string")
@@ -127,18 +132,20 @@ function isDialogLine(obj) {
 
 //----------------------------------------- Dialog Split ----------------------------------
 
-var DialogSplit = function(speaker, image, text) {
+var DialogSplit = function(speaker, sprite = sprite, text) {
 	this.speaker = speaker;
-	this.image = image;
+	this.sprite = sprite;
 	this.text = text;
-	this.choices = Array.prototype.slice.call(arguments, 3);
-	this.x = 0;
-	this.width = 800;
-	
-	
+	this.choices = Array.prototype.slice.call(arguments, 3).map(oj => {
+		if (oj.isDialogSplitChoice) {
+			return oj;
+		} else {
+			return new DialogSplitChoice(oj[0], ...(oj.slice(1)));
+		}
+	});
+	this.choiceButtons = this.choices.map((oj, dex, ray) => new Button(settings.width/4, settings.height-40*(ray.length-dex), settings.width/2, 30, oj.text, null, ()=>dialog.shoveIn(oj.lines)));
 }
 DialogSplit.prototype.isDialogSplit = true;
-DialogSplit.prototype.isDialogPausing = true;
 
 DialogSplit.prototype.init = function(ctx) {
 	ctx.font = "20px "+settings.font;
@@ -165,7 +172,7 @@ DialogSplit.prototype.update = function(ctx) {
 	});
 }
 
-DialogSplit.prototype.draw = function(ctx) {
+/*DialogSplit.prototype.draw = function(ctx) {
 	ctx.fillStyle = "#808080";
 	ctx.globalAlpha = .20;
 	if (!battleActive)
@@ -237,13 +244,13 @@ DialogSplit.prototype.draw = function(ctx) {
 
 function isDialogSplit(obj) {
 	return obj.isDialogSplit == true;
-}
+}*/
 
 //----------------------------------------- Dialog Split Choice ----------------------------------
 
-var DialogSplitChoice = function(text, handler = doNothing) {
+function DialogSplitChoice(text) {
 	this.text = text;
-	this.handler = function(){dialogIndex++; handler();};
+	this.lines = Array.prototype.slice.call(arguments, 1);
 }
 DialogSplitChoice.prototype.isDialogSplitChoice = true;
 

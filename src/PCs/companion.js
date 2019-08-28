@@ -1,3 +1,5 @@
+var relationshipType = 0;
+
 var companion = {name:"Companion"};
 
 class Companion extends PC {

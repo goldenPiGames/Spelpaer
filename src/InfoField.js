@@ -24,14 +24,16 @@ var infoField = {
 		
 		//text
 		var fontSize = 20;
-		ctx.fillStyle = (this.text == INFO_DEFAULT_MESSAGE) ? "#666666" : settings.normal_color;
-		ctx.font = fontSize + "px "+settings.font;
+		ctx.fillStyle = this.used ? settings.normal_color : settings.disabled_color;
+		drawParagraphInRect(this.text, 0, settings.height - settings.infoHeight + 5, settings.width, settings.infoHeight - 5, 20);
+		/*
 		ctx.textAlign = "start";
+		ctx.font = fontSize + "px "+settings.font;
 		var lines = getLines(this.text, settings.width - (SIDE_MARGINS * 2));
 		//console.log(lines);
 		for (i = 0; i < lines.length; i++) { 
 			ctx.fillText(lines[i], SIDE_MARGINS, settings.height-settings.infoHeight + SIDE_MARGINS + 1.1 * fontSize * i);
-		}
+		}*/
 		if (currentTime) {
 			ctx.fillStyle = settings.normal_color;
 			ctx.font = "25px monospace";
@@ -39,7 +41,7 @@ var infoField = {
 		}
 	},
 	setText : function(text) {
-		if (text == 0)
+		if (!text)
 			return;
 		this.text = text;
 		this.used = true;
@@ -49,7 +51,7 @@ var infoField = {
 /**
  * @author @crazy2b from StackOverflow
  */
-function getLines(text, maxWidth) {
+/*function getLines(text, maxWidth) {
 	//console.log(text)
 	if (!text)
 		return [""]//["Something was passed undefined text.", "Nice coding there, boyo."];
@@ -78,4 +80,4 @@ function getLines(text, maxWidth) {
 	}
 	lines.push(currentLine);
 	return lines;
-}
+}*/

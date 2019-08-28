@@ -128,3 +128,31 @@ function drawTextInRect(text, x, y, width, height) {
 		ctx.font = (height*width/wid)+"px "+settings.font;
 	ctx.fillText(text, x+width/2, y+height/2);
 }
+
+function drawParagraphInRect(text, x, y, width, height, size) {
+	ctx.textAlign = "left";
+	ctx.textBaseline = "top";
+	ctx.font = size+"px "+settings.font;
+	if (Array.isArray(text))
+		text = text.join(" <br> ");
+	//console.log(text);
+	text = text.replace(/<Player>/g, player.name);
+	text = text.replace(/<Companion>/g, companion.name);
+	//console.log(text);
+	var words = text.split(" ");
+	var cx = x;
+	var cy = y;
+	for (var i = 0; i < words.length; i++) {
+		var word = words[i];
+		var wwid = ctx.measureText(word).width;
+		if (word == "<br>" || cx + wwid > x + width) {
+			cy += size;
+			cx = x;
+		}
+		//console.log(word, cx, cy);
+		if (word != "<br>") {
+			ctx.fillText(word, cx, cy);
+			cx += wwid + ctx.measureText(" ").width;
+		}
+	}
+}

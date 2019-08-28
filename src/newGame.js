@@ -36,10 +36,21 @@ function preGameIntro() {
 	currentTime = 0;
 	GeneralEngine.objects = [];
 	dialog.begin(
-		new DialogLine("Obaliiv", null, "So you're finally here?"),
-		new DialogLine("Obaliiv", null, "I never thought that this would happen in my lifetime..."),
-		new DialogLine("Obaliiv", null, "It's time to create a vessel for you."),
-		new DialogLine("Obaliiv", null, "This person will be the window to your world, as well as a capable caster of spells."),
+		new DialogLine("Obaliiv", null, "So, you're finally here? I'll admit, I had almost given up."),
+		new DialogLine("Obaliiv", null, "...I mean, of course not. I've been diligently performing my duty, of course. I mean, me, slacking off? Perish the thought."),
+		new DialogLine("Obaliiv", null, "I've got some people ready, let me just connect you to Marcel and Manz. It'll be just a moment on your end."),
+		new DialogLine("Obaliiv", null, "..."),
+		new DialogLine("Obaliiv", null, "...You still there? Didn't go through?"),
+		new DialogLine("Obaliiv", null, "Figures. Lousy little clump."),
+		new DialogLine("Obaliiv", null, "Well, at least it didn't notice you. I mean, of course it didn't notice you, the metaface connection protocol didn't even get past the real-side phase, how would it have noticed you? Stupid council, always worrying about all the wrong things...."),
+		new DialogLine("Obaliiv", null, "Welp, time for the backup plan. I'll just have to have some people custom-made for you instead."),
+		new DialogLine("Obaliiv", null, "...I mean, I told them that establishing a metaface with preexisting humans wouldn't work, and we should've gone with the homosynthesizer as our Plan A, but did they listen?"),
+		new DialogLine("Obaliiv", null, "Nooooooooooooooooo, of course they didn't."),
+		new DialogLine("Obaliiv", null, "Yes, of course the memetics expert and the bog-standard administrator are more qualified to talk about theoretical metapsionics than the world's leading expert on theoretical metapsionics. That makes sense, of course, right?"),
+		new DialogLine("Obaliiv", null, "... Anyway, yeah. Down to business."),
+		new DialogLine("Obaliiv", null, "I was thinking two would be best, one caster and one fighter, cover your bases but not dilute the potential too much, you know?"),
+		new DialogLine("Obaliiv", null, "Just tell me what you want, I'll have them ready in a decade or two."),
+		new DialogLine("Obaliiv", null, "Let's get started. First up, the spellcaster, who'll also be your primary vessel."),
 		buildPlayerCreation,
 	);
 }
@@ -55,58 +66,6 @@ function buildPlayerCreation() {
 			buildCompanionCreation,
 		)
 	}));
-	/*GeneralEngine.objects = [
-		//new Label(400, 10, 400, 60, "Player", "This will be you, effectively."),
-		new Label(10, 100, 200, 20, "Gender", ""),
-		playerGenderRadio,
-		favColorPicker,
-		new Button(settings.width-130, mainHeight()-50, 120, 40, "Continue", "Continue on to the next step. Note: You CANNOT go back and change these things later.", 
-			function() {
-				var pgender;
-				switch (playerGenderRadio.index) {
-					case -1: return; break;
-					case 0: pgender = GENDER_MALE; break;
-					case 1: pgender = GENDER_FEMALE; break;
-					case 2: pgender = GENDER_OTHER; break;
-				}
-				var pname = textInput.value;
-				if (pname == 0)
-					return;
-				player = new Player();
-				player.gender = pgender;
-				player.name = pname;
-				player.color = favColorPicker.color;
-				player.level = 10;
-				player.baseStats = statMultsToArray({
-					Vitality : 1.0,
-					Strength : .8,
-					Constitution : .8,
-					Dexterity : .9,
-					Agility : .9,
-					Intelligence : 1.2,
-					Wisdom : 1.2,
-					Charisma : 1.2,
-					Potential : 1.0,
-					Weapon : 0,
-					Armor : 0,
-				}, player.level);
-				player.maxhp = player.Vitality * 10;
-				player.hp = player.maxhp;
-				AcidSplash.prototype.known = true;
-				RayOfFrost.prototype.known = true;
-				MagicMissile.prototype.known = true;
-				CureLight.prototype.known = true;
-				ReadStats.prototype.known = true;
-				Frighten.prototype.known = true;
-				player.spells = [
-					new MagicMissile(player),
-					new CureLight(player),
-					new Frighten(player),
-					new ReadStats(player),
-				];
-				)
-			}),
-	];*/
 }
 
 function buildCompanionCreation() {
@@ -128,8 +87,8 @@ function CharacterCreationScreen(comp, after) {
 	if (!comp) {
 		
 	} else {
-		this.relationshipRadio = new RadioButtons(10, 275, 200, 25, ["Friends", "Siblings", "Spouses"], ["They're as close as friends can be.", "They have the same parents.", "They're already married. Use your imagination."]);
-		this.objects.push(this.relationshipRadio);
+		//this.relationshipRadio = new RadioButtons(10, 275, 200, 25, ["Friends", "Siblings", "Spouses"], ["They're as close as friends can be.", "They have the same parents.", "They're already married. Use your imagination."]);
+		//this.objects.push(this.relationshipRadio);
 	}
 	setTextInput(settings.width/4, 10, settings.width/2, 60, "Name");
 	this.changeColor(defaultColor);
@@ -181,9 +140,10 @@ CharacterCreationScreen.prototype.generate = function() {
 		AcidSplash.prototype.known = true;
 		//BurningHands.prototype.known = true;
 	} else {
-		if (!(this.relationshipRadio.index >= 0))
+		/*if (!(this.relationshipRadio.index >= 0))
 			return false;
-		relationshipType = this.relationshipRadio.index;
+		relationshipType = this.relationshipRadio.index;*/
+		relationshipType = 0;
 		character = new Companion();
 		character.level = 10;
 		character.baseStats = statsToArray({
@@ -239,9 +199,10 @@ function beginNewGame() {
 	money = 0;
 	currentTime = 1;
 	dialog.begin(
-		new DialogLine("Player", null, "Ugh... What time is it? Midnight?"),
+		new DialogLine("Player", null, "I wake up with a start. I'm not sure why."),
+		new DialogLine("Player", null, "I feel like I had some sort of weird dream that I just forgot completely."),
 		new DialogLine("Front door", null, "*knocking*"),
-		new DialogLine("Player", null, "Who would that be at this time of night? I'll go answer it. I'm already up. No point in troubling anybody else."),
+		new DialogLine("Player", null, "I wonder who would be knocking at this time of night. I get up to answer it."),
 		new DialogLine("Player", null, "I open the door."),
 		new DialogLine("Vertace", CHAR_SPRITES.Vertace.DialogNormal, "<Player>! Urgent!"),
 		new DialogLine("Player", CHAR_SPRITES.Vertace.DialogNormal, "This is Vertace. He's the grandson and apprentice of Voh Claire, the town's seer."),
@@ -254,7 +215,7 @@ function beginNewGame() {
 		new DialogLine("Vertace", CHAR_SPRITES.Vertace.DialogNormal, "Right. See you there."),
 		
 		new DialogLine("Player", null, "I shout for <Companion>, Marcel, and M'treac."),
-		new DialogLine("Companion", null, "What is it?"),
+		new DialogLine("Companion", null, "*asks why I'm shouting*"),
 		new DialogLine("Player", null, shipswitch(
 					"This is <Companion>, my best friend. We've known each other since we were little.",
 					"This is <Companion>, my "+cgender("brother","sister","sibling")+".",
@@ -273,7 +234,11 @@ function beginNewGame() {
 					"This is Marcel, my father.",
 					"This is Marcel, my father-in-law."
 				)),
-		function(){Pocutop.arrive();},
+		function(){PocutopHome.arrive();},
 		new DialogLine("Player", null, "I lead the way to the observatory."),
+		()=>tutorialOverlay.begin(
+			{text:"Click this button to exit your house.", textX:settings.width/2, textY:settings.height/3, textWidth:250, textHeight:200, opening:runnee.leaveButton, updateRunnee:UPDATE_RUNNEE_IN_OPENING, advance:(()=>currentLoc!=PocutopHome)},
+			{text:"Now select the Observatory to go there.", opening:runnee.POImenu, advance:(()=>currentLoc==PocutopObservatory)},
+		)
 	)
 }

@@ -104,7 +104,7 @@ GameMenuItems.prototype.update = function() {
 	}
 }
 GameMenuItems.prototype.draw = function() {
-	let tem = this.itemMenu.hovered || this.selectedItem;
+	let tem = this.itemMenu.hoveredValue || this.selectedItem;
 	this.objects.forEach(oj=>oj.draw(tem))
 }
 GameMenuItems.prototype.unitClicked = function(unit) {

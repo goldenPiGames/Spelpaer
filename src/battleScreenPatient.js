@@ -133,18 +133,15 @@ function BattleScreenPatientTutorial(battleScreen) {
 	this.shownSpells = false;
 	this.shownTechniques = false;
 	this.battleScreen = battleScreen;
-	var bspdm = this.battleScreen.delayMeter;
-	dialog.begin(
-		new DialogLine("Marcel", null, "Don't worry, nobody's going to die here."),
-		new DialogLine("Spelpaer", null, "Please direct your attention to the left side of the screen."),
-		()=>this.setWindow(bspdm.x-5, bspdm.y-5, bspdm.width+10, bspdm.height+10),
-		new DialogLine("Spelpaer", null, "That's the Delay Meter. Each arrow represents one character in the battle."),
-		new DialogLine("Spelpaer", null, "Each unit's position at the start of battle is determined by both their Agility stat and a random factor."),
-		new DialogLine("Spelpaer", null, "During battle, each arrow moves upwards at a constant rate. When one reaches the top, its corresponding unit takes an action."),
-		new DialogLine("Spelpaer", null, "You two are represented by the two leftmost arrows , which are also color-coded, while the enemies are to the right."),
-		function(){thisser.clearWindow()},
-		new DialogLine("Spelpaer", null, "For now, just wait until it gets to be your turn."),
+	tutorialOverlay.begin(
+		{text:"Please direct your attention to the left side of the screen.", opening:this.battleScreen.delayMeter, updateRunnee:UPDATE_RUNNEE_NEVER, textX:settings.width/2, textY:settings.height/4, textWidth:settings.width/2, textHeight:300},
+		{text:"That's the Delay Meter. Each arrow represents one character in the battle."},
+		{text:"Each unit's position at the start of battle is determined by both their Agility stat and a random factor."},
+		{text:"During battle, each arrow moves upwards at a constant rate. When one reaches the top, its corresponding unit takes an action."},
+		{text:"You two are represented by the two leftmost arrows , which are also color-coded, while the enemies are to the right."},
+		{text:"After you close this tutorial box, just wait until it gets to be your turn."},
 	);
+	console.log(overlay);
 }
 BattleScreenPatientTutorial.prototype.update = function() {
 	var thisser = this;
@@ -152,57 +149,24 @@ BattleScreenPatientTutorial.prototype.update = function() {
 	if (this.battleScreen.taker == player) {
 		if (!this.shownPlayerTurn) {
 			this.shownPlayerTurn = true;
-			var bsppsb = this.battleScreen.playerSpellButton;
-			//()=>this.setWindow(bsppsb.x-5, bsppsb.y-5, bsppsb.width+10, bsppsb.height+10);
-			dialog.begin(
-				new DialogLine("Manz", null, "You're up, <Player>."),
-				new DialogLine("Manz", null, "You are a primary spellcaster, like me. It's time to use those spells that you prepared this morning."),
-				()=>this.setWindow(bsppsb.x-5, bsppsb.y-5, bsppsb.width+10, bsppsb.height+10),
-				new DialogLine("Spelpaer", null, "To cast a Spell, first click on the Spell button."),
-				function(){thisser.clearWindow()},
+			tutorialOverlay.begin(
+				{text:"It's <Player>'s turn. <Player> is a primary spellcaster.", opening:false, updateRunnee:UPDATE_RUNNEE_NEVER, textX:settings.width/4, textY:200, textWidth:settings.width/3, textHeight:200},
+				{text:"To cast a Spell, first click on the Spell button.", opening:this.battleScreen.playerSpellButton, updateRunnee:UPDATE_RUNNEE_IN_OPENING, advance:()=>this.battleScreen.currentMenu==this.battleScreen.playerSpellMenu},
+				{text:"Now pick a spell. Again, you can get all kinds of information by hovering them.", opening:this.battleScreen.playerSpellMenu, updateRunnee:UPDATE_RUNNEE_IN_OPENING, advance:()=>this.battleScreen.selectedAction instanceof Spell && this.battleScreen.selectedAction.isAvailable()},
 			);
-			this.battleScreen.attackButton.active = false;
-		} else if (!this.shownSpells && this.battleScreen.currentMenu == this.battleScreen.playerSpellMenu) {
-			this.shownSpells = true;
-			var bsppsm = this.battleScreen.playerSpellMenu;
-			this.setWindow(bsppsm.x-5, bsppsm.y-5, bsppsm.width+10, bsppsm.height+10);
-			dialog.begin(
-				new DialogLine("Spelpaer", null, "Your Spells are shown on this scroll menu. To use one, click on it and then click on the target."),
-				new DialogLine("Spelpaer", null, "Just like when preparing, you can hover over a spell to see its details."),
-				function(){thisser.clearWindow()},
-			);
-		} else {
-			this.battleScreen.attackButton.active = true;
-			this.battleScreen.itemButton.active = true;
 		}
 	} else if (this.battleScreen.taker == companion) {
 		if (!this.shownCompanionTurn) {
-			//this.battleScreen.itemButton.active = false;
 			this.shownCompanionTurn = true;
-			var bspctb = this.battleScreen.companionTechniqueButton;
-			dialog.begin(
-				new DialogLine("Marcel", null, "You're up, <Companion>."),
-				new DialogLine("Marcel", null, "You're a martial fighter, like me. You have a variety of Techniques at your disposal."),
-				()=>this.setWindow(bspctb.x-5, bspctb.y-5, bspctb.width+10, bspctb.height+10),
-				new DialogLine("Spelpaer", null, "To use a Technique, first click on the Technique button."),
-				function(){thisser.clearWindow()},
+			tutorialOverlay.begin(
+				{text:"It's <Companion>'s turn. <Companion> is a martial fighter.", opening:false, updateRunnee:UPDATE_RUNNEE_NEVER, textX:settings.width/4, textY:200, textWidth:settings.width/3, textHeight:200},
+				{text:"To use a technique, first click on the Technique button.", opening:this.battleScreen.companionTechniqueButton, updateRunnee:UPDATE_RUNNEE_IN_OPENING, advance:()=>this.battleScreen.currentMenu==this.battleScreen.companionTechniquePalette},
+				{text:"Now pick a technique. Again, you can get all kinds of information by hovering over them.", opening:this.battleScreen.companionTechniquePalette, updateRunnee:UPDATE_RUNNEE_IN_OPENING, advance:()=>this.battleScreen.selectedAction instanceof Technique && this.battleScreen.selectedAction.isAvailable()},
 			);
-		} else if (!this.shownTechniques && this.battleScreen.currentMenu == this.battleScreen.companionTechniquePalette) {
-			this.shownTechniques = true;
-			var bspctp = this.battleScreen.companionTechniquePalette;
-			this.setWindow(bspctp.x-5, bspctp.y-5, bspctp.width+10, bspctp.getTotalHeight()+10);
-			dialog.begin(
-				new DialogLine("Spelpaer", null, "Your Techniques are shown on this Palette. To use one, click on it and then click on the target."),
-				new DialogLine("Spelpaer", null, "You can hover over a technique to see its details."),
-				new DialogLine("Spelpaer", null, "When you use a Technique (other than basic ones like Attack or Guard), it'll be a certain amount of time before you can use it again."),
-				function(){thisser.clearWindow()},
-			);
-		} else {
-			this.battleScreen.itemButton.active = true;
 		}
 	}
 	if (player.hpPortion() <= .5 || companion.hpPortion() <= .5 || battle.enemies[0].hpPortion() <= .5 || battle.enemies[1].hpPortion() <= .5) {
-		dialog.begin(
+		tutorialOverlay.begin(
 			new DialogLine("Marcel", null, "That's enough."),
 			function(){battle.win();},
 		);
@@ -210,23 +174,6 @@ BattleScreenPatientTutorial.prototype.update = function() {
 }
 BattleScreenPatientTutorial.prototype.draw = function() {
 	this.battleScreen.draw();
-	if (this.showingWindow) {
-		ctx.fillStyle = settings.background_color + "80";
-		ctx.fillRect(0, 0, canvas.width, this.windowy);
-		ctx.fillRect(0, this.windowy, this.windowx, this.windowheight); //left
-		ctx.fillRect(this.windowx+this.windowwidth, this.windowy, canvas.width-this.windowx-this.windowwidth, this.windowheight);
-		ctx.fillRect(0, this.windowy+this.windowheight, canvas.width, canvas.height-this.windowy-this.windowheight);
-		ctx.strokeStyle = settings.foreground_color;
-		ctx.lineWidth = 2;
-		ctx.strokeRect(this.windowx, this.windowy, this.windowwidth, this.windowheight);
-	}
-}
-BattleScreenPatientTutorial.prototype.setWindow = function(x, y, width, height) {
-	this.showingWindow = true;
-	this.windowx = x;
-	this.windowy = y;
-	this.windowwidth = width;
-	this.windowheight = height;
 }
 BattleScreenPatientTutorial.prototype.clearWindow = function() {
 	this.showingWindow = false;

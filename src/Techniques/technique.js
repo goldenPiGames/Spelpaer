@@ -15,7 +15,7 @@ class Technique extends BattleAction {
 		else
 			desc += "; Cooldown: None";
 		if (this.power)
-			desc += " <br> Power: " + this.power + " " + ATTRIBUTE_NAMES[this.attribute] + " (" + STAT_NAMES[this.attackStat] + (this.usesWeapon?" + Weapon":"") + " vs. " + STAT_NAMES[this.defenseStat] + (this.usesArmor?" + Armor":"") + (this.damageInflection != 1.0 ? ", damage inflection "+this.damageInflection+")" : ")");
+			desc += " <br> Power: " + this.power + " " + (this.attribute == WEAPON_ATTRIBUTE ? "weapon's" : ATTRIBUTE_NAMES[this.attribute]) + " (" + STAT_NAMES[this.attackStat] + (this.usesWeapon?" + Weapon":"") + " vs. " + STAT_NAMES[this.defenseStat] + (this.usesArmor?" + Armor":"") + (this.damageInflection != 1.0 ? ", damage inflection "+this.damageInflection+")" : ")");
 		if (this.hitrate) {
 			desc += " <br> Hitrate: " + asPercent(this.hitrate, 0)
 			if (this.hitrate < 1.0)

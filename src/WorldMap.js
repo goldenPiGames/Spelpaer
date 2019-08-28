@@ -58,7 +58,7 @@ class WorldMapMap extends DynamicCamera {
 	draw(polit) {
 		ctx.globalAlpha = 1;
 		ctx.fillStyle = MAP_WATER_COLOR;
-		ctx.fillRect(0, 0, this.width, this.height);
+		ctx.fillRect(this.x, this.y, this.width, this.height);
 		ctx.drawImage(this.fullMapImg, this.drawX(0), this.drawY(0), this.fullMapImg.width*this.zoom, this.fullMapImg.height*this.zoom); 
 		if (polit) {
 			PATHS.forEach(dab => dab.drawLine(this));

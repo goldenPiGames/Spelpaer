@@ -11,29 +11,20 @@ var coreEngine = {
 		musicLoopCheck();
 		var thisser = this;
 		infoField.update();
+		//console.log(overlay)
 		if (!overlay || overlay.update())
 			runnee.update();
 		if (mouse.clicked)
 			particles.push(new ParticleRing(mouse.x, mouse.y, 1.5, settings.click_color, .04));
 		runnee.draw();
-		if (overlay)
-			dialog.draw();
-		else {
+		if (!overlay || overlay.draw()) {
 			infoField.draw();
 			addRandomEmbers();
 		}
 		var i = 0;
 		particles = particles.filter((oj)=>oj.go());
-		/*while (i < particles.length) {
-			if (particles[i].dead || particles[i].alpha < 0) {
-				particles.splice(i, 1);
-			} else {
-				particles[i].go();
-				i++;
-			}
-		}*/
 		mouse.unClick();
-		setTimeout(function(){thisser.run()}, Math.max(0, desiredTime-Date.now()));
+		setTimeout(()=>this.run(), Math.max(0, desiredTime-Date.now()));
 	},
 }
 

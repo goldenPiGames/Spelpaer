@@ -1,17 +1,16 @@
 function PrepScreen() {
-	var thisser = this;
 	var wid = settings.width;
 	this.pointsLabel = new Label(wid*3/8, 0, wid/4, 30, "Points", "How many spell points you have.");
 	this.knownLabel = new Label(wid/8, 0, wid/4, 30, "Spells Known", "All of the spells that you have collected throughout your journey. Click in this column to add them to your prepared list. You can add the same spell more than once.");
 	this.preparedLabel = new Label(wid*5/8, 0, wid/4, 30, "Spells Prepared", "All of the spells that you currently have prepared. Click in this column to remove them and get their points back.");
 	var hafw = settings.width/2;
 	var hit = mainHeight();
-	this.sortButton = new Button(hafw, hit-45, 145, 40, "Sort", "Sort your spells.", function(){sortSpells();thisser.preparedMenu.putItems()});
-	this.finishedButton = new Button(wid-150, hit-45, 145, 40, "Finished", "Finish studying and go about your day.", function(){thisser.finish()});
-	this.autoButton = new Button(10, hit-45, 140, 40, "Auto", "Automatically prepare spells.", function(){thisser.autoPrepare()});
-	this.lastButton = new Button(160, hit-45, 140, 40, "Last", "Prepare the same set of spells that you did last time.", function(){thisser.prepareLast()}, localStorage.getItem("SpelpaerLastSpells"));
-	this.knownMenu = new ScrollMenu(0, 30, hafw, hit-80, function(value){thisser.knownClicked(value)}, [], function(val){return val.prototype.cost}, function(val){return val.prototype.description});
-	this.preparedMenu = new ScrollMenu(hafw, 30, hafw, hit-80, function(value){thisser.preparedClicked(value)}, [], "cost", "description");
+	this.sortButton = new Button(hafw, hit-45, 145, 40, "Sort", "Sort your spells.", ()=>{sortSpells();this.preparedMenu.putItems()});
+	this.finishedButton = new Button(wid-150, hit-45, 145, 40, "Finished", "Finish studying and go about your day.", ()=>this.finish());
+	this.autoButton = new Button(10, hit-45, 140, 40, "Auto", "Automatically prepare spells.", ()=>this.autoPrepare());
+	this.lastButton = new Button(160, hit-45, 140, 40, "Last", "Prepare the same set of spells that you did last time.", ()=>this.prepareLast());
+	this.knownMenu = new ScrollMenu(0, 30, hafw, hit-80, val=>this.knownClicked(val), [], val=>val.prototype.cost, val=>val.prototype.description);
+	this.preparedMenu = new ScrollMenu(hafw, 30, hafw, hit-80, val=>this.preparedClicked(val), [], "cost", "description");
 	this.objects = [this.pointsLabel, this.knownLabel, this.preparedLabel, this.knownMenu, this.preparedMenu, this.autoButton, this.lastButton, this.sortButton, this.finishedButton];
 }
 PrepScreen.prototype = Object.create(ScreenBase);
@@ -29,6 +28,26 @@ PrepScreen.prototype.begin = function(amount, after) {
 	this.preparedMenu.setItems(player.spells);
 	this.preparedMenu.currentScroll = 0;
 	switchScreen(this);
+	//console.log(currentTime, difficulty);
+	if (/*currentTime < 14*HOURS && */difficulty < 2) { //TODO make a condition that makes sense
+		this.doTutorial();
+	}
+}
+PrepScreen.prototype.doTutorial = function() {
+	tutorialOverlay.begin(
+		{text:"Welcome to the Spell Preparation screen.", textX:settings.width/3, textY:settings.height/4, textWidth:settings.width/3, textHeight:200},
+		{text:"Preparing your spells is very important - you'll need to tailor your spells according to your character's build, as well as what you expect to encounter that day."},
+		{text:"This menu on the left shows all the spells that are available to be prepared - that is to say, it's been found and its level is less than or equal to <Player>'s.", opening:this.knownMenu, textX:settings.width/2, textY:settings.height/4, textWidth:settings.width/2, textHeight:200, updateRunnee:UPDATE_RUNNEE_IN_OPENING},
+		{text:"Hover over a spell to get all its juicy details."},
+		{text:"You can prepare the same spell multiple times, in which case each instance keeps track of its cooldown separately."},
+		{text:"This shows you how many points of spells you can prepare. There's no reason not to use every single point.", opening:this.pointsLabel},
+		{text:"This menu on the right shows the spells you've currently prepared. You can click on them to remove them and get their points back.", opening:this.preparedMenu, textX:0, textY:settings.height/4, textWidth:settings.width/2, textHeight:200, updateRunnee:UPDATE_RUNNEE_IN_OPENING},
+		{text:"Use his button to automatically prepare spells. Its algorithm isn't very good, so it's not recommended.", opening:this.autoButton, textX:settings.width/3, textY:settings.height/3, textWidth:settings.width/3, textHeight:200, updateRunnee:UPDATE_RUNNEE_NEVER},
+		{text:"Use this button to prepare the same spells that you did last time.", opening:this.lastButton},
+		{text:"When you finish preparing spells, your prepared spells are immediately saved. Even if you refresh or get a game over without saving your game, you can reuse your last list."},
+		{text:"Use this button to sort your list of prepared spells.", opening:this.sortButton},
+		{text:"Use this button when you're finished preparing spells and you're ready to face the day ahead.", opening:this.finishedButton},
+	);
 }
 PrepScreen.prototype.knownClicked = function(val) {
 	if (!val)

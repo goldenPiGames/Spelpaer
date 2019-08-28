@@ -41,9 +41,9 @@ function saveGame(slot, restfulness = 1.0) {
 		toSave.player[thing] = player[thing];
 		toSave.companion[thing] = companion[thing];
 	});
-	toSave.player.equipped = player.equipped.map((quip)=>saveItem(quip));
-	toSave.companion.equipped = companion.equipped.map((quip)=>saveItem(quip));
-	toSave.inventory = inventory.map((quip)=>saveItem(quip));
+	toSave.player.equipped = player.equipped.map(quip=>saveItem(quip));
+	toSave.companion.equipped = companion.equipped.map(quip=>saveItem(quip));
+	toSave.inventory = inventory.map(quip=>saveItem(quip));
 	//kongregate.stats.submit("PlayerLevel", player.level);
 	localStorage.setItem("SpelpaerSlot"+slot, JSON.stringify(toSave));
 	console.log("Game saved to slot "+slot+".");

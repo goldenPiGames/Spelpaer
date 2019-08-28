@@ -33,22 +33,20 @@ class ScrollMenu extends UIObject {
 			this.itemElements.push(newElement);
 		}
 	}
-	scrollUp(amount = 1) {
-		let lastScroll = this.currentScroll;
+	scrollUp(amount = 1, canLoop = true) {
 		this.currentScroll -= amount;
 		if (this.currentScroll < 0) {
-			if (lastScroll <= 0)
+			if (canLoop)
 				this.currentScroll = this.maxScroll;
 			else
 				this.currentScroll = 0;
 		}
 		this.putItems();
 	}
-	scrollDown(amount = 1) {
-		let lastScroll = this.currentScroll;
+	scrollDown(amount = 1, canLoop = true) {
 		this.currentScroll += amount;
 		if (this.currentScroll > this.maxScroll) {
-			if (lastScroll >= this.maxScroll)
+			if (canLoop)
 				this.currentScroll = 0;
 			else
 				this.currentScroll = this.maxScroll;
@@ -71,6 +69,7 @@ class ScrollMenu extends UIObject {
 	}
 	update() {
 		super.update();
+		this.hoveredItem = null;
 		//super.update();
 		this.upButton.update();
 		this.downButton.update();
@@ -80,9 +79,9 @@ class ScrollMenu extends UIObject {
 		}
 		if (this.hovered && mouse.scrolled) {
 			if (mouse.scrolled < 0)
-				this.scrollUp(Math.abs(mouse.scrolled));
+				this.scrollUp(Math.abs(mouse.scrolled), false);
 			else
-				this.scrollDown(Math.abs(mouse.scrolled));
+				this.scrollDown(Math.abs(mouse.scrolled), false);
 		}
 	}
 	draw() {
