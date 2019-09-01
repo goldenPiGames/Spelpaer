@@ -8,26 +8,17 @@ var DepartureShrine = {
 	y : 369,
 	getPOIs : function() {
 		var pois = [];
-		pois.push(new intoDungeonPOI("Into the Dungeon", "The shrine itself is just one open room, but there's a dungeon that acts as the actual trial grounds underground. Enter the dungeon using the ladder.", DepartureShrineDungeon, -1, 0, 0, 0));
+		pois.push(new intoDungeonPOI("Into the Dungeon", "The shrine itself is just one open room, but there's a dungeon that acts as the actual trial grounds underground. Enter the dungeon using the ladder.", DepartureShrineDungeon, 1));
 		return pois;
 	}
 }; LOCALES.push(DepartureShrine);
 
-filePrefix = "src/DungeonAssets/DepartureShrine/";
 var DepartureShrineDungeon = {
 	__proto__ : Dungeon,
 	name : "Departure Shrine",
-	description : "A dungeon filled with statues, where aspiring adventurers from Pocutop must retrieve a Barrier Token to allow exit.",
+	description : "A dungeon filled with statues, and the only place one may gain permission to pass through the Departure Gate.",
 	music : "Hong Kong Midnight",
-	wallImages : [makeImage(filePrefix+"Wall0.png"), makeImage(filePrefix+"Wall1.png")],
-	doorImage : makeImage(filePrefix+"Door.png"),
-	mainDoorSprites : makeSprites(filePrefix+"MainDoor.png", {
-			Closed : {x:0, y:0, width:300, height:315},
-			Open : {x:300, y:0, width:300, height:315},
-			Lock : {x:0, y:315, width:70, height:70},
-			Unlock : {x:70, y:315, width:70, height:70},
-		}),
-	ladderImage : makeImage(filePrefix+"LadderOut.png"),
+	/*ladderImage : makeImage(filePrefix+"LadderOut.png"),
 	mapImage : makeImage(filePrefix+"Map.png"),
 	tableImage : makeImage(filePrefix+"Table.png"),
 	redBookImage : makeImage(filePrefix+"RedBook.png"),
@@ -38,8 +29,54 @@ var DepartureShrineDungeon = {
 	chairImage : makeImage(filePrefix+"Chair.png"),
 	priestStatueImage : makeImage(filePrefix+"PriestStatue.png"),
 	boxLockedImage : makeImage(filePrefix+"BoxLocked.png"),
-	boxOpenImage : makeImage(filePrefix+"BoxOpen.png"),
-	getPOIs : function(floor, x, y, facing) {
+	boxOpenImage : makeImage(filePrefix+"BoxOpen.png"),*/
+	loadLayout : function() {
+		var filePrefix = "src/DungeonAssets/DepartureShrine/";
+		var wallImages = makeSprites(filePrefix+"walls.png", {
+				wall0 : {x: 0, y:0, width:900, height:675},
+				wall1 : {x: 900, y:0, width:900, height:675},
+				door : {x: 1800, y:0, width:262, height:473},
+			});
+		mainDoorSprites : makeSprites(filePrefix+"MainDoor.png", {
+			Closed : {x:0, y:0, width:300, height:315},
+			Open : {x:300, y:0, width:300, height:315},
+			Lock : {x:0, y:315, width:70, height:70},
+			Unlock : {x:70, y:315, width:70, height:70},
+		})
+		return new SquareDungeonLayout([
+			/*[//entry
+				
+			],*/
+			[//main basement
+				[//column 0
+					null,
+					[//Library
+						new DungeonWall(wallImages.wall0, [new DungeonScenery(200, 100, makeImage(filePrefix+"Map.png"), "It's a map.")]),
+						new DungeonWall(wallImages.wall1, [new BasicDoor(wallImages.door, wallImages.wall1.width/2, 601)]),
+						new DungeonWall(wallImages.wall0, []),
+						new DungeonWall(wallImages.wall1, []),
+					],
+					null,
+				],
+				[//column 1
+					[//Chest Room
+						new DungeonWall(wallImages.wall0, []),
+						new DungeonWall(wallImages.wall1, []),
+						new DungeonWall(wallImages.wall0, [new BasicDoor(wallImages.door, wallImages.wall0.width/2, 601)]),
+						new DungeonWall(wallImages.wall1, []),
+					],
+					[//Entrance
+						new DungeonWall(wallImages.wall1, [], {entrance:1}),
+						new DungeonWall(wallImages.wall0, []),
+						new DungeonWall(wallImages.wall1, []),
+						new DungeonWall(wallImages.wall0, [new BasicDoor(wallImages.door, wallImages.wall0.width/2, 601)]),
+					],
+					null,
+				],
+			]
+		])
+	},
+	/*getPOIs : function(floor, x, y, facing) {
 		var thisser = this;
 		var pois = [];
 		switch(floor+","+x+","+y+","+facing) {
@@ -206,10 +243,10 @@ var DepartureShrineDungeon = {
 					break;
 		}
 		return pois;
-	},
+	},*/
 	enterDungeonEvent : function() {
-		this.pipePuzzle = new PipePath(PipeLevel1, 150, 100, 300, Flags.departureNE ? function(){dialog.begin("You completed the puzzle again, just for fun. Nothing happens.");}
-		: function(){Flags.departureNE = true; dialog.begin("You hear a definitive click as the last piece is rotated into place, completing the connection. It would seem that the northeastern trial is now complete.");});
+		/*this.pipePuzzle = new PipePath(PipeLevel1, 150, 100, 300, Flags.departureNE ? function(){dialog.begin("You completed the puzzle again, just for fun. Nothing happens.");}
+		: function(){Flags.departureNE = true; dialog.begin("You hear a definitive click as the last piece is rotated into place, completing the connection. It would seem that the northeastern trial is now complete.");});*/
 	},
 	enterRoomEvent : function(floor, x, y) {
 		//Beast

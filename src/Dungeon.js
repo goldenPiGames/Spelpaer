@@ -22,6 +22,6 @@ var intoDungeonPOI = function(name, description, dungeon, floor, x, y, facing) {
 	this.name = name;
 	this.description = description;
 	this.activate = function() {
-		dungeonScreen.begin(dungeon, floor, x, y, facing);
+		new DungeonScreen().begin(dungeon, floor, x, y, facing);
 	}
 }

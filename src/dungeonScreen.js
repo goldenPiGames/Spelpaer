@@ -1,99 +1,94 @@
-class DungeonScreen {
+class DungeonScreen extends Screen {
 	constructor() {
+		super();
+		this.stuffX = Math.ceil(settings.width*3/4);
+		this.stuffWidth = settings.width-this.stuffX;
+		var height = mainHeight();
 		this.encounterTimer = 1;
-		this.dungeonLabel = new Label(900, 0, 300, 30, "Dungeon Name", "Description of the dungeon.");
-		this.roomLabel = new Label(900, 30, 300, 30, "F,X,Y,F", "Floor, X, Y, facing.");
+		this.camera = new DungeonCamera(this.stuffX, height, this);
+		this.menuButton = new Button(settings.width-95, 5, 90, 40, "Menu", "Open up the menu.", ()=>openGameMenu(()=>this.doWall()));
+		this.dungeonLabel = new Label(this.stuffX, 50, this.stuffWidth, 30, "Dungeon Name", "Description of the dungeon.");
+		this.roomLabel = new Label(this.stuffX, 30, this.stuffWidth, 30, "F,X,Y,F", "Floor, X, Y, facing.");
 		this.leftButton = new Button(0, 250, 40, 150, "<", "Turn left 90 degrees.", ()=>this.turnLeft());
-		this.rightButton = new Button(860, 250, 40, 150, ">", "Turn right 90 degrees.", ()=>this.turnRight());
+		this.rightButton = new Button(this.stuffX-40, 250, 40, 150, ">", "Turn right 90 degrees.", ()=>this.turnRight());
 	}
 	update() {
 		advanceTime(1, true);
-		this.dungeonLabel.update();
-		this.roomLabel.update();
-		this.leftButton.update();
-		this.rightButton.update();
-		this.dungeonCamera.update();
+		this.camera.update();
+		this.uiStuff.forEach(oj=>oj.update())
 	}
 	draw() {
 		clearBack();
-		//console.log("blarp");
-		drawSprite(this.wallImage, 0,0)//this.picx, this.picy);
-		this.dungeonLabel.draw();
-		this.roomLabel.draw();
-		this.leftButton.draw();
-		this.rightButton.draw();
-		this.dungeonCamera.draw();
+		this.camera.draw();
+		ctx.fillStyle = settings.background_color;
+		ctx.fillRect(this.stuffX, 0, settings.width-this.stuffX+1, settings.height);
+		this.uiStuff.forEach(oj=>oj.draw())
 	}
-	begin(dungeon, floor=0, x=0, y=0, facing=0) {
+	begin(dungeon, which = 1) {
 		switchScreen(this);
 		this.dungeon = dungeon;
-		this.floor = floor;
-		this.x = x;
-		this.y = y;
-		this.facing = facing;
+		this.layout = dungeon.loadLayout();
 		currentLoc = dungeon;
 		this.dungeonLabel.text = dungeon.name;
 		this.dungeonLabel.hoverText = dungeon.description;
-		this.encounterTimer = 3 + Math.floor(2 * Math.random());
+		//this.encounterTimer = 3 + Math.floor(2 * Math.random());
 		playMusic(dungeon.music);
-		this.doWall();
 		dungeon.enterDungeonEvent();
+		this.doWall(this.layout.getEntrance(which));
 	}
 	enterDoor() {
-		switch (this.facing) {
-			case 0: this.y--; break;
-			case 1: this.x++; break;
-			case 2: this.y++; break;
-			case 3: this.x--; break;
-		}
 		this.doWall();
 		this.dungeon.enterRoomEvent(this.floor, this.x, this.y);
 	}
-	doWall() {
-		this.wallImage = this.dungeon.getWallImage(this.floor, this.x, this.y, this.facing);
-		//this.picx = 450-this.wallImage.width/2;
-		//this.picy = Math.floor(337.5-this.wallImage.height/2);
-		this.roomLabel.text = this.floor+"F,"+this.x+","+this.y+","+directionInitial(this.facing);
-		this.roomLabel.hoverText = "You are on floor "+this.floor+". You are in room "+this.x+","+this.y+". You are facing "+directionName(this.facing, false)+".";
-		this.pois = this.dungeon.getPOIs(this.floor, this.x, this.y, this.facing);
-		player.setDisplay(1000, 400, 200, 100);
-		companion.setDisplay(1000, 500, 200, 100);
-		particles.push(new ColorFade(4));
+	doWall(now) {
+		if (now)
+			this.currentView = now;
+		this.camera.setWall(this.currentView);
+		this.roomLabel.text = this.currentView.positionText;
+		//this.roomLabel.hoverText = "You are on floor "+this.floor+". You are in room "+this.x+","+this.y+". You are facing "+directionName(this.facing, false)+".";
+		player.setDisplay(this.stuffX, mainHeight()-200, this.stuffWidth, 100, this);
+		companion.setDisplay(this.stuffX, mainHeight()-100, this.stuffWidth, 100, this);
+		this.uiStuff = [this.menuButton, this.dungeonLabel, this.roomLabel, this.leftButton, this.rightButton, player, companion];
+		switchScreen(this);
+		particles.push(new ColorFade(4, this.camera.x, this.camera.y, this.camera.width, this.camera.height));
 	}
 	turnLeft() {
-		this.facing--;
-		if (this.facing < 0)
-			this.facing = 3;
-		this.doWall();
+		this.doWall(this.currentView.toLeft);
 	}
 	turnRight() {
-		this.facing++;
-		if (this.facing > 3)
-			this.facing = 0;
-		this.doWall();
+		this.doWall(this.currentView.toRight);
+	}
+	unitClicked() {
+		
 	}
 }
 
 class DungeonCamera extends DynamicCamera {
-	constructor(width, height) {
+	constructor(width, height, parent) {
 		super(0, 0, width, height);
+		this.parent = parent;
 		//this.centerX = 0;
 	}
-}
-
-function directionName(direction, caps = north) {
-	var name;
-	switch (direction) {
-		case 0: name = "North"; break;
-		case 1: name = "East"; break;
-		case 2: name = "South"; break;
-		case 3: name = "West"; break;
+	setWall(wall) {
+		this.wallImg = wall.wallImg;
+		this.boundLeft = 0;
+		this.boundRight = this.wallImg.width;
+		this.boundTop = 0;
+		this.boundBottom = this.wallImg.height;
+		this.objects = wall.objects;
 	}
-	if (!caps)
-		return name.toLowerCase();
-	return name;
+	update() {
+		super.update();
+		this.objects.forEach(oj=>oj.update(this));
+	}
+	draw() {
+		this.drawSprite(this.wallImg, 0, 0);
+		this.objects.forEach(oj=>oj.draw(this));
+	}
+	moveTo(to) {
+		this.parent.doWall(to);
+	}
 }
-
-function directionInitial(direction) {
-	return directionName(direction)[0];
-}
+DungeonCamera.prototype.minZoom = .5;
+DungeonCamera.prototype.maxZoom = 3;
+DungeonCamera.prototype.directPan = true;

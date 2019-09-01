@@ -2,15 +2,19 @@ const ITEMS = [];
 
 var inventory = [];
 
-var Item = {
-	usableInBattle : false,
-	key : false,
-	weight : 0,
-	value : 0,
-	spec : "",
-	expend : function() {
+class Item {
+	constructor() {
+		this.description = this.getDescription(); //TODO find some way to do this after
+	}
+	expend() {
 		var dex = inventory.indexOf(this);
 		if (dex >= 0)
 			inventory.splice(dex, 1);
-	},
+	}
 }
+Item.prototype.usableInBattle = false;
+Item.prototype.key = false;
+Item.prototype.weight = 0;
+Item.prototype.worth = 0;
+Item.prototype.weight = 0;
+Item.prototype.spec = "";

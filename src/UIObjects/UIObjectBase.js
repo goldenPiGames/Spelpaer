@@ -36,9 +36,6 @@ var UIObjectBase = {
 };
 
 class BlankUIObject extends UIObject {
-	constructor(x = 0, y = 0, width = 0, height = 0) {
-		super(x, y, width, height);
-	}
 	draw() {
 		
 	}

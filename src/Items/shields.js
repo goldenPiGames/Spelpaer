@@ -1,13 +1,13 @@
-var Shield = {
-	slot : SLOT_INDICES.LeftHand,
-	forPlayer : false,
-	forCompanion : true,
-	usableInBattle : true,
-	delay : 150,
+class Shield extends Equipment {
+	
 }
-Object.setPrototypeOf(Shield, Equipment);
+Shield.prototype.slot = SLOT_INDICES.LeftHand;
+Shield.prototype.forPlayer = false;
+Shield.prototype.forCompanion = true;
+Shield.prototype.usableInBattle = true;
+Shield.prototype.delay = 150;
 
-function PocutopShield() {
+class PocutopShield extends Shield {
 	
 }
 ITEMS.push(PocutopShield);

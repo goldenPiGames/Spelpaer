@@ -9,7 +9,7 @@ class WorldMapScreen extends Screen {
 		this.hideButton = new Button(mapWidth+10, mapHeight-100, 180, 45, "Hide", "Mouse over to hide all locales and paths, showing only the physical landscape.");
 		this.backButton = new Button(mapWidth+10, mapHeight-50, 180, 45, "Back", "Return to the Locale", ()=>currentLoc.buildScreen());
 		this.centerButton = new Button(mapWidth+10, mapHeight-150, 180, 45, "Center", "Center the camera on your current location.", ()=>this.map.centerOnCurrent());
-		this.zoomSlider = new Slider(mapWidth+10, 20, 180, 30, "Zoom", "Use this slider to adjust the zoom. You can also scroll.", this.map.minZoom, this.map.maxZoom, val=>this.map.setZoom(Math.round(val*4)/4), ()=>this.map.zoom); //TODO scroll events
+		this.zoomSlider = new Slider(mapWidth+10, 20, 180, 30, "Zoom", "Use this slider to adjust the zoom. You can also use the scroll wheel.", this.map.minZoom, this.map.maxZoom, val=>this.map.setZoom(Math.round(val*4)/4), ()=>this.map.zoom); //TODO scroll events
 		this.objects = [this.backButton, this.hideButton, this.centerButton, this.zoomSlider];
 		this.map.centerOnCurrent();
 		if (!getFlag("beginningTalkToClaire")) {
@@ -49,17 +49,22 @@ class WorldMapScreen extends Screen {
 class WorldMapMap extends DynamicCamera {
 	constructor(width, height) {
 		super(0, 0, width, height);
+		this.boundLeft = 0;
+		this.boundRight = this.fullMapImg.width;
+		this.boundTop = 0;
+		this.boundBottom = this.fullMapImg.height;
+		this.checkBounds();
 	}
 	update() {
 		super.update();
-		LOCALES.forEach(dab => dab.updatePoint(this));
 		PATHS.forEach(dab => dab.updateLine(this));
+		LOCALES.forEach(dab => dab.updatePoint(this));
 	}
 	draw(polit) {
 		ctx.globalAlpha = 1;
 		ctx.fillStyle = MAP_WATER_COLOR;
 		ctx.fillRect(this.x, this.y, this.width, this.height);
-		ctx.drawImage(this.fullMapImg, this.drawX(0), this.drawY(0), this.fullMapImg.width*this.zoom, this.fullMapImg.height*this.zoom); 
+		this.drawSprite(this.fullMapImg, 0, 0);
 		if (polit) {
 			PATHS.forEach(dab => dab.drawLine(this));
 			LOCALES.forEach(dab => dab.drawPoint(this));

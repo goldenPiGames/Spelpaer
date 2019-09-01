@@ -1,19 +1,18 @@
-var Implement = {
-	slot : SLOT_INDICES.LeftHand,
-	forPlayer : true,
-	forCompanion : false,
-	usableInBattle : true,
-	delay : 90,
+class Implement extends Equipment {
 }
-Object.setPrototypeOf(Implement, Equipment);
+Implement.prototype.slot = SLOT_INDICES.LeftHand;
+Implement.prototype.forPlayer = true;
+Implement.prototype.forCompanion = false;
+Implement.prototype.usableInBattle = true;
+Implement.prototype.delay = 90;
 
-function PocutopWand() {
+class PocutopWand extends Implement {
 	
 }
 ITEMS.push(PocutopWand);
-PocutopWand.prototype = Object.create(Implement);
 PocutopWand.prototype.name = "Pocutop Wand";
 PocutopWand.prototype.flavor = "Wizards's wand crafted traditionally in Pocutop.";
 PocutopWand.prototype.statMods = statsToArray({
-	//Implement : 10,
+	Wisdom : +1,
+	Strength : -1,
 }, 0);

@@ -1,17 +1,16 @@
-var Weapon = {
-	slot : SLOT_INDICES.RightHand,
-	forPlayer : false,
-	forCompanion : true,
-	usableInBattle : true,
-	delay : 90,
+class Weapon extends Equipment {
+	
 }
-Object.setPrototypeOf(Weapon, Equipment);
+Weapon.prototype.slot = SLOT_INDICES.RightHand;
+Weapon.prototype.forPlayer = false;
+Weapon.prototype.forCompanion = true;
+Weapon.prototype.usableInBattle = true;
+Weapon.prototype.delay = 90;
 
-function PocutopSword() {
+class PocutopSword extends Weapon {
 	
 }
 ITEMS.push(PocutopSword);
-PocutopSword.prototype = Object.create(Weapon);
 PocutopSword.prototype.name = "Pocutop Sword";
 PocutopSword.prototype.flavor = "Knight's armor crafted traditionally in Pocutop.";
 PocutopSword.prototype.statMods = statsToArray({

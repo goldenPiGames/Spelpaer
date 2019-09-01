@@ -35,7 +35,12 @@ class PC extends Unit {
 		this.displayMode = displayMode;
 		if (this.displayMode == PC_DISPLAYMODE_EQUIP) {
 			this.equipLabels = [];
-			this.equipped.forEach((quip, dex, lisp) => this.equipLabels.push(new Label(this.x+4+this.width/2*(dex%2), this.y+150+25*Math.floor(dex/2), this.width/2, 20, quip.name, quip.description, settings.normal_color, "left")));
+			this.equipped.forEach((quip, dex, lisp) => {
+				let lab = new Label(this.x+4+this.width/2*(dex%2), this.y+150+25*Math.floor(dex/2), this.width/2, 20, quip.name, quip.description, settings.normal_color, "left")
+				this.equipLabels.push(lab);
+				lab.slot = dex;
+				lab.item = quip;
+			});
 		}
 	}
 	update() {
@@ -101,7 +106,14 @@ class PC extends Unit {
 		ctx.font = "20px "+settings.font;
 		ctx.textAlign = "left";
 		ctx.textBaseline = "top";
-		this.equipLabels.forEach(oj=>oj.draw());
+		this.equipLabels.forEach(oj=>{
+			//console.log(this, oj, oj.slot, oj.item);
+			if (this.equipped[oj.slot] != oj.item) {
+				oj.text = this.equipped[oj.slot].name;
+				oj.hoverText = this.equipped[oj.slot].description;
+			}
+			oj.draw();
+		});
 		/*this.equipped.forEach((quip, dex, lisp)=> {
 			ctx.fillText(quip.name, this.x+4+this.width/2*(dex%2), this.y+150+25*Math.floor(dex/2));
 		});*/

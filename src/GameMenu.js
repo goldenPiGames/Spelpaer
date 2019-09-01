@@ -34,8 +34,9 @@ GameMenu.prototype.setSubscreen = function(subconstruct) {
 //------------------------------------------------------------------ Status ---------------------------------------------------
 
 function GameMenuStatus() {
-	player.setDisplay(0, 0, settings.width/2, mainHeight()/2, this, PC_DISPLAYMODE_DETAIL);
-	companion.setDisplay(0, mainHeight()/2, settings.width/2, mainHeight()/2, this, PC_DISPLAYMODE_DETAIL);
+	var mid = Math.floor(settings.width*2/3 - 50);
+	player.setDisplay(0, 0, mid, mainHeight()/2, this, PC_DISPLAYMODE_DETAIL);
+	companion.setDisplay(0, mainHeight()/2, mid, mainHeight()/2, this, PC_DISPLAYMODE_DETAIL);
 	this.objects = [
 		player,
 		companion,

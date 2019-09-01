@@ -18,13 +18,16 @@ class DungeonObject {
 		this.clicked = mouse.clicked && this.hovered;
 		this.held = (this.clicked || (this.held && mouse.down));
 	}
+	shortcutForward() {
+		return false;
+	}
 }
 
 class DungeonScenery extends DungeonObject {
 	constructor(x, y, image, hoverText, interact = doNothing) {
 		super(x, y, image.width, image.height);
 		this.image = image;
-		this,hoverText = hoverText;
+		this.hoverText = hoverText;
 		if (typeof interact == "string" || interact instanceof DialogLine) {
 			let dia = Array.prototype.slice.call(arguments, 4);
 			this.handler = ()=>dialog.begin(dia);
@@ -33,41 +36,44 @@ class DungeonScenery extends DungeonObject {
 	}
 	update(cam) {
 		super.update(cam);
+		if (!this.width) {
+			this.width = this.image.width;
+			this.height = this.image.height;
+		}
 		if (this.hovered)
 			infoField.setText(this.hoverText);
 		if (this.clicked)
 			this.handler();
 	}
 	draw(cam) {
-		this.drawSprite(this.image, this.x, this.y);
+		cam.drawSprite(this.image, this.x, this.y);
 	}
 }
 
 //------------------------------------- Door --------------------------------------------
-var DOOR_HOVER = "This negative object which stands before me  is in all likelihood a doorway of some variety.";
+var DOOR_HOVER = "This negative object which stands before me is in all likelihood a doorway of some variety.";
 
-var BasicDoor = function(image) {
-	this.image = image;
-	this.width = image.width;
-	this.height = image.height;
-	this.x = DUNGEON_WIDTH/2 - this.width/2;
-	this.y = DUNGEON_FLOOR_Y - this.height;
-}
-BasicDoor.prototype = Object.create(UIObjectBase);
-
-BasicDoor.prototype.update = function() {
-	this.updateMouse();
-	if (this.hovered) {
-		infoField.setText(DOOR_HOVER);
+class BasicDoor extends DungeonObject {
+	constructor(image, midx, floory) {
+		let width = image.width;
+		let height = image.height;
+		super(midx - width/2, floory - height, width, height);
+		this.image = image;
 	}
-	if (this.clicked && wasNotClicked) {
-		dungeonScreen.enterDoor();
+	update(cam) {
+		super.update(cam);
+		if (this.hovered) {
+			infoField.setText(DOOR_HOVER);
+		}
+		if (this.clicked) {
+			cam.moveTo(this.destination);
+		}
+	}
+	draw(cam) {
+		cam.drawSprite(this.image, this.x, this.y);
 	}
 }
-
-BasicDoor.prototype.draw = function() {
-	drawSprite(this.image, this.x, this.y);
-}
+BasicDoor.prototype.bindForward = true;
 
 //------------------------------------- Dungeon Exit --------------------------------------------
 var EXIT_HOVER = "This is the exit out of the dungeon.";

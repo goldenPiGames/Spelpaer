@@ -29,14 +29,15 @@ PrepScreen.prototype.begin = function(amount, after) {
 	this.preparedMenu.currentScroll = 0;
 	switchScreen(this);
 	//console.log(currentTime, difficulty);
-	if (/*currentTime < 14*HOURS && */difficulty < 2) { //TODO make a condition that makes sense
+	if (currentTime < 14*HOURS && difficulty < 2) {
 		this.doTutorial();
 	}
 }
 PrepScreen.prototype.doTutorial = function() {
 	tutorialOverlay.begin(
-		{text:"Welcome to the Spell Preparation screen.", textX:settings.width/3, textY:settings.height/4, textWidth:settings.width/3, textHeight:200},
-		{text:"Preparing your spells is very important - you'll need to tailor your spells according to your character's build, as well as what you expect to encounter that day."},
+		{text:"Welcome to the Spell Preparation screen. (Click here to continue)", textX:settings.width/3, textY:settings.height/4, textWidth:settings.width/3, textHeight:200},
+		{text:"Preparing your spells is very important - you should tailor your spells according to your character's build, as well as what you expect to encounter that day."},
+		{text:"Or you can just get like four Magic Missiles and fill up the rest with Cure Wounds. Honestly, that'll work for you most of the time."},
 		{text:"This menu on the left shows all the spells that are available to be prepared - that is to say, it's been found and its level is less than or equal to <Player>'s.", opening:this.knownMenu, textX:settings.width/2, textY:settings.height/4, textWidth:settings.width/2, textHeight:200, updateRunnee:UPDATE_RUNNEE_IN_OPENING},
 		{text:"Hover over a spell to get all its juicy details."},
 		{text:"You can prepare the same spell multiple times, in which case each instance keeps track of its cooldown separately."},
@@ -97,7 +98,8 @@ PrepScreen.prototype.prepareLast = function() {
 	}
 }
 PrepScreen.prototype.finish = function() {
-	localStorage.setItem("SpelpaerLastSpells", JSON.stringify(player.spells.map((sp)=>sp.iname)));
+	if (player.spells.length > 0)
+		localStorage.setItem("SpelpaerLastSpells", JSON.stringify(player.spells.map((sp)=>sp.iname)));
 	this.after();
 }
 

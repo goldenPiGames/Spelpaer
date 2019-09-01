@@ -23,6 +23,7 @@ const MUSIC_LIST = [
 	{name:"Prairie",              by:"PeriTune",      yt:"iMkX3NxQYv0", site:"https://peritune.com/prairie/", ogg:true},
 	{name:"Exotic",               by:"PeriTune",      yt:"ykiWQdzt4GI", site:"https://peritune.com/exotic/"},
 	{name:"Blast 2",              by:"PeriTune",      yt:"3orQ-zmYZiQ", site:"https://peritune.com/blast2/", ogg:true},
+	{name:"Raid FolkMetal",       by:"PeriTune",      yt:"zpXKr5VK5go", site:"https://peritune.com/raid_folkmetal/"},
 	{name:"Beatdown City",        by:"Darren Curtis", yt:"qL4u3u5WKgU", site:"https://www.darrencurtismusic.com/sci-fi-modern"},
 	{name:"Let's Party 2",        by:"PeriTune",      yt:"rb8gRa6tTMY", site:"https://peritune.com/lets-party2/"},
 	{name:"Up In My Jam (All Of A Sudden)", by:"Kubbi", yt:"6DB6hBRPsWc", site:"https://kubbimusic.com/track/up-in-my-jam-all-of-a-sudden"},

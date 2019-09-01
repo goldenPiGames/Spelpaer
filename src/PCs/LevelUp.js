@@ -51,13 +51,27 @@ function LevelUpScreen(leveler, after) {
 		this.objects.push(new Label(5, this.yStart + this.yIncrement*i, settings.width, this.yIncrement, STAT_ABBS[i], descriptions[i], settings.normal_color, "left"));
 	}
 	this.increases = getLevelUpIncreases(leveler.level, leveler == companion);
-	//this.strips = [];
+	this.strips = [];
 	for (var i = 0; i < this.increases.length; i++) {
-		this.objects.push(new LevelUpStrip(stripXStart + stripXIncrement * i, stripXIncrement, this.increases[i], this));
+		this.strips.push(new LevelUpStrip(stripXStart + stripXIncrement * i, stripXIncrement, this.increases[i], this));
+	}
+	this.objects.push(...this.strips);
+	if (this.leveler == player && player.level == 11 && difficulty < 2) {
+		this.doTutorial();
 	}
 }
 LevelUpScreen.prototype.hoveredIncreases = [0,0,0,0,0,0,0,0,0];
 
+LevelUpScreen.prototype.doTutorial = function() {
+	tutorialOverlay.begin([
+		{text:"It looks like you've leveled up. On this screen, you'll need to decide how to increases the characters' stats.", textX:settings.width/4, textY:0, textWidth:settings.width/2, textHeight:this.yStart-5},
+		{text:"There are nine different stats, as shown to the right. Hover over them to see how that stat affects the character.", opening:{x:0, y:this.yStart, width:this.strips[0].x-1, height:this.yIncrement*8}, updateRunnee:UPDATE_RUNNEE_IN_OPENING},
+		{text:"You have five different choices, as shown here by these five columns.", opening:{x:this.strips[0].x, y:this.yStart, width:this.strips[this.strips.length-1].x + this.strips[this.strips.length-1].width, height:this.yIncrement*8}, updateRunnee:UPDATE_RUNNEE_NEVER},
+		{text:"Each choice gives you the same total increase of nine, distributed differently into the nine stats,"},
+		{text:"Although they may seem random, they are are not."},
+		{text:"A certain character at a certain level will always have the same choices, so no save-scumming."},
+	]);
+}
 LevelUpScreen.prototype.update = function() {
 	this.hoveredIncreases = [0,0,0,0,0,0,0,0,0];
 	this.objects.forEach((oj)=>oj.update());

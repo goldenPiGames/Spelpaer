@@ -101,13 +101,13 @@ function addEvents() {
 		//mouse.clicked = (e.which == 1 && !mouse.down);
 		//mouse.down = (e.which == 1);
 	});
-
+	
 	eventCatcher.addEventListener("mousedown", function(e) {
 		mouse.clicked = true;// !mouse.down;
 		mouse.down = true;
 	});
-
-	eventCatcher.addEventListener("mouseup", function(e) {
+	
+	document.addEventListener("mouseup", function(e) {
 		mouse.down = false;
 		mouse.clicked;
 	});

@@ -1,4 +1,4 @@
-var Consumable = {
-	usableInBattle : true,
+class Consumable extends Item {
+	
 }
-Object.setPrototypeOf(Consumable, Item);
+Consumable.prototype.usableinBattle = true;
