@@ -6,6 +6,9 @@ class Item {
 	constructor() {
 		this.description = this.getDescription(); //TODO find some way to do this after
 	}
+	isAvailable() {
+		return this.usableInBattle;
+	}
 	expend() {
 		var dex = inventory.indexOf(this);
 		if (dex >= 0)

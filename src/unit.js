@@ -250,7 +250,7 @@ class Unit extends UIObject {
 		ctx.fillText(this.name, this.x+this.width/2, this.y+3);
 		ctx.font = 13 + "px "+settings.font;
 		ctx.fillText("Lv "+this.level, this.x+this.width/2, this.y+21);
-		ctx.fillRect(this.x, this.y+35, this.width*Math.max(this.hpPortion(), 0), 10);
+		this.drawHPBar(this.x, this.y+35, this.width, 10);
 		ctx.lineWidth = 2;
 		ctx.strokeStyle = this.clicked ? settings.click_color : this.hovered ? settings.hover_color : this.isActive() ? settings.normal_color : settings.disabled_color;
 		ctx.strokeRect(this.x+1, this.y+1, this.width-2, this.height-2);
@@ -261,6 +261,10 @@ class Unit extends UIObject {
 		this.drawField();
 		//if (this.image)
 			//ctx.drawImage(this.image, this.selectionButton.x + this.selectionButton.width/2 - this.image.width/2, 320 - this.image.height/2);
+	}
+	drawHPBar(x, y, width, height) {
+		ctx.fillStyle = this.color;
+		ctx.fillRect(x, y, width * Math.max(this.hpPortion(), 0), height);
 	}
 	drawField() {
 		if (this.team)

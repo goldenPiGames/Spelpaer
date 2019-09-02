@@ -33,7 +33,7 @@ var DepartureShrineDungeon = {
 	loadLayout : function() {
 		var filePrefix = "src/DungeonAssets/DepartureShrine/";
 		var wallWidth = 900;
-		var wallImages = makeSprites(filePrefix+"walls.png", {
+		var wallImages = makeSprites(filePrefix+"Walls.png", {
 				wall0 : {x: 0, y:0, width:900, height:675},
 				wall1 : {x: 900, y:0, width:900, height:675},
 				door : {x: 1800, y:0, width:262, height:473},
@@ -134,8 +134,8 @@ var DepartureShrineDungeon = {
 						new DungeonWall(wallImages.wall0, []),
 					],
 				],
-			]
-		])
+			],
+		], -1, -1, -1);
 	},
 	/*getPOIs : function(floor, x, y, facing) {
 		var thisser = this;

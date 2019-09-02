@@ -103,8 +103,7 @@ var Pocutop = {
 				new DialogSplitChoice(companion.name, function(){companion.experience += 5000;}),
 				new DialogSplitChoice("No, thanks.", doNothing)),
 			new DialogLine("Prexot", null, "Okay.")));
-		pois.push(new BasicPOI("Fight", "Fight some boars.", ()=>battle.begin([new Boar(10), new Boar(10)], "BattleField 2", ()=>Pocutop.arrive())));
-		//console.log(pois);
+		//pois.push(new BasicPOI("Fight", "Fight some boars.", ()=>battle.begin([new Boar(10), new Boar(10)], "BattleField 2", ()=>Pocutop.arrive())));
 		return pois;
 	},
 	/*returnFromRest : function() {
@@ -266,7 +265,7 @@ Manz.prototype.spellTable = [
 	//MagicMissile2,
 ];
 Manz.prototype.expYield = function() {
-	return Math.ceil(forNextLevel(Math.min(player.level, this.level)) * (this.hpPortion <= .5 ? 1 : .5));
+	return Math.ceil(forNextLevel(Math.min(player.level, this.level)) * (this.hpPortion() <= .5 ? 1 : .5));
 }
 
 class Marcel extends Unit {
@@ -312,5 +311,5 @@ Marcel.prototype.techniqueTable = [
 	Cleave,
 ];
 Marcel.prototype.expYield = function() {
-	return Math.ceil(forNextLevel(Math.min(companion.level, this.level)) * (this.hpPortion <= .5 ? 1 : .5));
+	return Math.ceil(forNextLevel(Math.min(companion.level, this.level)) * (this.hpPortion() <= .5 ? 1 : .5));
 }

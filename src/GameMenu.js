@@ -55,7 +55,7 @@ GameMenuStatus.prototype.unitClicked = function() {
 //------------------------------------------------------------------ Spells ---------------------------------------------------
 
 function GameMenuSpells() {
-	var mid = Math.floor(settings.width*2/3 - 50)
+	var mid = Math.floor(settings.width*2/3 - 50);
 	this.spellMenu = new ScrollMenu(mid, 0, settings.width - 100 - mid, mainHeight() - 50, (val)=>this.selectedSpell=val, player.spells, sp=>sp.getCDDesc(player), "description", sp=>sp.isAvailable(), (sp)=>sp==this.selectedSpell);
 	player.setDisplay(0, 0, mid, mainHeight()/2, this, PC_DISPLAYMODE_DETAIL);
 	companion.setDisplay(0, mainHeight()/2, mid, mainHeight()/2, this, PC_DISPLAYMODE_DETAIL);

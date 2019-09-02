@@ -13,7 +13,7 @@ Boar.prototype = Object.create(Unit);
 Boar.prototype.name = "Boar";
 Boar.prototype.description = "A forest animal, dangerous and aggressive when rutting.";
 Boar.prototype.image = makeImage("src/Enemies/Boar.png"); //Pigboar, Master of the Monster Lair
-Boar.prototype.hpMult = 2.5;
+Boar.prototype.hpMult = 5.0;
 Boar.prototype.statMults = statsToArray({
 	Vitality : 1.0,
 	Strength : 1.7,
@@ -57,7 +57,7 @@ class Moose extends Unit {
 Moose.prototype.name = "Moose";
 Moose.prototype.description = "A majestic moose. Mind you, moose bites can be pretty nasty."
 Moose.prototype.image = makeImage("src/Enemies/Moose.png"); //http://wikiclipart.com/moose-clipart_10850/
-Moose.prototype.hpMult = 2.5;
+Moose.prototype.hpMult = 5.0;
 Moose.prototype.statMults = statsToArray({
 	Vitality : 1.3,
 	Strength : 1.5,
@@ -106,7 +106,7 @@ class Wolf extends Unit {
 Wolf.prototype.name = "Wolf";
 Wolf.prototype.description = "A wild canine. They hunt in packs.";
 Wolf.prototype.image = makeImage("src/Enemies/Wolf.png");
-Wolf.prototype.hpMult = 2.5;
+Wolf.prototype.hpMult = 5.0;
 Wolf.prototype.statMults = statsToArray({
 	Vitality : 0.8,
 	Strength : 1.0,

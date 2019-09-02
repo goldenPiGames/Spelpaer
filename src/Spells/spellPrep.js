@@ -29,7 +29,7 @@ PrepScreen.prototype.begin = function(amount, after) {
 	this.preparedMenu.currentScroll = 0;
 	switchScreen(this);
 	//console.log(currentTime, difficulty);
-	if (currentTime < 14*HOURS && difficulty < 2) {
+	if (player.level <= 10 && currentTime < 14*HOURS && difficulty < 2) {
 		this.doTutorial();
 	}
 }

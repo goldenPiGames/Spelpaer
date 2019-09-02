@@ -33,20 +33,20 @@ function BattleScreenPatient() {
 		var rightButtonWidth = settings.width - rightButtonX;
 		this.attackButton = new Button(rightX, 5, hafwid-5, 35, "Attack", "Use your current attack.", function(){
 			thisser.selectedAction = thisser.taker.getAttack(); thisser.currentMenu = null});
-		this.itemButton = new Button(rightX, 45, hafwid-5, 35, "Item", "Use an item from your inventory.", function(){thisser.currentMenu = thisser.itemMenu});
-		this.playerSpellButton = new Button(rightX+hafwid, 5, hafwid, 75, "Spell", "Choose one of your spells.", function(){thisser.currentMenu = thisser.playerSpellMenu});
+		this.itemButton = new Button(rightX, 45, hafwid-5, 35, "Item", "Use an item from your inventory.", ()=>this.currentMenu = this.itemMenu);
+		this.playerSpellButton = new Button(rightX+hafwid, 5, hafwid, 75, "Spell", "Choose one of your spells.", ()=>this.currentMenu = this.playerSpellMenu);
 		this.companionTechniqueButton = new Button(rightX+hafwid, 5, hafwid, 75, "Technique", "Choose one of your techniques.", function(){thisser.currentMenu = thisser.companionTechniquePalette});
 	}
-	this.playerSpellMenu = new ScrollMenu(menuX, menuY, menuWidth, menuHeight, function(val){thisser.selectedAction = val}, [], (oj)=>oj.getCDDesc(player), "description", (val)=>val.isAvailable(), val=>val==thisser.selectedAction);
-	this.companionTechniquePalette = new TechniquePalette(menuX, menuY, menuWidth, menuHeight, function(val){thisser.selectedAction = val}, [], function(val){return val == thisser.selectedAction});
-	this.itemMenu = new ScrollMenu(menuX, menuY, menuWidth, menuHeight, function(val){thisser.selectedAction = val}, [], "spec", "description", (val)=>true, val=>val==thisser.selectedAction);
+	this.playerSpellMenu = new ScrollMenu(menuX, menuY, menuWidth, menuHeight, function(val){thisser.selectedAction = val}, player.spells, (oj)=>oj.getCDDesc(player), "description", (val)=>val.isAvailable(), val=>val==thisser.selectedAction);
+	this.companionTechniquePalette = new TechniquePalette(menuX, menuY, menuWidth, menuHeight, function(val){thisser.selectedAction = val}, [], (val)=>val==this.selectedAction);
+	this.itemMenu = new ScrollMenu(menuX, menuY, menuWidth, menuHeight, function(val){thisser.selectedAction = val}, inventory, "spec", "description", (val)=>val.isAvailable(), val=>val==thisser.selectedAction);
 	this.fieldY = 50;
 	this.fieldHeight = mainHeight() - this.fieldY - 100;
 	var fieldBottom = this.fieldY + this.fieldHeight;
 	var fieldMiddle = this.fieldX + this.fieldWidth/2;
 	player.setDisplay(fieldMiddle-150, fieldBottom, 150, mainHeight()-fieldBottom, this);
 	companion.setDisplay(fieldMiddle, fieldBottom, 150, mainHeight()-fieldBottom, this);
-	this.playerSpellMenu.setItems(player.spells);
+	//this.playerSpellMenu.setItems(player.spells);
 	this.currentMenu = null;
 	this.taker = null;
 	this.companionTechniquePalette.setTechniques(companion.techniques);
@@ -88,6 +88,7 @@ BattleScreenPatient.prototype.update = function() {
 	}
 	if (this.taker && this.taker.isReady() && this.selectedAction && this.selectedAction.isAvailable() && (this.selectedAction.selfOnly || this.selectedTarget)) {
 		battle.executeAction(this.taker, this.selectedAction, this.selectedTarget || this.taker);
+		this.itemMenu.putItems();
 		this.currentMenu = null;
 		this.selectedAction = null;
 		this.selectedTarget = null;

@@ -69,7 +69,7 @@ class ScrollMenu extends UIObject {
 	}
 	update() {
 		super.update();
-		this.hoveredItem = null;
+		this.hoveredValue = null;
 		//super.update();
 		this.upButton.update();
 		this.downButton.update();
@@ -96,6 +96,9 @@ class ScrollMenu extends UIObject {
 			this.itemElements[i].draw();
 		}
 	}
+	setHovered(value) {
+		this.hoveredValue = value;
+	}
 	returnItem(value) {
 		this.returnFunction(value, this);
 	}
@@ -118,7 +121,7 @@ class ScrollMenuElement extends UIObject {
 		if (this.value != undefined) {
 			if (this.hovered) {
 				infoField.setText(typeof this.parent.infoProperty == "function" ? this.parent.infoProperty(this.value) : this.value[this.parent.infoProperty]);
-				this.parent.hoveredValue = this.value;
+				this.parent.setHovered(this.value);
 			}
 			if (this.clicked)
 				this.parent.returnItem(this.value);

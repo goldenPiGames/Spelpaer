@@ -1,4 +1,4 @@
 class Consumable extends Item {
 	
 }
-Consumable.prototype.usableinBattle = true;
+Consumable.prototype.usableInBattle = true;

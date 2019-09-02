@@ -1,5 +1,5 @@
 class SquareDungeonLayout {
-	constructor(matrix) {
+	constructor(matrix, fs = 0, xs = 0, ys = 0) {
 		this.entrances = [];
 		console.log(matrix)
 		this.matrix = matrix;
@@ -10,7 +10,7 @@ class SquareDungeonLayout {
 					if (matrix[f][x][y] != null) {
 						for (let d = 0; d < 4; d++) {
 							let curr = matrix[f][x][y][d];
-							curr.positionText = f+"F,"+x+","+y+","+directionInitial(d);
+							curr.positionText = (fs-f)+"F,"+(xs+x)+","+(ys+y)+","+directionInitial(d);
 							curr.toLeft = matrix[f][x][y][(d+3)%4];
 							curr.toRight = matrix[f][x][y][(d+1)%4];
 							let door = curr.objects.find(oj=>oj instanceof BasicDoor);

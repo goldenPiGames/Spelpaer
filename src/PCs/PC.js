@@ -64,6 +64,7 @@ class PC extends Unit {
 		ctx.textAlign = "left";
 		ctx.font = "20px "+settings.font;
 		ctx.fillText(this.name, this.x+4, this.y+4);
+		this.drawHPBar(this.x, this.y+27, this.width, 15);
 		ctx.fillStyle = settings.normal_color;
 		var wid = this.width/(READABLE_STATS.length+1);
 		drawTextInRect("stat", this.x, this.y+50, wid, 20);
@@ -87,6 +88,7 @@ class PC extends Unit {
 		ctx.textAlign = "left";
 		ctx.font = "20px "+settings.font;
 		ctx.fillText(this.name, this.x+4, this.y+4);
+		this.drawHPBar(this.x, this.y+27, this.width, 15);
 		ctx.fillStyle = settings.normal_color;
 		var wid = this.width/(READABLE_STATS.length+1);
 		drawTextInRect("stat", this.x, this.y+50, wid, 20);
