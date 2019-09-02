@@ -32,6 +32,7 @@ var DepartureShrineDungeon = {
 	boxOpenImage : makeImage(filePrefix+"BoxOpen.png"),*/
 	loadLayout : function() {
 		var filePrefix = "src/DungeonAssets/DepartureShrine/";
+		var wallWidth = 900;
 		var wallImages = makeSprites(filePrefix+"walls.png", {
 				wall0 : {x: 0, y:0, width:900, height:675},
 				wall1 : {x: 900, y:0, width:900, height:675},
@@ -52,7 +53,7 @@ var DepartureShrineDungeon = {
 					null,
 					[//Library
 						new DungeonWall(wallImages.wall0, [new DungeonScenery(200, 100, makeImage(filePrefix+"Map.png"), "It's a map.")]),
-						new DungeonWall(wallImages.wall1, [new BasicDoor(wallImages.door, wallImages.wall1.width/2, 601)]),
+						new DungeonWall(wallImages.wall1, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
 						new DungeonWall(wallImages.wall0, []),
 						new DungeonWall(wallImages.wall1, []),
 					],
@@ -62,16 +63,76 @@ var DepartureShrineDungeon = {
 					[//Chest Room
 						new DungeonWall(wallImages.wall0, []),
 						new DungeonWall(wallImages.wall1, []),
-						new DungeonWall(wallImages.wall0, [new BasicDoor(wallImages.door, wallImages.wall0.width/2, 601)]),
+						new DungeonWall(wallImages.wall0, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
 						new DungeonWall(wallImages.wall1, []),
 					],
 					[//Entrance
 						new DungeonWall(wallImages.wall1, [], {entrance:1}),
-						new DungeonWall(wallImages.wall0, []),
+						new DungeonWall(wallImages.wall0, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
 						new DungeonWall(wallImages.wall1, []),
-						new DungeonWall(wallImages.wall0, [new BasicDoor(wallImages.door, wallImages.wall0.width/2, 601)]),
+						new DungeonWall(wallImages.wall0, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
 					],
 					null,
+				],
+				[//column 2
+					[//Red Statue
+						new DungeonWall(wallImages.wall1, []),
+						new DungeonWall(wallImages.wall0, []),
+						new DungeonWall(wallImages.wall1, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+						new DungeonWall(wallImages.wall0, []),
+					],
+					[//Hallway 1
+						new DungeonWall(wallImages.wall0, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+						new DungeonWall(wallImages.wall1, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+						new DungeonWall(wallImages.wall0, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+						new DungeonWall(wallImages.wall1, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+					],
+					[//Trivia room
+						new DungeonWall(wallImages.wall1, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+						new DungeonWall(wallImages.wall0, []),
+						new DungeonWall(wallImages.wall1, []),
+						new DungeonWall(wallImages.wall0, []),
+					],
+				],
+				[//column 3
+					[//Undead Room
+						new DungeonWall(wallImages.wall0, []),
+						new DungeonWall(wallImages.wall1, []),
+						new DungeonWall(wallImages.wall0, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+						new DungeonWall(wallImages.wall1, []),
+					],
+					[//Hallway 2
+						new DungeonWall(wallImages.wall1, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+						new DungeonWall(wallImages.wall0, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+						new DungeonWall(wallImages.wall1, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+						new DungeonWall(wallImages.wall0, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+					],
+					[//Todoroki room
+						new DungeonWall(wallImages.wall0, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+						new DungeonWall(wallImages.wall1, []),
+						new DungeonWall(wallImages.wall0, []),
+						new DungeonWall(wallImages.wall1, []),
+					],
+				],
+				[//column 4
+					[//Pipe Room
+						new DungeonWall(wallImages.wall1, []),
+						new DungeonWall(wallImages.wall0, []),
+						new DungeonWall(wallImages.wall1, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+						new DungeonWall(wallImages.wall0, []),
+					],
+					[//Hallway 3
+						new DungeonWall(wallImages.wall0, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+						new DungeonWall(wallImages.wall1, []),
+						new DungeonWall(wallImages.wall0, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+						new DungeonWall(wallImages.wall1, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+					],
+					[//Green statue
+						new DungeonWall(wallImages.wall1, [new BasicDoor(wallImages.door, wallWidth/2, 601)]),
+						new DungeonWall(wallImages.wall0, []),
+						new DungeonWall(wallImages.wall1, []),
+						new DungeonWall(wallImages.wall0, []),
+					],
 				],
 			]
 		])

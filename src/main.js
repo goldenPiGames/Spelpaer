@@ -130,6 +130,8 @@ function drawTextInRect(text, x, y, width, height) {
 }
 
 function drawParagraphInRect(text, x, y, width, height, size) {
+	if (!text)
+		return;
 	ctx.textAlign = "left";
 	ctx.textBaseline = "top";
 	ctx.font = size+"px "+settings.font;

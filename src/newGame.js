@@ -96,11 +96,11 @@ function CharacterCreationScreen(comp, after) {
 CharacterCreationScreen.prototype = Object.create(ScreenBase);
 CharacterCreationScreen.prototype.update = function() {
 	this.continueButton.active = !!textInput.value && this.genderRadio.index >= 0 && (!this.relationshipRadio || this.relationshipRadio.index >= 0)
-	this.objects.forEach((oj)=>oj.update());
+	this.objects.forEach(oj=>oj.update());
 }
 CharacterCreationScreen.prototype.draw = function() {
 	clearBack();
-	this.objects.forEach((oj)=>oj.draw());
+	this.objects.forEach(oj=>oj.draw());
 }
 CharacterCreationScreen.prototype.generate = function() {
 	if (!textInput.value)
@@ -180,6 +180,7 @@ CharacterCreationScreen.prototype.generate = function() {
 	character.experience = 0;
 	character.recalculateStats();
 	character.name = textInput.value;
+	console.log(this.favColorPicker.color);
 	character.color = this.favColorPicker.color;
 	switch (this.genderRadio.index) {
 		case -1: return; break;

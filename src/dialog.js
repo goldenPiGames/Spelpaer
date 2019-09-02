@@ -84,11 +84,11 @@ var dialog = {
 		var displaySpeaker = currentLine.speaker;
 		switch (currentLine.speaker) {
 			case "Player":
-				ctx.fillStyle = settings.player_color;
+				ctx.fillStyle = player.color;
 				displaySpeaker = player.name;
 				break;
 			case "Companion":
-				ctx.fillStyle = settings.companion_color;
+				ctx.fillStyle = companion.color;
 				displaySpeaker = companion.name;
 				break;
 			case "Anymos":

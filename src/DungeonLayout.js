@@ -14,6 +14,7 @@ class SquareDungeonLayout {
 							curr.toLeft = matrix[f][x][y][(d+3)%4];
 							curr.toRight = matrix[f][x][y][(d+1)%4];
 							let door = curr.objects.find(oj=>oj instanceof BasicDoor);
+							//console.log(f, x, y, d)
 							if (door)
 								door.destination = matrix[f][x+directionDX(d)][y+directionDY(d)][d];
 							if (curr.entrance)
