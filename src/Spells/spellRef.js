@@ -1,13 +1,13 @@
 const SPELLS_BY_NAME = {};
 
-//const SPELLS = [RayOfFrost, AcidSplash, MagicMissile, MagicMissile2, MagicMissile3, MagicMissile4, MagicMissile5, BurningHands, ShockingGrasp, AcidArrow, ScorchingRay, ScorchingRay2, CureMinor, CureLight, CureModerate, CureSerious, CureCritical, CureExtreme, Channel1, Channel2, Channel3, Channel4, Channel5, InflictLight, InflictModerate, InflictSerious, InflictCritical, InflictExtreme, Favor, Frighten, Distract, MindThrust1, MindThrust2, MindThrust3, MindThrust4, MindThrust5, MindThrust6, ReadStats, ReadEffectiveness, WaterBreathing];
-//const SPELLS_CHEAP = [RayOfFrost, AcidSplash, ReadStats];
 var knownSpells;
 
 SPELLS.forEach(function(sp, index) {
 	SPELLS_BY_NAME[sp.name] = sp;
 	sp.prototype.iname = sp.name;
 	sp.prototype.index = index;
+	if (typeof sp.prototype.attack != "boolean")
+		sp.prototype.attack = sp.prototype.power > 0 && sp.prototype.attribute != ATTRIBUTE_INDICES.positive && sp.prototype.attribute != ATTRIBUTE_INDICES.repair;
 	if (typeof sp.prototype.attribute != "number")
 		throw sp.name+"'s attribute is not valid.";
 });

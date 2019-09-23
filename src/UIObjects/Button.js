@@ -1,21 +1,19 @@
 const BUTTON_BORDER_WIDTH = 2;
 
 class Button extends UIObject {
-	constructor(x, y, width, height, text, hoverText, handler = doNothing, active) {
+	constructor(x, y, width, height, text, hoverText, handler = doNothing, active = true) {
 		super(x, y, width, height);
 		this.text = text;
 		this.hoverText = hoverText;
 		this.handler = handler;
-		this.clicked = false;
-		this.hovered = false;
-		this.active = true;
+		this.active = active;
 	}
 	update() {
 		super.update();
-		if (this.hovered && this.hoverText != undefined) {
+		if (this.hovered) {
 			infoField.setText(this.hoverText);
 		}
-		if (this.clicked && !this.wasClicked && this.active)
+		if (this.clicked && this.active)
 			this.handler();
 	}
 	draw() {

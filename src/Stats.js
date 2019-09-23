@@ -10,6 +10,8 @@ const STAT_NAMES = [
 	"Potential",
 	"Weapon",
 	"Armor",
+	"Implement",
+	"Resistance",
 	"HReduce",
 ]
 
@@ -48,3 +50,20 @@ function statsFromMults(mults, level) {
 	stats[STAT_INDICES.HRE] = level;
 	return stats;
 }
+
+const STAT_COLORS = statsToArray({
+	Vitality : "#FF0000",
+	Strength : "#FF8000",
+	Constitution : "#FFFF00",
+	Dexterity : "#00FF00",
+	Agility : "#00FFB0",
+	Intelligence : "#0080FF",
+	Wisdom : "#4000FF",
+	Charisma : "#FF00FF",
+	Potential : "#80808080",
+	Weapon : "#B08040",
+	Armor : "#B0B080",
+	Implement : "#4080B0",
+	Resistance : "#B080B0",
+	HReduce : "#404040",
+});

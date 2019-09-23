@@ -88,6 +88,9 @@ class DungeonCamera extends DynamicCamera {
 	moveTo(to) {
 		this.parent.doWall(to);
 	}
+	returnFromBattle() {
+		this.parent.doWall();
+	}
 }
 DungeonCamera.prototype.minZoom = .5;
 DungeonCamera.prototype.maxZoom = 3;

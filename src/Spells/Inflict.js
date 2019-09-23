@@ -1,68 +1,82 @@
-/*function InflictMinor(user) {
-	this.user = user;
-}; SPELLS.push(InflictMinor);
-InflictMinor.prototype = Object.create(Spell);
-InflictMinor.prototype.name = "Inflict Minor";
-InflictMinor.prototype.flavor = "A very small surge of negative energy.";
-InflictMinor.prototype.level = 4;
-InflictMinor.prototype.power = 5;
-InflictMinor.prototype.damageInflection = 0.7;
-InflictMinor.prototype.attribute = "negative";
-InflictMinor.prototype.hitrate = 0.65;
-InflictMinor.prototype.attackStat = STAT_INDICES.Wisdom;
-InflictMinor.prototype.defenseStat = STAT_INDICES.Vitality;
-InflictMinor.prototype.accuracyStat = STAT_INDICES.Wisdom;
-InflictMinor.prototype.evasionStat = STAT_INDICES.Charisma;
-InflictMinor.prototype.delay = 100;
-InflictMinor.prototype.cost = 2;
+class InflictBase extends Spell {
+	constructor() {
+		super();
+	}
+}
+InflictBase.prototype.flavor = "A surge of negative energy.";
+InflictBase.prototype.attribute = ATTRIBUTE_INDICES.negative;
+InflictBase.prototype.hitrate = 0.65;
+InflictBase.prototype.damageInflection = 0.7;
+InflictBase.prototype.attackStat = STAT_INDICES.Wisdom;
+InflictBase.prototype.attackStat2 = false;
+InflictBase.prototype.defenseStat = STAT_INDICES.Vitality;
+InflictBase.prototype.accuracyStat = STAT_INDICES.Charisma;
+InflictBase.prototype.evasionStat = STAT_INDICES.Wisdom;
+InflictBase.prototype.cooldownStat = STAT_INDICES.Wisdom;
+InflictBase.prototype.delay = 150;
 
-function InflictLight(user) {
-	this.user = user;
+class InflictLight extends InflictBase {
+	constructor() {
+		super();
+	}
 }; SPELLS.push(InflictLight);
-InflictLight.prototype = Object.create(InflictMinor.prototype);
+InflictLight.prototype = Object.create(InflictBase);
 InflictLight.prototype.name = "Inflict Light";
-InflictLight.prototype.flavor = "A surge of negative energy.";
 InflictLight.prototype.level = 10;
 InflictLight.prototype.power = 14;
-InflictLight.prototype.cost = 5;
+InflictLight.prototype.cost = 1;
+InflictLight.prototype.maxCooldown = HOURS*20;
 
-function InflictModerate(user) {
-	this.user = user;
+class InflictModerate extends InflictBase {
+	constructor() {
+		super();
+	}
 }; SPELLS.push(InflictModerate);
-InflictModerate.prototype = Object.create(InflictMinor.prototype);
+InflictModerate.prototype = Object.create(InflictBase);
 InflictModerate.prototype.name = "Inflict Moderate";
-InflictModerate.prototype.flavor = "A surge of negative energy.";
 InflictModerate.prototype.level = 20;
 InflictModerate.prototype.power = 28;
-InflictModerate.prototype.cost = 12;
+InflictModerate.prototype.cost = 2;
+InflictModerate.prototype.maxCooldown = HOURS*40;
 
-function InflictSerious(user) {
-	this.user = user;
+class InflictSerious extends InflictBase {
+	constructor() {
+		super();
+	}
 }; SPELLS.push(InflictSerious);
-InflictSerious.prototype = Object.create(InflictMinor.prototype);
-InflictSerious.prototype.name = "Inflict Moderate";
-InflictSerious.prototype.flavor = "A surge of negative energy.";
+InflictSerious.prototype = Object.create(InflictBase);
+InflictSerious.prototype.name = "Inflict Serious";
 InflictSerious.prototype.level = 30;
 InflictSerious.prototype.power = 42;
-InflictSerious.prototype.cost = 20;
+InflictSerious.prototype.cost = 3;
+InflictSerious.prototype.maxCooldown = HOURS*60;
 
-function InflictCritical(user) {
-	this.user = user;
+class InflictCritical extends InflictBase {
+	constructor() {
+		super();
+	}
 }; SPELLS.push(InflictCritical);
-InflictCritical.prototype = Object.create(InflictMinor.prototype);
-InflictCritical.prototype.name = "Inflict Moderate";
-InflictCritical.prototype.flavor = "A surge of negative energy.";
+InflictCritical.prototype = Object.create(InflictBase);
+InflictCritical.prototype.name = "Inflict Critical";
 InflictCritical.prototype.level = 40;
 InflictCritical.prototype.power = 56;
-InflictCritical.prototype.cost = 30;
+InflictCritical.prototype.cost = 4;
+InflictCritical.prototype.maxCooldown = HOURS*80;
 
-function InflictExtreme(user) {
-	this.user = user;
+class InflictExtreme extends InflictBase {
+	constructor() {
+		super();
+	}
 }; SPELLS.push(InflictExtreme);
-InflictExtreme.prototype = Object.create(InflictMinor.prototype);
-InflictExtreme.prototype.name = "Inflict Moderate";
-InflictExtreme.prototype.flavor = "A surge of negative energy.";
+InflictExtreme.prototype = Object.create(InflictBase);
+InflictExtreme.prototype.name = "Inflict Extreme";
 InflictExtreme.prototype.level = 50;
 InflictExtreme.prototype.power = 70;
-InflictExtreme.prototype.cost = 41;
-*/
+InflictExtreme.prototype.cost = 5;
+InflictExtreme.prototype.maxCooldown = HOURS*100;
+
+/*function RepairLight(user) {
+	this.user = user;
+}
+RepairLight.prototype = Object.create(InflictLight.prototype);
+RepairLight.prototype.attribute = "repair";*/

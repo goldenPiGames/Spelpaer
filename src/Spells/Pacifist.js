@@ -6,7 +6,7 @@ class Frighten extends Spell {
 Frighten.prototype = Object.create(Spell);
 Frighten.prototype.name = "Frighten";
 Frighten.prototype.flavor = "The target is frightened and forced to flee from battle, but only if it has low enough hit points.";
-Frighten.prototype.attack = true;
+Frighten.prototype.attack = false;
 Frighten.prototype.level = 10;
 Frighten.prototype.power = 15;
 Frighten.prototype.attribute = ATTRIBUTE_INDICES.fear;

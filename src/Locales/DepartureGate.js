@@ -9,7 +9,7 @@ var DepartureGate = {
 	getPOIs : function() {
 		var thisser = this;
 		var pois = [];
-		if (Flags.departureFinished)
+		if (getFlag("departureMain"))
 			pois.push(new BasicPOI("Forcefield", "Enter the strange forcefield.",
 				new DialogLine("You", null, "Now that we have our tokens embedded, we can pass through this gate."),
 				function(){

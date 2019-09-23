@@ -18,9 +18,18 @@ var dialog = {
 	update : function() {
 		this.skipButton.update();
 		//console.log(this.index, mouse.clicked, this.advanceBuffer);
-		if (this.skipButton.held || mouse.clicked && !this.advanceBuffer) {
+		var currentLine = this.list[this.index];
+		if (!currentLine.isSplit && (this.skipButton.held || mouse.clicked && !this.advanceBuffer)) {
 			this.index ++;
 			this.checkCurrent();
+		}
+		if (currentLine.isSplit) {
+			var clickedButton = currentLine.choiceButtons.filter(oj=>{oj.update(); return oj.clicked})[0];
+			if (clickedButton) {
+				this.shoveIn(clickedButton.lines);
+				this.index++;
+				this.checkCurrent();
+			}
 		}
 		//console.log(this.index);
 		this.advanceBuffer = false;
@@ -83,7 +92,13 @@ var dialog = {
 			ctx.fillText(lines[i], SIDE_MARGINS, canvas.height-settings.infoHeight + SIDE_MARGINS + 1.2 * fontSize * i);
 		}*/
 		
+		if (currentLine.isSplit) {
+			currentLine.choiceButtons.forEach(oj=>oj.draw());
+		}
+		
 		//speaker
+		ctx.textAlign = "left";
+		ctx.font = fontSize + "px " + settings.font;
 		var displaySpeaker = currentLine.speaker;
 		switch (currentLine.speaker) {
 			case "Player":
@@ -109,7 +124,13 @@ var dialog = {
 		return false;
 	},
 	add : function(what) {
-		this.dialogList.splice(-1, what);
+		this.list.push(...what);
+	},
+	shoveIn : function(stuff) {
+		if (Array.isArray(stuff))
+			this.list.splice(this.index+1, 0, ...stuff);
+		else
+			this.list.splice(this.index+1, 0, ...Array.prototype.slice.call(arguments))
 	}
 }
 
@@ -146,34 +167,13 @@ var DialogSplit = function(speaker, sprite = sprite, text) {
 			return new DialogSplitChoice(oj[0], ...(oj.slice(1)));
 		}
 	});
-	this.choiceButtons = this.choices.map((oj, dex, ray) => new Button(settings.width/4, settings.height-40*(ray.length-dex), settings.width/2, 30, oj.text, null, ()=>dialog.shoveIn(oj.lines)));
-}
-DialogSplit.prototype.isDialogSplit = true;
-
-DialogSplit.prototype.init = function(ctx) {
-	ctx.font = "20px "+settings.font;
-	this.lines = getLines(ctx, this.text, this.width - (SIDE_MARGINS * 2));
-	
-	this.height = Math.max(SIDE_MARGINS * 2 + 24 * this.lines.length + this.choices.length * 36, dialog.height);
-	this.y = 600 - this.height;
-	var buttons = [];
-	var y = this.y;
-	
-	var lineCount = this.lines.length;
-	this.choices.forEach(function(dab, index) {
-		buttons.push(new Button(100, y + SIDE_MARGINS + 24 * lineCount + index * 36, 600, 31, dab.text, dab.hoverText, dab.handler));
-	});
-	this.buttons = buttons;
-}
-
-DialogSplit.prototype.update = function(ctx) {
-	if (!this.lines) {
-		this.init(ctx);
-	}
-	this.buttons.forEach(function(dab){
-		dab.update(ctx);
+	this.choiceButtons = this.choices.map((oj, dex, ray) => {
+		let butt = new Button(settings.width/4, settings.height-40*(ray.length-dex), settings.width/2, 30, oj.text);
+		butt.lines = oj.lines;
+		return butt;
 	});
 }
+DialogSplit.prototype.isSplit = true;
 
 /*DialogSplit.prototype.draw = function(ctx) {
 	ctx.fillStyle = "#808080";

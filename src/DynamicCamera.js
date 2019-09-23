@@ -68,10 +68,41 @@ class DynamicCamera extends UIObject {
 			ctx.drawImage(sprite, Math.round(this.drawX(x)), Math.round(this.drawY(y)), sprite.width*this.zoom, sprite.height*this.zoom);
 		} else if (sprite.image) {
 			ctx.drawImage(sprite.image, sprite.x, sprite.y, sprite.width, sprite.height, Math.round(this.drawX(x)), this.drawY(y), sprite.width*this.zoom, sprite.height*this.zoom);
+		} else {
+			throw sprite + " is not an image or sprite";
 		}
+	}
+	drawLine(x1, y1, x2, y2) {
+		ctx.beginPath();
+		ctx.moveTo(this.drawX(x1), this.drawY(y1));
+		ctx.lineTo(this.drawX(x2), this.drawY(y2));
+		ctx.stroke();
+	}
+	drawArc(x, y, r, t1, t2, w) {
+		if (w)
+			ctx.lineWidth = w * this.zoom;
+		ctx.beginPath();
+		ctx.arc(this.drawX(x), this.drawY(y), r*this.zoom, t1, t2);
+		ctx.stroke();
+	}
+	drawRect(x, y, width, height, line, color, stroke) {
+		this.fillRect(x, y, width, height, color);
+		this.strokeRect(x, y, width, height, line, stroke);
+	}
+	fillRect(x, y, width, height, color) {
+		if (color)
+			ctx.fillStyle = color;
+		ctx.fillRect(this.drawX(x), this.drawY(y), width*this.zoom, height*this.zoom);
+	}
+	strokeRect(x, y, width, height, line, color) {
+		if (line)
+			ctx.lineWidth = line * this.zoom;
+		if (color)
+			ctx.strokeStyle = color;
+		ctx.strokeRect(this.drawX(x), this.drawY(y), width*this.zoom, height*this.zoom);
 	}
 }
 DynamicCamera.prototype.boundLeft = -Infinity;
 DynamicCamera.prototype.boundRight = Infinity;
 DynamicCamera.prototype.boundTop = -Infinity;
-DynamicCamera.prototype.boundBottomm = Infinity;
+DynamicCamera.prototype.boundBottom = Infinity;

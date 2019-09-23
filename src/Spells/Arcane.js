@@ -1,12 +1,9 @@
 class RayOfFrost extends Spell {
-	constructor() {
-		super();
-	}
+	
 }; SPELLS.push(RayOfFrost);
 RayOfFrost.prototype = Object.create(Spell);
 RayOfFrost.prototype.name = "Ray of Frost";
 RayOfFrost.prototype.flavor = "A small beam of frigid air.";
-RayOfFrost.prototype.attack = true;
 RayOfFrost.prototype.level = 5;
 RayOfFrost.prototype.power = 7;
 RayOfFrost.prototype.attribute = ATTRIBUTE_INDICES.cold;
@@ -21,14 +18,11 @@ RayOfFrost.prototype.cooldownStat = STAT_INDICES.Intelligence;
 RayOfFrost.prototype.cost = 1;
 
 class AcidSplash extends Spell {
-	constructor() {
-		super();
-	}
+	
 }; SPELLS.push(AcidSplash);
 AcidSplash.prototype = Object.create(Spell);
 AcidSplash.prototype.name = "Acid Splash";
 AcidSplash.prototype.flavor = "A small orb of corrosive liquid.";
-AcidSplash.prototype.attack = true;
 AcidSplash.prototype.level = 5;
 AcidSplash.prototype.power = 7;
 AcidSplash.prototype.attribute = ATTRIBUTE_INDICES.acid;
@@ -43,13 +37,11 @@ AcidSplash.prototype.cooldownStat = STAT_INDICES.Intelligence;
 AcidSplash.prototype.cost = 1;
 
 class BurningHands extends Spell {
-	constructor() {
-		super();
-	}}; SPELLS.push(BurningHands);
+	
+}; SPELLS.push(BurningHands);
 BurningHands.prototype = Object.create(Spell);
 BurningHands.prototype.name = "Burning Hands";
 BurningHands.prototype.flavor = "Create a cone of fire from your hands.";
-BurningHands.prototype.attack = true;
 BurningHands.prototype.level = 11;
 BurningHands.prototype.power = 12;
 BurningHands.prototype.splash = 0.5;
@@ -65,14 +57,11 @@ BurningHands.prototype.cooldownStat = STAT_INDICES.Intelligence;
 BurningHands.prototype.cost = 2;
 
 class ShockingGrasp extends Spell {
-	constructor() {
-		super();
-	}
+	
 }; SPELLS.push(ShockingGrasp);
 ShockingGrasp.prototype = Object.create(Spell);
 ShockingGrasp.prototype.name = "Shocking Grasp";
 ShockingGrasp.prototype.flavor = "Touch an enemy to discharge an electrical shock.";
-ShockingGrasp.prototype.attack = true;
 ShockingGrasp.prototype.level = 12;
 ShockingGrasp.prototype.power = 16;
 ShockingGrasp.prototype.attribute = ATTRIBUTE_INDICES.electricity;
@@ -83,30 +72,9 @@ ShockingGrasp.prototype.accuracyStat = STAT_INDICES.Dexterity;
 ShockingGrasp.prototype.evasionStat = STAT_INDICES.Agility;
 ShockingGrasp.prototype.delay = 120;
 ShockingGrasp.prototype.cost = 6;
-/*class ShockingGrasp extends SpellC {
-	constructor() {
-		super();
-	}
-	name = "Shocking Grasp";
-	flavor = "Touch an enemy to discharge an electrical shock.";
-	attack = true;
-	level = 12;
-	power = 16;
-	attribute = "electricity";
-	hitrate = 0.75;
-	attackStat = STAT_INDICES.Intelligence;
-	defenseStat = STAT_INDICES.Wisdom;
-	accuracyStat = STAT_INDICES.Dexterity;
-	evasionStat = STAT_INDICES.Agility;
-	delay = 110;
-	cost = 6;
-}
-SPELLS.push(ShockingGrasp);*/
 
 class AcidArrow extends Spell {
-	constructor() {
-		super();
-	}
+	
 }; SPELLS.push(AcidArrow);
 AcidArrow.prototype = Object.create(Spell);
 AcidArrow.prototype.name = "Acid Arrow";
@@ -123,38 +91,44 @@ AcidArrow.prototype.evasionStat = STAT_INDICES.Agility;
 AcidArrow.prototype.delay = 100;
 AcidArrow.prototype.cost = 10;
 
-/*var ScorchingRay = {
-	__proto__ : Spell,
-	name : "Scorching Ray",
-	description : "Fire a thin beam of intense heat.",
-	source : ".",
-	attack : true,
-	level : 21,
-	power : 27,
-	attribute : "fire",
-	hitrate : 0.75,
-	attackStat : STAT_INDICES.Intelligence,
-	defenseStat : STAT_INDICES.Wisdom,
-	accuracyStat : STAT_INDICES.Dexterity,
-	evasionStat : STAT_INDICES.Agility,
-	delay : 100,
-	cost : 13
-}; SPELLS.push(ScorchingRay);
+class ScorchingRayBase extends Spell {
+	
+}
+ScorchingRayBase.prototype.attribute = ATTRIBUTE_INDICES.fire;
+ScorchingRayBase.prototype.hitrate = 0.75;
+ScorchingRayBase.prototype.attackStat = STAT_INDICES.Intelligence;
+ScorchingRayBase.prototype.defenseStat = STAT_INDICES.Wisdom;
+ScorchingRayBase.prototype.accuracyStat = STAT_INDICES.Dexterity;
+ScorchingRayBase.prototype.evasionStat = STAT_INDICES.Agility;
+ScorchingRayBase.prototype.delay = 100;
+ScorchingRayBase.prototype.cooldownStat = STAT_INDICES.Intelligence;
 
-var ScorchingRay2 = {
-	__proto__ : Spell,
-	name : "Scorching Ray x2",
-	description : "Fire two thin beams of intense heat.",
-	source : ".",
-	attack : true,
-	level : 42,
-	power : 54,
-	attribute : "fire",
-	hitrate : 0.75,
-	attackStat : STAT_INDICES.Intelligence,
-	defenseStat : STAT_INDICES.Wisdom,
-	accuracyStat : STAT_INDICES.Dexterity,
-	evasionStat : STAT_INDICES.Agility,
-	delay : 100,
-	cost : 32
-}; SPELLS.push(ScorchingRay2);*/
+class ScorchingRay1 extends ScorchingRayBase {
+	
+}; SPELLS.push(ScorchingRay1);
+ScorchingRay1.prototype.name = "Scorching Ray";
+ScorchingRay1.prototype.description = "Fire a thin beam of intense heat.";
+ScorchingRay1.prototype.level = 21;
+ScorchingRay1.prototype.power = 27;
+ScorchingRay1.prototype.cost = 3;
+ScorchingRay1.prototype.maxCooldown = 25200;
+
+class ScorchingRay2 extends ScorchingRayBase {
+	
+}; SPELLS.push(ScorchingRay2);
+ScorchingRay2.prototype.name = "Double Scorching Ray";
+ScorchingRay2.prototype.description = "Fire a two beams of intense heat.";
+ScorchingRay2.prototype.level = 42;
+ScorchingRay2.prototype.power = 54;
+ScorchingRay2.prototype.cost = 6;
+ScorchingRay2.prototype.maxCooldown = 50400;
+
+class ScorchingRay3 extends ScorchingRayBase {
+	
+}; SPELLS.push(ScorchingRay3);
+ScorchingRay3.prototype.name = "Triple Scorching Ray";
+ScorchingRay3.prototype.description = "Fire a three beams of intense heat.";
+ScorchingRay3.prototype.level = 63;
+ScorchingRay3.prototype.power = 81;
+ScorchingRay3.prototype.cost = 9;
+ScorchingRay3.prototype.maxCooldown = 75600;

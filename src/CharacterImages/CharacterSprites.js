@@ -3,29 +3,29 @@ const CHAR_SPRITES = {
 		
 	},*/
 	Claire : {
-		DialogNormal : {x:0, y:0, width:500, height:680},
+		dialogNormal : {x:0, y:0, width:500, height:680},
 		Pointing : {x:500, y:0, width:500, height:680},
 	},
 	Manz : {
-		DialogNormal : {x:0, y:0, width:610, height:830},
-		Normal : {x:700, y:900, width:200, height:300},
-		Cast : {x:900, y:900, width:200, height:300},
-		Attack : {x:1100, y:900, width:200, height:300},
+		dialogNormal : {x:0, y:0, width:610, height:830},
+		normal : {x:700, y:900, width:200, height:300},
+		cast : {x:900, y:900, width:200, height:300},
+		attack : {x:1100, y:900, width:200, height:300},
 	},
 	Marcel : {
-		DialogNormal : {x:0, y:0, width:610, height:832},
-		Normal : {x:700, y:900, width:200, height:300},
-		Attack : {x:900, y:900, width:200, height:300},
+		dialogNormal : {x:0, y:0, width:610, height:832},
+		normal : {x:700, y:900, width:200, height:300},
+		attack : {x:900, y:900, width:200, height:300},
 		//Dodge : {x:700, y:900, width:200, height:300},
 	},
 	Mtreac : {
-		DialogNormal : {x:0, y:0, width:500, height:750},//width:286, height:550},
+		dialogNormal : {x:0, y:0, width:500, height:750},//width:286, height:550},
 	},
 	Poslo : {
-		DialogNormal : {x:0, y:0, width:400, height:555},
+		dialogNormal : {x:0, y:0, width:400, height:555},
 	},
 	Vertace : {
-		DialogNormal : {x:0, y:0, width:400, height:555},
+		dialogNormal : {x:0, y:0, width:400, height:555},
 	},
 }
 

@@ -16,7 +16,7 @@ class UIObject {
 		this.wasPressed = this.pressed;
 		this.pressed = mouse.down && this.hovered;
 		this.clicked = mouse.clicked && this.hovered;
-		this.held = (this.clicked || (this.held && mouse.down));
+		this.held = (this.clicked || (this.held && mouse.down)) ? this.held+1 : 0;
 	}
 }
 

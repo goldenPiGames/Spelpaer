@@ -80,7 +80,7 @@ GameMenuSpells.prototype.draw = function() {
 GameMenuSpells.prototype.unitClicked = function(unit) {
 	if (this.selectedSpell)
 		this.selectedCharacter = unit;
-}
+ }
 
 //------------------------------------------------------------------ Items ---------------------------------------------------
 

@@ -133,6 +133,7 @@ function BattleScreenPatientTutorial(battleScreen) {
 	this.shownCompanionTurn = false;
 	this.shownSpells = false;
 	this.shownTechniques = false;
+	this.shownTargeting = false;
 	this.battleScreen = battleScreen;
 	tutorialOverlay.begin(
 		{text:"Please direct your attention to the left side of the screen.", opening:this.battleScreen.delayMeter, updateRunnee:UPDATE_RUNNEE_NEVER, textX:settings.width/2, textY:settings.height/4, textWidth:settings.width/2, textHeight:300},
@@ -153,7 +154,7 @@ BattleScreenPatientTutorial.prototype.update = function() {
 			tutorialOverlay.begin(
 				{text:"It's <Player>'s turn. <Player> is a primary spellcaster.", opening:false, updateRunnee:UPDATE_RUNNEE_NEVER, textX:settings.width/4, textY:200, textWidth:settings.width/3, textHeight:200},
 				{text:"To cast a Spell, first click on the Spell button.", opening:this.battleScreen.playerSpellButton, updateRunnee:UPDATE_RUNNEE_IN_OPENING, advance:()=>this.battleScreen.currentMenu==this.battleScreen.playerSpellMenu},
-				{text:"Now pick a spell. Again, you can get all kinds of information by hovering them.", opening:this.battleScreen.playerSpellMenu, updateRunnee:UPDATE_RUNNEE_IN_OPENING, advance:()=>this.battleScreen.selectedAction instanceof Spell && this.battleScreen.selectedAction.isAvailable()},
+				{text:"Now pick a spell. Again, you can get all kinds of information by hovering them.", opening:this.battleScreen.playerSpellMenu, updateRunnee:UPDATE_RUNNEE_IN_OPENING, advance:()=>this.battleScreen.selectedAction instanceof Spell && this.battleScreen.selectedAction.isAvailable() && this.battleScreen.selectedAction.attack},
 			);
 		}
 	} else if (this.battleScreen.taker == companion) {
@@ -162,9 +163,16 @@ BattleScreenPatientTutorial.prototype.update = function() {
 			tutorialOverlay.begin(
 				{text:"It's <Companion>'s turn. <Companion> is a martial fighter.", opening:false, updateRunnee:UPDATE_RUNNEE_NEVER, textX:settings.width/4, textY:200, textWidth:settings.width/3, textHeight:200},
 				{text:"To use a technique, first click on the Technique button.", opening:this.battleScreen.companionTechniqueButton, updateRunnee:UPDATE_RUNNEE_IN_OPENING, advance:()=>this.battleScreen.currentMenu==this.battleScreen.companionTechniquePalette},
-				{text:"Now pick a technique. Again, you can get all kinds of information by hovering over them.", opening:this.battleScreen.companionTechniquePalette, updateRunnee:UPDATE_RUNNEE_IN_OPENING, advance:()=>this.battleScreen.selectedAction instanceof Technique && this.battleScreen.selectedAction.isAvailable()},
+				{text:"Now pick an attack technique. Again, you can get all kinds of information by hovering over them.", opening:this.battleScreen.companionTechniquePalette, updateRunnee:UPDATE_RUNNEE_IN_OPENING, advance:()=>this.battleScreen.selectedAction instanceof Technique && this.battleScreen.selectedAction.isAvailable() && this.battleScreen.selectedAction.attack},
 			);
 		}
+	}
+	if (battle.selectedAction && !this.shownTargeting) {
+		this.shownTargeting = true;
+		tutorialOverlay.begin(
+			{text:"Now you can choose a target.", opening:false, updateRunnee:UPDATE_RUNNEE_NEVER, textX:settings.width/4, textY:200, textWidth:settings.width/3, textHeight:200},
+			{text:"Now select a target by clicking on the enemy's tab.", opening:{x:this.battleScreen.fieldX, y:-5, width:this.battleScreen.fieldWidth, height:this.battleScreen.fieldY+10}, updateRunnee:UPDATE_RUNNEE_IN_OPENING, advance:()=>this.battleScreen.selectedTarget},
+		);
 	}
 	if (player.hpPortion() <= .5 || companion.hpPortion() <= .5 || battle.enemies[0].hpPortion() <= .5 || battle.enemies[1].hpPortion() <= .5) {
 		tutorialOverlay.begin(

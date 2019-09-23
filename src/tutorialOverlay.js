@@ -3,6 +3,12 @@ const UPDATE_RUNNEE_IN_OPENING = 1;
 const UPDATE_RUNNEE_ALWAYS = 2;
 
 var tutorialOverlay = {
+	advanceAnywhere : function() {
+		return mouse.clicked;
+	},
+	advanceNotInOpening : function(inOp) {
+		return mouse.clicked && !inOp;
+	},
 	begin : function() {
 		var arrayguments = Array.prototype.slice.call(arguments);
 		this.list = Array.isArray(arrayguments[0]) ? (Array.isArray(arrayguments[0][0]) ? arrayguments[0][0]: arrayguments[0]) : arrayguments;
@@ -62,7 +68,7 @@ var tutorialOverlay = {
 		}
 		if (typeof line.updateRunnee == "number")
 			this.updateRunnee = line.updateRunnee;
-		this.advance = line.advance || (this.updateRunnee == UPDATE_RUNNEE_IN_OPENING ? ((inOp)=>mouse.clicked && !inOp) : (()=>mouse.clicked));
+		this.advance = line.advance || (this.updateRunnee == UPDATE_RUNNEE_IN_OPENING ? this.advanceNotInOpening : this.advanceAnywhere);
 	},
 	draw : function() {
 		//console.log("bap")
@@ -86,6 +92,12 @@ var tutorialOverlay = {
 		ctx.strokeRect(this.textX, this.textY, this.textWidth, this.textHeight);
 		ctx.fillStyle = settings.normal_color;
 		drawParagraphInRect(this.text, this.textX+5, this.textY+5, this.textWidth-10, this.textHeight-10, 20);
+		if (this.advance == this.advanceNotInOpening || this.advance == this.advanceAnywhere) {
+			ctx.fillStyle = settings.normal_color;
+			ctx.textAlign = "right";
+			ctx.textBaseline = "bottom";
+			ctx.fillText("Click here to continue", this.textX+this.textWidth, this.textY+this.textHeight);
+		}
 		return true;//this.updateRunnee == UPDATE_RUNNEE_ALWAYS || this.updateRunnee == UPDATE_RUNNEE_IN_OPENING && mouseInOpening;
 	},
 }

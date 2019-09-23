@@ -9,14 +9,13 @@ class Boar extends Unit {
 			return {action: this.findTechnique(BasicAttack), target: this.pickRandomEnemy()}
 	}
 }
-Boar.prototype = Object.create(Unit);
 Boar.prototype.name = "Boar";
 Boar.prototype.description = "A forest animal, dangerous and aggressive when rutting.";
 Boar.prototype.image = makeImage("src/Enemies/Boar.png"); //Pigboar, Master of the Monster Lair
 Boar.prototype.hpMult = 5.0;
 Boar.prototype.statMults = statsToArray({
 	Vitality : 1.0,
-	Strength : 1.7,
+	Strength : 1.5,
 	Constitution : 1.6,
 	Dexterity : 0.8,
 	Agility : 1.1,
@@ -24,14 +23,14 @@ Boar.prototype.statMults = statsToArray({
 	Wisdom : 0.7,
 	Charisma : 0.6,
 	Potential : 0.5,
-	Weapon : 0,
+	Weapon : .3,
 	Armor : 0,
+	Implement : 0,
+	Resistance : .5,
 });
 Boar.prototype.effectiveness = attributesToArray({
 	piercing : 1.3,
-	positive : -1.0,
-	thought : 0.4,
-});
+}, STANDARD_EFFECTIVENESS_ANIMAL);
 Boar.prototype.weaponAttribute = ATTRIBUTE_INDICES.piercing;
 Boar.prototype.techniqueTable = [
 	BasicAttack,
@@ -60,7 +59,7 @@ Moose.prototype.image = makeImage("src/Enemies/Moose.png"); //http://wikiclipart
 Moose.prototype.hpMult = 5.0;
 Moose.prototype.statMults = statsToArray({
 	Vitality : 1.3,
-	Strength : 1.5,
+	Strength : 1.4,
 	Constitution : 1.7,
 	Dexterity : 0.8,
 	Agility : 0.9,
@@ -68,15 +67,15 @@ Moose.prototype.statMults = statsToArray({
 	Wisdom : 0.9,
 	Charisma : 0.5,
 	Potential : 0.5,
-	Weapon : 0,
+	Weapon : .5,
 	Armor : 0,
+	Implement : 0,
+	Resistance : .5,
 });
 Moose.prototype.effectiveness = attributesToArray({
-	fire : 1.4,
-	cold : .6,
-	positive : -1.0,
-	thought : 0.4,
-});
+	fire : 1.3,
+	cold : .7,
+}, STANDARD_EFFECTIVENESS_ANIMAL);
 Moose.prototype.weaponAttribute = ATTRIBUTE_INDICES.bludgeoning;
 Moose.prototype.techniqueTable = [
 	BasicAttack,
@@ -119,11 +118,12 @@ Wolf.prototype.statMults = statsToArray({
 	Potential : 0.5,
 	Weapon : 0,
 	Armor : 0,
+	Implement : 0,
+	Resistance : .5,
 });
 Wolf.prototype.effectiveness = attributesToArray({
-	fire : 1.3,
-	thought : 0.4,
-});
+	
+}, STANDARD_EFFECTIVENESS_ANIMAL);
 Wolf.prototype.weaponAttribute = ATTRIBUTE_INDICES.piercing;
 Wolf.prototype.techniqueTable = [
 	BasicAttack,

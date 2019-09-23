@@ -3,7 +3,9 @@ function longRest(amount = 1.0) {
 	player.effects = [];
 	companion.hp = companion.maxhp;
 	companion.effects = [];
+	setFlag("restBegun");
 	advanceTime(8*HOURS);
+	setFlag("restEnded");
 	saveGame(saveSlot, amount);
 	dialog.begin(
 		"Game saved to slot "+saveSlot+".", 
@@ -26,9 +28,20 @@ var RestPOI = function(name, description, restfulness = 1.0, cost = 0) {
 }
 RestPOI.prototype.type = "Rest";
 RestPOI.prototype.activate = function() {
-	if (!(money < this.cost)) {
-		money -= this.cost;
+	if (timeSince(getFlag("restEnded")) < 2*HOURS) {
+		dialog.begin(new DialogSplit("Player", null, "Do I really need to go back to sleep already?",
+			new DialogSplitChoice("Yes", ()=>this.activate2()),
+			new DialogSplitChoice("No"),
+		));
+	} else
+		this.activate2();
+}
+RestPOI.prototype.activate2 = function() {
+	if (money < this.cost) {
+		dialog.begin("I can't afford to stay here.");
+	} else {
+		if (this.cost)
+			money -= this.cost;
 		longRest(this.restfulness);
 	}
 }
-

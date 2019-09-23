@@ -1,3 +1,5 @@
+const DUNGEONS = [];
+
 const DUNGEON_FLOOR_Y = 600;
 const DUNGEON_WIDTH = 900;
 
@@ -13,7 +15,7 @@ var Dungeon = {
 	enterRoomEvent : function(floor, x, y) {},
 	getBattleWeatherObject : function() {
 		return new BlankUIObject();
-	}
+	},
 }
 
 //----------------------------------------- Into Dungeon ----------------------------------------

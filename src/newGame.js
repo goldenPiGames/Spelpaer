@@ -10,7 +10,7 @@ function newGame() {
 			"The apocalypse approaches exactly at the speed of plot, not in-game time.",
 			"Experience gain is reduced.",
 			"When you get a game over, you can reload your last save.",],
-			function(){difficulty = 0; preGameIntro()}),
+			()=>{difficulty = 0; preGameIntro()}),
 		new Button(bwidth, 200, bwidth, 50, DIFFICULTY_NAMES[1], [
 			"For people who like the authentic experience.",
 			"Battles occur in real time.",
@@ -18,7 +18,7 @@ function newGame() {
 			"The apocalypse approaches steadily.",
 			"Experience gain is normal.",
 			"When you get a game over, you can reload your last save."],
-			function(){difficulty = 1; preGameIntro()}),
+			()=>{difficulty = 1; preGameIntro()}, false),
 		new Button(bwidth, 300, bwidth, 50, DIFFICULTY_NAMES[2], [
 			"For people who like to be in a constant state of panic. Not for first-timers.",
 			"Battles occur in real time.",
@@ -26,7 +26,7 @@ function newGame() {
 			"The apocalypse approaches a little faster.",
 			"Experience gain is increased.",
 			"When you get a game over, your save is instantly deleted."],
-			function(){difficulty = 2; preGameIntro()}),
+			()=>{difficulty = 2; preGameIntro()}, false),
 	]
 }
 
@@ -123,6 +123,8 @@ CharacterCreationScreen.prototype.generate = function() {
 				Potential : 10,
 				Weapon : 0,
 				Armor : 0,
+				Implement : 0,
+				Resistance : 0,
 				HReduce : 10,
 			}, character.level);
 		character.equipped = [
@@ -158,6 +160,8 @@ CharacterCreationScreen.prototype.generate = function() {
 				Potential : 10,
 				Weapon : 0,
 				Armor : 0,
+				Implement : 0,
+				Resistance : 0,
 				HReduce : 10,
 			});
 		character.equipped = [
@@ -198,6 +202,11 @@ CharacterCreationScreen.prototype.changeColor = function(color) {
 function beginNewGame() {
 	GeneralEngine.objects = [];
 	money = 0;
+	inventory = [
+		new HealingPotion(40),
+		new HealingPotion(15),
+		new HealingPotion(15),
+	];
 	currentTime = 1;
 	dialog.begin(
 		new DialogLine("Player", null, "I wake up with a start. I'm not sure why."),

@@ -7,7 +7,7 @@ class Technique extends BattleAction {
 		this.power = this.powerMult * this.level;
 		this.maxCooldown = this.cooldownMult * this.level;
 	}
-	getDescription() {
+	/*getDescription() {
 		var desc = this.name + " lv. " + this.level;
 		desc += " <br> Delay: " + this.delay;
 		if (this.maxCooldown)
@@ -27,13 +27,13 @@ class Technique extends BattleAction {
 		}
 		desc += " <br> " + this.flavor;
 		return desc;
-	}
+	}*/
 }
 Technique.prototype.known = false;
 Technique.prototype.isTechnique = true;
 Technique.prototype.isSpell = false;
-Technique.prototype.usesWeapon = true;
-Technique.prototype.usesArmor = true;
+Technique.prototype.attackStat2 = STAT_INDICES.Weapon
+Technique.prototype.defenseStat2 = STAT_INDICES.Armor;
 
 class BasicAttack extends Technique {
 	constructor(level) {
@@ -47,13 +47,14 @@ BasicAttack.prototype.powerMult = 1.0;
 BasicAttack.prototype.attribute = WEAPON_ATTRIBUTE;
 BasicAttack.prototype.hitrate = 0.75;
 BasicAttack.prototype.attackStat = STAT_INDICES.Strength;
-BasicAttack.prototype.usesWeapon = true;
+BasicAttack.prototype.attackStat2 = STAT_INDICES.Weapon;
 BasicAttack.prototype.defenseStat = STAT_INDICES.Constitution;
-BasicAttack.prototype.usesArmor = true;
+BasicAttack.prototype.defenseStat2 = STAT_INDICES.Armor;
 BasicAttack.prototype.accuracyStat = STAT_INDICES.Dexterity;
 BasicAttack.prototype.evasionStat = STAT_INDICES.Agility;
 BasicAttack.prototype.delay = 100;
 BasicAttack.prototype.cooldownMult = 0;
+BasicAttack.prototype.cooldownStat = STAT_INDICES.Constitution;
 BasicAttack.prototype.isAvailable = function() {
 	return true;
 },
@@ -61,6 +62,41 @@ BasicAttack.prototype.cooldownPortion = function() {
 	return 1.0;
 },
 BasicAttack.prototype.prerequisites = [];
+
+class CastersResort extends Technique {
+	constructor(level) {
+		super(level);
+	}
+};// TECHNIQUES.push(CastersResort);
+CastersResort.prototype.name = "Caster's Resort";
+CastersResort.prototype.flavor = "When a spellcaster has nothing to do. Recharges all spells a tiny bit.";
+CastersResort.prototype.attack = true;
+CastersResort.prototype.powerMult = 0.5;
+CastersResort.prototype.attribute = WEAPON_ATTRIBUTE;
+CastersResort.prototype.hitrate = 0.75;
+CastersResort.prototype.attackStat = STAT_INDICES.Strength;
+CastersResort.prototype.attackStat2 = STAT_INDICES.Weapon;
+CastersResort.prototype.defenseStat = STAT_INDICES.Constitution;
+CastersResort.prototype.defenseStat2 = STAT_INDICES.Armor;
+CastersResort.prototype.accuracyStat = STAT_INDICES.Dexterity;
+CastersResort.prototype.evasionStat = STAT_INDICES.Agility;
+CastersResort.prototype.delay = 90;
+CastersResort.prototype.cooldownMult = 0;
+CastersResort.prototype.cooldownStat = STAT_INDICES.Intelligence;
+CastersResort.prototype.isAvailable = function() {
+	return true;
+},
+CastersResort.prototype.cooldownPortion = function() {
+	return 1.0;
+},
+CastersResort.prototype.prerequisites = [];
+//TODO add spell recharge effect
+
+class CastersResortEffect extends Effect {
+	apply(user, target, dmg) {
+		user.spells.forEach(sp=>sp.cooldown=Math.max(0, sp.cooldown-this.level*15));
+	}
+}
 
 class PowerChop extends Technique {
 	constructor(level) {
@@ -87,9 +123,9 @@ PowerChop.prototype.powerMult = 1.5;
 PowerChop.prototype.attribute = ATTRIBUTE_INDICES.cutting;
 PowerChop.prototype.hitrate = 0.6;
 PowerChop.prototype.attackStat = STAT_INDICES.Strength;
-PowerChop.prototype.usesWeapon = true;
+PowerChop.prototype.attackStat2 = STAT_INDICES.Weapon;
 PowerChop.prototype.defenseStat = STAT_INDICES.Constitution;
-PowerChop.prototype.usesArmor = true;
+PowerChop.prototype.defenseStat2 = STAT_INDICES.Armor;
 PowerChop.prototype.accuracyStat = STAT_INDICES.Dexterity;
 PowerChop.prototype.evasionStat = STAT_INDICES.Agility;
 PowerChop.prototype.delay = 120;
@@ -122,9 +158,9 @@ Cleave.prototype.attribute = ATTRIBUTE_INDICES.cutting;
 Cleave.prototype.splash = 0.6;
 Cleave.prototype.hitrate = 0.65;
 Cleave.prototype.attackStat = STAT_INDICES.Strength;
-Cleave.prototype.usesWeapon = true;
+Cleave.prototype.attackStat2 = STAT_INDICES.Weapon;
 Cleave.prototype.defenseStat = STAT_INDICES.Constitution;
-Cleave.prototype.usesArmor = true;
+Cleave.prototype.defenseStat2 = STAT_INDICES.Armor;
 Cleave.prototype.accuracyStat = STAT_INDICES.Dexterity;
 Cleave.prototype.evasionStat = STAT_INDICES.Agility;
 Cleave.prototype.delay = 120;
@@ -170,9 +206,9 @@ InfinitySlash.prototype = Object.create(Technique);
 .prototype.powerMult = ;
 .prototype.hitrate = ;
 .prototype.attackStat = STAT_INDICES.Strength;
-.prototype.usesWeapon = true;
+.prototype.attackStat2 = STAT_INDICES.Weapon;
 .prototype.defenseStat = STAT_INDICES.Constitution;
-.prototype.usesArmor = true;
+.prototype.defenseStat2 = STAT_INDICES.Armor;
 .prototype.accuracyStat = STAT_INDICES.Dexterity;
 .prototype.evasionStat = STAT_INDICES.Agility;
 .prototype.delay = ;
@@ -192,9 +228,9 @@ QuickStab.prototype.powerMult = 0.6;
 QuickStab.prototype.attribute = ATTRIBUTE_INDICES.piercing;
 QuickStab.prototype.hitrate = 0.85;
 QuickStab.prototype.attackStat = STAT_INDICES.Strength;
-QuickStab.prototype.usesWeapon = true;
+QuickStab.prototype.attackStat2 = STAT_INDICES.Weapon;
 QuickStab.prototype.defenseStat = STAT_INDICES.Constitution;
-QuickStab.prototype.usesArmor = true;
+QuickStab.prototype.defenseStat2 = STAT_INDICES.Armor;
 QuickStab.prototype.accuracyStat = STAT_INDICES.Dexterity;
 QuickStab.prototype.evasionStat = STAT_INDICES.Agility;
 QuickStab.prototype.delay = 65;

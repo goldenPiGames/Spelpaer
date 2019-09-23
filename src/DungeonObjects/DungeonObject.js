@@ -50,33 +50,23 @@ class DungeonScenery extends DungeonObject {
 	}
 }
 
-//------------------------------------- Door --------------------------------------------
-var DOOR_HOVER = "This negative object which stands before me is in all likelihood a doorway of some variety.";
-
-class BasicDoor extends DungeonObject {
-	constructor(image, midx, floory) {
-		let width = image.width;
-		let height = image.height;
-		super(midx - width/2, floory - height, width, height);
-		this.image = image;
+class CustomDungeonObject extends DungeonObject {
+	constructor(x, y, width, height, updatex, draw, stuff) {
+		super(x, y, width, height);
+		this.updatex = updatex;
+		this.draw = draw;
+		for (var im in stuff) {
+			this[im] = stuff[im];
+		}
 	}
 	update(cam) {
 		super.update(cam);
-		if (this.hovered) {
-			infoField.setText(DOOR_HOVER);
-		}
-		if (this.clicked) {
-			cam.moveTo(this.destination);
-		}
-	}
-	draw(cam) {
-		cam.drawSprite(this.image, this.x, this.y);
+		this.updatex(cam);
 	}
 }
-BasicDoor.prototype.bindForward = true;
 
 //------------------------------------- Dungeon Exit --------------------------------------------
-var EXIT_HOVER = "This is the exit out of the dungeon.";
+/*var EXIT_HOVER = "This is the exit out of the dungeon.";
 
 var DungeonExit = function(destination, image) {
 	this.destination = destination;
@@ -101,4 +91,4 @@ DungeonExit.prototype.update = function(ctx) {
 
 DungeonExit.prototype.draw = function(ctx) {
 	drawSprite(this.image, this.x, this.y);
-}
+}*/

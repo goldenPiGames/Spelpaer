@@ -24,4 +24,4 @@ MageArmorEffect.prototype.target = false;
 MageArmorEffect.prototype.statChanges = statsToArray({
 	Armor : +12,
 }, 0);
-MageArmorEffect.prototype.maxuration = 4*HOURS;
+MageArmorEffect.prototype.maxDuration = 4*HOURS;

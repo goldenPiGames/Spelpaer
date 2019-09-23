@@ -16,7 +16,7 @@ class PC extends Unit {
 		});
 		this.effectiveness = resistances.map((res, dex) => this.baseEffectiveness[dex] * (1 - res / (res + this.level)));
 		var lastmax = this.maxhp;
-		this.maxhp = this.hpMult * this.stats[STAT_INDICES.Vitality];
+		this.maxhp = this.calcMaxHP();
 		if (typeof this.hp != "number" || this.hp != this.hp)
 			this.hp = this.maxhp;
 		else

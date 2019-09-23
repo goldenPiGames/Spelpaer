@@ -4,6 +4,55 @@ class BattleAction {
 	constructor() {
 		
 	}
+	getDescription(user) {
+		var desc = this.name + " : level " + this.level;
+		if (this instanceof Spell)
+			desc += ", costs " + this.cost;
+		desc += " <br> Delay: " + this.delay;
+		if (this.maxCooldown == Infinity)
+			desc += "; Ticket";
+		else if (this.maxCooldown)
+			desc += "; Cooldown: " + this.maxCooldown + " / " + STAT_ABBS[this.cooldownStat] + " (~" + this.estimateMaxCooldownTime(user) + ")";
+		else
+			desc += "; Cooldown: None";
+		if (this.power)
+			desc += " <br> Power: " + this.power + " " + (this.attribute == WEAPON_ATTRIBUTE ? (user ? user.weaponAttribute : "weapon's") : ATTRIBUTE_NAMES[this.attribute]) + "; " + STAT_ABBS[this.attackStat] + (this.attackStat2 ? " & " + STAT_ABBS[this.attackStat2] : "") + " vs. " + 
+				STAT_ABBS[this.defenseStat] + (this.defenseStat2 ? " & " + STAT_ABBS[this.defenseStat2] : "") + (this.damageInflection != 1.0 ? " DI " + this.damageInflection : "");
+		if (this.hitrate) {
+			desc += " <br> Hitrate: " + asPercent(this.hitrate, 0);
+			if (this.hitrate < 1.0)
+				desc += " " + STAT_ABBS[this.accuracyStat] + " vs " + STAT_ABBS[this.evasionStat];
+		}
+		if (this.effect) {
+			var fect = new this.effect(this);
+			desc += " <br> Effect: " + fect.getDescription();
+		}
+		desc += " <br> " + this.flavor;
+		return desc;
+	}
+	estimateMaxCooldownTime(user) {
+		var divisor;
+		if (user) {
+			divisor = user.stats[this.cooldownStat];
+		} else if (player.stats) {
+			divisor = player.stats[this.cooldownStat];
+		} else if (player.level) {
+			divisor = player.level;
+		} else {
+			divisor = this.level;
+		}
+		var time = this.maxCooldown / divisor;
+		return getShortDuration(time);
+	}
+	getCDDesc(user) {
+		var cd = Math.ceil(this.cooldown / user.stats[this.cooldownStat]);
+		if (this.isAvailable())
+			return "";
+		else if (cd >= Infinity)
+			return "-";
+		else
+			return getShortDuration(cd);
+	}
 	execute(user, target) {
 		this.addHit(user, target);
 		if (this.splash) {
@@ -59,12 +108,21 @@ class BattleAction {
 	getDamage(attacker, defender) {
 		var pow = this.power;
 		var eff = defender.getEffectiveness(this.attribute == WEAPON_ATTRIBUTE ? attacker.weaponAttribute : this.attribute);
-		var atk = attacker.getStat(this.attackStat) + this.usesWeapon*attacker.getStat(STAT_INDICES.Weapon);
-		var def = (eff >= 0 ? defender.getStat(this.defenseStat) + this.usesArmor*attacker.getStat(STAT_INDICES.Armor) : defender.getStat(STAT_INDICES.HReduce));
+		var atk = attacker.getStat(this.attackStat);
+		if (typeof this.attackStat2 == "number" && this.attackStat2 >= 0)
+			atk = (atk + attacker.getStat(this.attackStat2)) / 2;
+		var def = defender.getStat(this.defenseStat);
+		if (eff < 0)
+			def = defender.getStat(STAT_INDICES.HReduce);
+		else if (typeof this.defenseStat2 == "number" && this.defenseStat2 >= 0)
+			def = (def + defender.getStat(this.defenseStat2)) / 2;
 		var inf = this.damageInflection;
 		var bon = this.getConditionalMult(attacker, defender);
 		//console.log(pow, eff, atk, def, inf, bon);
 		var dmg = pow * eff * Math.pow(atk / def, inf) * bon;
+		if (dmg != dmg) {
+			throw "Returned NaN for damage. Params: pow="+pow+", eff="+eff+", atk="+atk+", def="+def+", inf="+inf+", bon="+bon+".";
+		}
 		return dmg;
 	}
 	getConditionalMult(attacker, defender) {

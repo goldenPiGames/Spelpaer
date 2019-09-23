@@ -12,7 +12,7 @@ function saveGame(slot, restfulness = 1.0) {
 		techniques : {},
 		locales : {},
 		paths : {},
-		flags : Flags,
+		flags : flags,
 		player : {},
 		companion : {},
 		restfulness : restfulness,
@@ -34,8 +34,8 @@ function saveGame(slot, restfulness = 1.0) {
 	PATHS.forEach(function(item) {
 		toSave.paths[item.name] = item.available;
 	});
-	/*for (var prop in Flags) {
-		localStorage.setItem(slot+prop, Flags[prop]);
+	/*for (var prop in flags) {
+		localStorage.setItem(slot+prop, flags[prop]);
 	};*/
 	SAVEABLE_CHARACTER_THINGS.forEach(function(thing) {
 		toSave.player[thing] = player[thing];
@@ -77,7 +77,7 @@ function loadGame(slot) {
 	PATHS.forEach(function(item) {
 		item.available = loaded.paths[item.name];
 	});
-	Flags = loaded.flags;
+	flags = loaded.flags;
 	player = new Player();
 	companion = new Companion();
 	SAVEABLE_CHARACTER_THINGS.forEach(function(stat) {

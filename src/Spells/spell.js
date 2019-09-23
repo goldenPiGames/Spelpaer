@@ -1,7 +1,7 @@
 const SPELLS = [];
 
 class Spell extends BattleAction {
-	getDescription(user) {
+	/*getDescription(user) {
 		var desc = this.name + " : level " + this.level + ", costs " + this.cost;
 		desc += " <br> Delay: " + this.delay;
 		if (this.maxCooldown == Infinity)
@@ -23,33 +23,10 @@ class Spell extends BattleAction {
 		}
 		desc += " <br> " + this.flavor;
 		return desc;
-	}
+	}*/
 	isPreparable() {
 		//console.log(this.known, (this.level <= player.level))
 		return this.known && (this.level <= player.level);
-	}
-	estimateMaxCooldownTime(user) {
-		var divisor;
-		if (user) {
-			divisor = user.stats[this.cooldownStat];
-		} else if (player.stats) {
-			divisor = player.stats[this.cooldownStat];
-		} else if (player.level) {
-			divisor = player.level;
-		} else {
-			divisor = this.level;
-		}
-		var time = this.maxCooldown / divisor;
-		return getShortDuration(time);
-	}
-	getCDDesc(user) {
-		var cd = Math.ceil(this.cooldown / user.stats[this.cooldownStat]);
-		if (this.isAvailable())
-			return "";
-		else if (cd >= Infinity)
-			return "-";
-		else
-			return getShortDuration(cd);
 	}
 	getKeyStat() {
 		return this.attackStat || this.accuracyStat || this.cooldownStat;
@@ -67,8 +44,8 @@ class Spell extends BattleAction {
 Spell.prototype.known = false;
 Spell.prototype.isTechnique = false;
 Spell.prototype.isSpell = true;
-Spell.prototype.usesWeapon = false;
-Spell.prototype.usesArmor = false;
+Spell.prototype.attackStat2 = STAT_INDICES.Implement;
+Spell.prototype.defenseStat2 = STAT_INDICES.Resistance;
 Spell.prototype.maxCooldown = Infinity;
 
 

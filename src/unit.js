@@ -4,7 +4,7 @@ class Unit extends UIObject {
 		super(); //I'm still not sure whether or not Unit should extend UIObject
 		this.level = level;
 		this.stats = statsFromMults(this.statMults, this.level);
-		this.maxhp = Math.floor(this.hpMult * this.stats[STAT_INDICES.Vitality]);
+		this.maxhp = this.calcMaxHP();
 		this.hp = this.maxhp;
 		this.techniques = [];
 		this.techniqueTable.forEach(row => {
@@ -28,9 +28,12 @@ class Unit extends UIObject {
 		this.emptyEffects();
 		this.color = settings.normal_color;
 	}
+	calcMaxHP() {
+		return Math.floor(this.hpMult * (this.level + this.stats[STAT_INDICES.Vitality]) / 2);
+	}
 	battleTick() {
 		if (!this.defeated) {
-			this.delay = Math.max(this.delay-1, 0)//PRound(battleSpeed * this.getStat("speed"), tickSeed);
+			this.delay = Math.max(this.delay-1, 0);
 		}
 		this.effects = this.effects.filter(fmega => fmega.tick(this));
 		this.allActions().forEach(quiche => quiche.tick(this));
@@ -67,7 +70,14 @@ class Unit extends UIObject {
 		}
 		this.hp -= amount;
 		//this.hpLabel.text = this.hp + "/" + this.maxhp;
-		this.lastHitBy = attacker;
+		if (attacker) {
+			this.lastHitWith = source;
+			this.lastHitBy = attacker;
+			if (!this.firstHitBy) {
+				this.firstHitWith = source;
+				this.firstHitBy = attacker;
+			}
+		}
 		particles.push(new ParticleText("-"+amount, this.textX(), this.textY(), 0, .3, 40, "#FF4040", settings.normal_color, .05));
 		this.animHurt(amount);
 		if (this.hp <= 0)
@@ -157,6 +167,9 @@ class Unit extends UIObject {
 	findSpell(sp) {
 		this.foundAction = this.spells.find(oj => oj instanceof sp && oj.isAvailable());
 		return this.foundAction;
+	}
+	pickRandomSpell(crit = ()=>1) {
+		return randomTermWeighted(this.spells, sp => sp.isAvailable() && crit(sp));
 	}
 	findEffect(f) {
 		return this.effects.find(oj => oj instanceof f);
@@ -275,7 +288,7 @@ class Unit extends UIObject {
 				//console.log(this.sprites);
 				this.animTime--;
 				if (this.animTime <= 0)
-					this.animState = "Normal";
+					this.animState = "normal";
 				pic = this.sprites[this.animState];
 			} else if (this.image)
 				pic = this.image;
@@ -294,14 +307,14 @@ class Unit extends UIObject {
 	}
 	animDodge() {
 		if (this.sprites && this.sprites.Dodge) {
-			this.animState = "Dodge";
+			this.animState = "dodge";
 			this.animTime = 10;
 		} else
 			this.animoffX = 10;
 	}
 	animHurt(amount) {
 		if (this.sprites && this.sprites.Hurt) {
-			this.animState = "Hurt";
+			this.animState = "hurt";
 			this.animTime = 5;
 		} else
 			this.animoffY = -5;
@@ -309,12 +322,12 @@ class Unit extends UIObject {
 	animSkill(skill) {
 		if (skill.isSpell) {
 			if (this.sprites && this.sprites.Cast) {
-				this.animState = "Cast";
+				this.animState = "cast";
 				this.animTime = 15;
 			}
 		} else {
 			if (this.sprites && this.sprites.Attack) {
-				this.animState = "Attack";
+				this.animState = "attack";
 				this.animTime = 15;
 			} else
 				this.animoffY = 25;
@@ -334,5 +347,5 @@ Unit.prototype.dropTable = [];
 Unit.prototype.animoffX = 0;
 Unit.prototype.animoffY = 0;
 Unit.prototype.animTime = 0;
-Unit.prototype.animState = "Normal";
+Unit.prototype.animState = "normal";
 Unit.prototype.waterbreathing = 0;

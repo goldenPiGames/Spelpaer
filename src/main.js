@@ -97,11 +97,16 @@ function makeImage(sauce) {
 	return img;
 }
 
-function makeSprites(sauce, sec) {
+function makeSprites(sauce, sec, prel = true) {
+	var image;
 	if (typeof sauce == "string") {
-		sauce = makeImage(sauce);
+		if (prel)
+			image = makeImage(sauce);
+	} else {
+		image = sauce;
+		sauce = image.src;
 	}
-	var sheetData = {};
+	var sheetData = {image:image, src:sauce};
 	if (Array.isArray(sec)) {
 		var subs = Array.prototype.slice.call(arguments, 1);
 		subs.forEach(function(oj) {
@@ -110,13 +115,23 @@ function makeSprites(sauce, sec) {
 			oj.parent = sheetData;
 		});
 	} else {
-		for (sub in sec) {
+		for (var sub in sec) {
 			sheetData[sub] = sec[sub];
-			sheetData[sub].image = sauce;
+			sheetData[sub].image = image;
 			sheetData[sub].parent = sheetData;
 		}
 	}
 	return sheetData;
+}
+
+function loadSprites(data) {
+	//console.log(data);
+	var image = makeImage(data.src);
+	//console.log(image);
+	data.image = image;
+	for (var sub in data) {
+		data[sub].image = image;
+	}
 }
 
 function drawTextInRect(text, x, y, width, height) {
@@ -138,23 +153,47 @@ function drawParagraphInRect(text, x, y, width, height, size) {
 	if (Array.isArray(text))
 		text = text.join(" <br> ");
 	//console.log(text);
-	text = text.replace(/<Player>/g, player.name);
-	text = text.replace(/<Companion>/g, companion.name);
+	//text = text.replace(/<Player>/g, player.name);
+	//text = text.replace(/<Companion>/g, companion.name);
 	//console.log(text);
 	var words = text.split(" ");
 	var cx = x;
 	var cy = y;
 	for (var i = 0; i < words.length; i++) {
+		ctx.fillStyle = settings.normal_color;
 		var word = words[i];
-		var wwid = ctx.measureText(word).width;
-		if (word == "<br>" || cx + wwid > x + width) {
-			cy += size;
-			cx = x;
+		if (word.indexOf("<") >= 0) {
+			if (word == "<br>") {
+				cy += size;
+				cx = x;
+			} else if (word.includes("Player")) {
+				word = word.replace("<Player>", player.name);
+				ctx.fillStyle = player.color;
+			} else if (word.includes("Companion")) {
+				word = word.replace("<Companion>", companion.name);
+				ctx.fillStyle = companion.color;
+			}
+		} else if (typeof STAT_INDICES[word]) {
+			ctx.fillStyle = STAT_COLORS[STAT_INDICES[word]];
 		}
+		var wwid = ctx.measureText(word).width;
 		//console.log(word, cx, cy);
 		if (word != "<br>") {
+			if (cx + wwid > x + width) {
+				cy += size;
+				cx = x;
+			}
 			ctx.fillText(word, cx, cy);
 			cx += wwid + ctx.measureText(" ").width;
 		}
 	}
+}
+
+function loadEnemies(args) {
+	var things = Array.isArray(args) ? args : Array.prototype.slice.call(arguments);
+	things.forEach(oj => {
+		//console.log(oj);
+		if (oj.prototype.sprites && !oj.prototype.sprites.image)
+			loadSprites(oj.prototype.sprites);
+	});
 }

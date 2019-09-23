@@ -23,6 +23,7 @@ const ATTRIBUTE_NAMES = [
 	"pain",
 	"suggestion",
 	"illusion",
+	"repair",
 	"program",
 ]
 
@@ -33,9 +34,14 @@ ATTRIBUTE_NAMES.forEach(function(nom, dex) {
 });
 
 function attributesToArray(stuff, normal = 1.0) {
-	ray = [];
-	for (var i = 0; i < ATTRIBUTE_NAMES.length; i++) {
-		ray[i] = normal;
+	var ray;
+	if (Array.isArray(normal))
+		ray = normal.slice();
+	else {
+		ray = [];
+		for (var i = 0; i < ATTRIBUTE_NAMES.length; i++) {
+			ray[i] = normal;
+		}
 	}
 	for (nom in stuff) {
 		var dex = ATTRIBUTE_INDICES[nom];
@@ -46,3 +52,17 @@ function attributesToArray(stuff, normal = 1.0) {
 	}
 	return ray;
 }
+
+STANDARD_EFFECTIVENESS_ANIMAL = attributesToArray({
+	positive : -1.0,
+	thought : 0.4,
+}, 1.0);
+
+STANDARD_EFFECTIVENESS_CONSTRUCT = attributesToArray({
+	bio : 0,
+	positive : 0,
+	negative : 0,
+	fear : 0,
+	pain : 0,
+	repair : -1.0,
+}, 1.0);

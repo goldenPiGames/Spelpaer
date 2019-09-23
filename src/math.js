@@ -2,6 +2,15 @@ function randomTerm(ray) {
 	return ray[Math.floor(Math.random() * ray.length)];
 }
 
+function randomTermWeighted(ray, weightgen = ()=>1) {
+	var weights = ray.map(oj=>Math.max(0, weightgen(oj)));
+	var total = 0;
+	var upto = weights.map(wuh=>total+=wuh);
+	var rand = Math.random()*total;
+	var dex = upto.findIndex(oj=>oj>=rand);
+	return ray[dex];
+}
+
 function maxTerm(ray, criteria) {
 	return ray.reduce((accum, cur) => {
 		let newVal = criteria(cur);
@@ -79,4 +88,8 @@ function transposeArray(array) {
 		}
 	}
 	return newArray;
+}
+
+function differenceBetweenColors(c1, c2) {
+	return Math.abs(parseInt(c1.substring(1, 3), 16) - parseInt(c2.substring(1, 3), 16)) + Math.abs(parseInt(c1.substring(3, 5), 16) - parseInt(c2.substring(3, 5), 16)) + Math.abs(parseInt(c1.substring(5, 7), 16) - parseInt(c2.substring(5, 7), 16))
 }

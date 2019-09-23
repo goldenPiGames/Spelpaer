@@ -13,6 +13,6 @@ ITEMS.push(PocutopWand);
 PocutopWand.prototype.name = "Pocutop Wand";
 PocutopWand.prototype.flavor = "Wizards's wand crafted traditionally in Pocutop.";
 PocutopWand.prototype.statMods = statsToArray({
-	Wisdom : +1,
-	Strength : -1,
+	Implement : +10,
+	Resistance : +4,
 }, 0);

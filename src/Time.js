@@ -56,3 +56,7 @@ function timeOfDayBetween(start, end, hora = "current") {
 	dora = hora % DAYS;
 	return dora >= start && dora < end;
 }
+
+function timeSince(timb) {
+	return currentTime - timb;
+}
